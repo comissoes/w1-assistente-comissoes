@@ -1,0 +1,127 @@
+"""Valida respostas.yaml e gera site/kb.json para o Assistente de Comissões W1.
+
+Uso:  python scripts/gerar_kb.py respostas.yaml site
+Roda sozinho no GitHub (aba Actions) a cada alteração do respostas.yaml.
+Se encontrar erro, para com uma mensagem explicando o que corrigir e NADA é publicado.
+"""
+import json
+import re
+import sys
+from datetime import datetime, timezone
+from html.parser import HTMLParser
+from pathlib import Path
+
+import yaml
+
+TAGS_OK = {"p", "ul", "ol", "li", "strong", "em", "b", "i", "br", "a", "table", "thead", "tbody",
+           "tr", "th", "td", "span", "h4", "div"}
+ATTRS_OK = {"class", "href", "target", "rel"}
+SECOES = {
+    "comissoes": {"calendario", "w1nner", "prazos", "fup", "bonus", "realocacao", "calculadora-pps",
+                  "outros", "ticket", "academy"},
+    "estornos": {"conceitos", "resumo", "calculadora", "icatu", "mag", "sulamerica", "prudential", "amil",
+                 "saudemais", "vilavelha", "itau", "cnp", "embracon", "magalu", "bb", "duvidas"},
+}
+
+
+class Checker(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.problemas = []
+
+    def handle_starttag(self, tag, attrs):
+        if tag not in TAGS_OK:
+            self.problemas.append(f"tag <{tag}> não é permitida")
+        for nome, valor in attrs:
+            if nome not in ATTRS_OK:
+                self.problemas.append(f"atributo '{nome}' não é permitido (em <{tag}>)")
+            if nome == "href" and not re.match(r"^https?://", valor or ""):
+                self.problemas.append(f"link precisa começar com https:// ({valor})")
+
+
+def falhar(erros):
+    print("\n❌ A publicação foi interrompida. Corrija no respostas.yaml:\n")
+    for e in erros:
+        print("  •", e)
+    print("\nOs consultores continuam com a versão anterior até a correção.")
+    sys.exit(1)
+
+
+def main(origem, destino):
+    try:
+        doc = yaml.safe_load(Path(origem).read_text(encoding="utf-8"))
+    except yaml.YAMLError as e:
+        marca = getattr(e, "problem_mark", None)
+        onde = f" (perto da linha {marca.line + 1})" if marca else ""
+        falhar([f"o arquivo não está no formato certo{onde}. Confira a indentação e os dois-pontos. Detalhe: {e}"])
+
+    erros = []
+    parceiras = doc.get("parceiras") or {}
+    respostas = doc.get("respostas") or []
+    if not isinstance(respostas, list) or len(respostas) < 10:
+        falhar(["a lista 'respostas' está vazia ou com menos de 10 itens"])
+
+    vistos, itens = set(), []
+    for n, r in enumerate(respostas, 1):
+        ref = f"resposta nº {n} (id: {r.get('id', '?')})" if isinstance(r, dict) else f"resposta nº {n}"
+        if not isinstance(r, dict):
+            erros.append(f"{ref}: formato inválido")
+            continue
+        for campo in ("id", "area", "pergunta", "resposta", "secao"):
+            if not str(r.get(campo) or "").strip():
+                erros.append(f"{ref}: falta o campo '{campo}'")
+        rid = str(r.get("id") or "").strip()
+        if rid in vistos:
+            erros.append(f"{ref}: o id '{rid}' está repetido")
+        vistos.add(rid)
+        area = r.get("area")
+        if area not in ("comissoes", "estornos"):
+            erros.append(f"{ref}: 'area' deve ser comissoes ou estornos (está '{area}')")
+        parc = r.get("parceira") or ""
+        if parc and parc not in parceiras:
+            erros.append(f"{ref}: parceira '{parc}' não está na lista 'parceiras'")
+        secao = str(r.get("secao") or "")
+        pag, _, sec = secao.partition("#")
+        if pag not in SECOES or sec not in SECOES[pag]:
+            erros.append(f"{ref}: secao '{secao}' não existe. Use, por exemplo, comissoes#prazos ou estornos#icatu")
+        html = str(r.get("resposta") or "")
+        chk = Checker()
+        chk.feed(html)
+        erros += [f"{ref}: {p}" for p in chk.problemas]
+        alt = r.get("outras_formas") or []
+        if isinstance(alt, str):
+            alt = [alt]
+        itens.append({
+            "id": rid,
+            "cat": "c" if area == "comissoes" else "e",
+            "p": parc,
+            "q": str(r.get("pergunta") or "").strip(),
+            "alt": [str(a) for a in alt],
+            "tags": str(r.get("palavras_chave") or ""),
+            "a": html.strip(),
+            "link": secao,
+        })
+    if erros:
+        falhar(erros)
+
+    ext = doc.get("extensao") or {}
+    kb = {
+        "versao": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "updated": str(doc.get("atualizado_em") or ""),
+        "extensao": {"versao": str(ext.get("versao") or ""), "aviso": str(ext.get("aviso") or "")},
+        "partners": {str(k): str(v) for k, v in parceiras.items()},
+        "items": itens,
+    }
+    out = Path(destino)
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "kb.json").write_text(json.dumps(kb, ensure_ascii=False), encoding="utf-8")
+    (out / "robots.txt").write_text("User-agent: *\nDisallow: /\n", encoding="utf-8")
+    (out / "index.html").write_text(
+        '<!doctype html><meta charset="utf-8"><meta name="robots" content="noindex">'
+        f"<title>Assistente de Comissões W1</title><p>Base do Assistente de Comissões W1 · {len(itens)} respostas · "
+        f"publicada em {kb['versao']}</p>", encoding="utf-8")
+    print(f"✅ {len(itens)} respostas validadas e publicadas (versão {kb['versao']}).")
+
+
+if __name__ == "__main__":
+    main(sys.argv[1] if len(sys.argv) > 1 else "respostas.yaml", sys.argv[2] if len(sys.argv) > 2 else "site")

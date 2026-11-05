@@ -1,0 +1,1474 @@
+# =====================================================================
+#  RESPOSTAS DO ASSISTENTE DE COMISSÕES W1 (balão do navegador)
+# =====================================================================
+#  Este é o ÚNICO arquivo que você precisa editar.
+#  Salvou aqui no GitHub (botão "Commit changes") -> em ~1 minuto a
+#  publicação roda sozinha -> os consultores recebem em poucas horas,
+#  ou na próxima vez que abrirem o balão.
+#
+#  Se algo estiver errado (ex.: faltou um campo), a publicação para,
+#  a aba "Actions" fica vermelha com a explicação, e os consultores
+#  continuam com a versão anterior. Nada quebra para eles.
+#
+#  CAMPOS DE CADA RESPOSTA
+#   id             código único, sem espaço (ex.: c-janela). Não repita.
+#   area           comissoes  ou  estornos
+#   parceira       vazio ('') ou um código da lista "parceiras" abaixo
+#   pergunta       título da resposta (como o consultor perguntaria)
+#   outras_formas  outras frases que o consultor usaria (ajudam a busca)
+#   palavras_chave termos extras separados por espaço
+#   secao          seção da página "ver o assunto completo"
+#                  (comissoes#prazos, estornos#icatu, ...)
+#   resposta       texto da resposta em HTML simples. Mantenha o "|" e
+#                  a indentação de 4 espaços. Tags aceitas: p, ul, ol, li,
+#                  strong, em, b, i, br, a, table, tr, th, td, span, h4.
+#                  Selos: <span class="v ok">Não precisa de ticket</span>
+#                  (cores: ok = verde, wait = amarelo, ticket = vermelho,
+#                  other = azul). Tabela: <table class="t">...</table>
+#
+#  DICA: se uma pergunta comum dos consultores cai na resposta errada,
+#  copie a frase deles em "outras_formas" da resposta certa.
+# =====================================================================
+
+# Texto exibido no rodapé do balão ("atualizada em ...")
+atualizado_em: outubro de 2026
+
+# Versão mais recente da extensão (.zip no W1nner). Quando publicar um .zip
+# novo, aumente este número: quem estiver com a versão antiga vê um aviso no balão.
+extensao:
+  versao: 1.1.0
+  aviso: Há uma versão nova do Assistente de Comissões. Baixe em W1nner › Arquivos › Comissões e reinstale seguindo o guia.
+
+# Códigos de parceira usados no campo "parceira" -> nome exibido
+parceiras:
+  icatu: Icatu
+  mag: MAG
+  sulamerica: SulAmérica
+  prudential: Prudential
+  amil: Amil
+  saudemais: Saúde Mais
+  vilavelha: Vila Velha
+  itau: Itaú
+  cnp: Consórcio XP (CNP)
+  embracon: Embracon
+  magalu: Magalu
+  bb: BB Consórcio
+
+respostas:
+
+- id: c-janela
+  area: comissoes
+  parceira: ''
+  pergunta: Até que dia posso pedir o pagamento (saque) das comissões?
+  outras_formas:
+  - quando posso sacar
+  - prazo para solicitar pagamento
+  - janela de saque
+  - dia 1 a 20
+  palavras_chave: saque solicitar pagamento janela dia 1 20 prazo nota fiscal
+  secao: comissoes#w1nner
+  resposta: |
+    <p>O pedido de pagamento é feito no W1nner <strong>entre os dias 1 e 20</strong> de cada mês, com a <strong>nota fiscal de cada BU</strong> anexada.</p>
+    <p>O pagamento <strong>não é automático</strong>: sem a solicitação, o valor fica parado em <em>Disponível para receber</em>.</p>
+
+- id: c-perdi20
+  area: comissoes
+  parceira: ''
+  pergunta: Perdi o dia 20 e não pedi o pagamento. E agora?
+  outras_formas:
+  - esqueci de solicitar o saque
+  - passou do dia 20
+  - fora do prazo de saque
+  palavras_chave: perdi prazo dia 20 esqueci fora do prazo saque
+  secao: comissoes#w1nner
+  resposta: |
+    <p>Faça o pedido na próxima janela, <strong>entre os dias 1 e 20 do mês seguinte</strong>. O valor continua na sua carteira.</p>
+    <p><span class="v ok">Não precisa de ticket</span></p>
+
+- id: c-nfbu
+  area: comissoes
+  parceira: ''
+  pergunta: Posso emitir uma única nota fiscal somando todas as BUs?
+  outras_formas:
+  - uma nf para varias empresas
+  - nota fiscal rejeitada
+  - nota devolvida
+  palavras_chave: nota fiscal nf bu bus empresas uma so somando rejeitada devolvida
+  secao: comissoes#w1nner
+  resposta: |
+    <p>Não. O Financeiro exige <strong>uma nota fiscal por BU</strong>. Uma nota com o total de várias empresas é devolvida e o pagamento atrasa.</p>
+    <p>Emita uma nota para cada BU e faça uma solicitação de pagamento para cada uma.</p>
+
+- id: c-comosacar
+  area: comissoes
+  parceira: ''
+  pergunta: Como peço o pagamento das minhas comissões no W1nner?
+  outras_formas:
+  - como faco o saque
+  - passo a passo para sacar
+  - como solicitar pagamento
+  - como recebo minha comissao
+  palavras_chave: como solicitar pagamento saque passo a passo status solicitacoes aprovado processado pendencia centro economico
+  secao: comissoes#w1nner
+  resposta: |
+    <ol><li>Acesse <strong>Menu lateral › Centro Econômico › Comissões</strong>.</li>
+    <li>Com valor em <strong>Disponível para receber</strong>, clique em <strong>Solicitar pagamento</strong>.</li>
+    <li>Escolha a <strong>BU</strong>, informe o valor e anexe a <strong>nota fiscal daquela BU</strong>.</li>
+    <li>Acompanhe na tabela <strong>Solicitações de pagamento</strong>: a coluna <em>Status</em> mostra se foi aprovado, processado ou se há pendência.</li></ol>
+    <p>Lembre: pedido entre os dias <strong>1 e 20</strong> e uma nota por BU.</p>
+
+- id: c-saldos
+  area: comissoes
+  parceira: ''
+  pergunta: Onde vejo meu saldo? O que é "Disponível" e "Solicitado para receber"?
+  outras_formas:
+  - onde vejo meu saldo
+  - saldo de comissao
+  - centro economico
+  palavras_chave: saldo disponivel solicitado para receber onde vejo centro economico comissoes painel
+  secao: comissoes#w1nner
+  resposta: |
+    <p>Em <strong>Menu lateral › Centro Econômico › Comissões</strong>:</p>
+    <ul><li><strong>Disponível para receber:</strong> o que você já pode solicitar.</li>
+    <li><strong>Solicitado para receber:</strong> o que você já pediu e está com o Financeiro.</li></ul>
+    <p>À esquerda aparece a soma de todas as BUs; à direita, só a BU selecionada no seletor do topo.</p>
+
+- id: c-bu
+  area: comissoes
+  parceira: ''
+  pergunta: Por que tenho um extrato separado para cada BU?
+  outras_formas:
+  - o que e bu
+  - trocar de empresa no w1nner
+  - nao vejo o valor na carteira
+  palavras_chave: bu unidade de negocio empresa seletor extrato separado w1 group corretora carteira
+  secao: comissoes#w1nner
+  resposta: |
+    <p>Cada empresa do grupo (BU) tem o seu extrato. Troque a BU no <strong>seletor do topo da tela</strong> para ver cada saldo.</p>
+    <p>Exemplo: o bônus de PPs só aparece na BU <strong>W1 Group Corretora</strong>. Se um valor “sumiu”, confira primeiro se está na BU certa.</p>
+
+- id: c-extrato
+  area: comissoes
+  parceira: ''
+  pergunta: Como baixo meu extrato de comissões em Excel?
+  outras_formas:
+  - exportar extrato
+  - planilha de comissoes
+  - gerar extrato
+  palavras_chave: gerar extrato excel planilha email baixar exportar
+  secao: comissoes#w1nner
+  resposta: |
+    <p>Em <strong>Centro Econômico › Comissões</strong>, clique em <strong>Gerar extrato</strong>. A planilha detalhada é enviada para o seu e-mail.</p>
+
+- id: c-achacliente
+  area: comissoes
+  parceira: ''
+  pergunta: Como encontro um cliente no extrato?
+  outras_formas:
+  - nao acho o cliente no extrato
+  - filtrar extrato por cliente
+  - campo observacao
+  palavras_chave: procurar cliente extrato filtro contato observacao encontrar localizar
+  secao: comissoes#w1nner
+  resposta: |
+    <p>Role até <strong>Extrato de comissões</strong> e use os filtros:</p>
+    <ul><li><strong>Contato:</strong> comissões principais do cliente.</li>
+    <li><strong>Observação:</strong> bônus de PPs, AP e FUP, que são lançados com o nome do cliente nesse campo.</li></ul>
+    <p>Se o cliente não aparecer em um, procure no outro. E confira se a <strong>BU</strong> selecionada é a certa.</p>
+
+- id: c-docs
+  area: comissoes
+  parceira: ''
+  pergunta: Onde ficam os documentos oficiais de regras de comissão?
+  outras_formas:
+  - onde esta a calculadora
+  - onde acho as regras
+  - central de estornos onde fica
+  palavras_chave: regras oficiais documentos arquivos comissoes onde encontro pasta w1nner
+  secao: comissoes#w1nner
+  resposta: |
+    <p>No W1nner, em <strong>Menu lateral › Arquivos › Comissões</strong>: pasta da Calculadora de Comissões e PPs, pasta de Regras (com vídeos e FAQ), a Central de Comissões e a Central de Estornos.</p>
+    <p>Em caso de conflito, vale o documento oficial mais recente.</p>
+
+- id: c-calendario
+  area: comissoes
+  parceira: ''
+  pergunta: Quais são as datas do mês para comissões?
+  outras_formas:
+  - calendario de pagamento
+  - quando cai cada coisa
+  - datas de repasse
+  palavras_chave: calendario datas mes prazo quando cai dia 1 20 10 dia util repasse
+  secao: comissoes#calendario
+  resposta: |
+    <ul><li><strong>Dia 1 a 20:</strong> solicitar pagamento e anexar a nota fiscal (uma por BU).</li>
+    <li><strong>Até o dia 10:</strong> repasse de AP, consultoria, FUP, Business e Patrimonial pagos pelo cliente no mês anterior.</li>
+    <li><strong>Até o 10º dia útil:</strong> bônus de PPs históricos (BU W1 Group Corretora).</li>
+    <li><strong>Parceiras:</strong> qualquer dia útil, até 5 dias úteis depois que a parceira paga a W1. O 1º repasse pode levar até 60 dias.</li></ul>
+
+- id: c-proprios
+  area: comissoes
+  parceira: ''
+  pergunta: Quando cai a comissão de AP, consultoria e FUP?
+  outras_formas:
+  - prazo produtos proprios
+  - quando recebo a analise paga
+  - ap parcelada
+  palavras_chave: produtos proprios ap analise paga consultoria fup dia 10 mes anterior parcelada prazo quando cai
+  secao: comissoes#prazos
+  resposta: |
+    <p>Até o <strong>dia 10 do mês seguinte</strong> ao pagamento do cliente.</p>
+    <p><strong>AP parcelada:</strong> o repasse também é parcelado. O percentual incide sobre cada parcela paga pelo cliente.</p>
+
+- id: c-parceiras
+  area: comissoes
+  parceira: ''
+  pergunta: Quando cai a comissão de produtos de parceiras?
+  outras_formas:
+  - prazo de repasse da seguradora
+  - comissao da parceira demora
+  - quando recebo seguro de vida consorcio
+  palavras_chave: parceiras produtos financeiros 5 dias uteis dia fixo seguradora repasse prazo quando cai
+  secao: comissoes#prazos
+  resposta: |
+    <p>Cada parceira paga a W1 <strong>uma vez por mês</strong>, sobre as mensalidades que os clientes pagaram no mês anterior. Não há dia fixo: pode ser até o último dia do mês, e às vezes a parceira atrasa.</p>
+    <p>Depois que o valor entra na W1, o repasse para você ocorre em <strong>até 5 dias úteis</strong>.</p>
+    <p>O <strong>primeiro</strong> repasse de um contrato pode levar até <strong>60 dias</strong> depois do 1º pagamento do cliente.</p>
+
+- id: c-mesnaoveio
+  area: comissoes
+  parceira: ''
+  pergunta: A comissão da parceira deste mês ainda não caiu.
+  outras_formas:
+  - repasse do mes nao veio
+  - parceira atrasou
+  - ainda nao recebi a comissao do mes
+  palavras_chave: parceira repasse mes nao veio nao caiu atrasou aguardar fim do mes
+  secao: comissoes#prazos
+  resposta: |
+    <p><span class="v wait">Aguarde</span></p>
+    <p>Cada parceira paga a W1 sem dia fixo, <strong>até o último dia do mês</strong>. Espere o fim do mês; depois que a W1 recebe, o repasse ocorre em até 5 dias úteis.</p>
+
+- id: c-rodando
+  area: comissoes
+  parceira: ''
+  pergunta: O que significa o status “Rodando” e por que esperar 60 dias?
+  outras_formas:
+  - report nao esta rodando
+  - primeira comissao nao veio
+  - status do report
+  palavras_chave: definicao status rodando report 60 dias primeiro repasse parceira
+  secao: comissoes#prazos
+  resposta: |
+    <p>O report muda para <strong>Rodando</strong> automaticamente quando a parceira repassa a primeira comissão daquele contrato para a W1.</p>
+    <p>Depois do 1º pagamento do cliente, a parceira tem <strong>até 60 dias</strong> para fazer esse primeiro repasse.</p>
+    <ul><li><span class="v wait">Aguarde</span> menos de 60 dias desde o 1º pagamento do cliente.</li>
+    <li><span class="v ticket">Abra ticket</span> passou de 60 dias e o report não está Rodando: assunto <strong>Comissões</strong>.</li></ul>
+
+- id: c-60dias
+  area: comissoes
+  parceira: ''
+  pergunta: Passaram 60 dias e a comissão da parceira não veio.
+  outras_formas:
+  - mais de 60 dias sem comissao
+  - nunca recebi a comissao desse cliente
+  palavras_chave: 60 dias passou sem repasse parceira nao veio ticket comissoes
+  secao: comissoes#ticket
+  resposta: |
+    <p><span class="v ticket">Abra ticket · Comissões</span></p>
+    <p>Passado o prazo de 60 dias desde o 1º pagamento do cliente sem repasse, abra ticket com o assunto <strong>Comissões</strong>. Informe o cliente, a parceira e a data do 1º pagamento.</p>
+
+- id: c-cartao
+  area: comissoes
+  parceira: ''
+  pergunta: 'Business e Patrimonial: o cliente pagou no cartão e o valor não apareceu.'
+  outras_formas:
+  - pagamento no cartao de credito
+  - holdings cartao
+  - business nao caiu
+  palavras_chave: business patrimonial holdings cartao credito operadora 30 dias compensacao dia 10
+  secao: comissoes#prazos
+  resposta: |
+    <p><span class="v wait">Aguarde</span></p>
+    <p>Business e Patrimonial seguem a regra dos produtos próprios: repasse até o dia 10 do mês seguinte ao <strong>recebimento</strong> do pagamento pela W1.</p>
+    <p>No cartão de crédito, a operadora tem <strong>até 30 dias</strong> para passar o valor à W1. Só depois o pagamento conta como recebido. Confira a data da compra antes de reportar.</p>
+
+- id: c-consorcio2
+  area: comissoes
+  parceira: ''
+  pergunta: 'Consórcio: a 2ª parcela da comissão ainda não caiu.'
+  outras_formas:
+  - segunda parcela do consorcio
+  - consorcio parou de pagar comissao
+  palavras_chave: consorcio segunda 2 parcela 90 dias encerramento grupo validacao credito
+  secao: comissoes#prazos
+  resposta: |
+    <p><span class="v wait">Aguarde</span></p>
+    <p>Entre o repasse da 1ª e o da 2ª parcela pode haver um intervalo de <strong>até 90 dias</strong>: a administradora valida a venda, faz a análise de crédito e encerra o grupo.</p>
+    <p>Da 2ª parcela em diante, o repasse volta a ser mensal, desde que o cliente continue em dia.</p>
+
+- id: c-cnpmenor
+  area: comissoes
+  parceira: cnp
+  pergunta: 'Consórcio XP (CNP): a 1ª parcela veio com valor menor.'
+  outras_formas:
+  - primeira parcela cnp quebrada
+  - cnp pagou menos
+  palavras_chave: cnp xp consorcio primeira 1 parcela valor menor quebrada fracionada residual 01/04/2026
+  secao: comissoes#prazos
+  resposta: |
+    <p><span class="v wait">Aguarde o fim do mês</span></p>
+    <p>Em contratos fechados a partir de <strong>01/04/2026</strong>, a 1ª parcela de comissão é paga em duas partes: a principal, no repasse normal, e o restante até o último dia do mesmo mês.</p>
+
+- id: c-cnprodando
+  area: comissoes
+  parceira: cnp
+  pergunta: 'Consórcio XP (CNP): o cliente está pagando, mas o contrato não está Rodando.'
+  outras_formas:
+  - cnp em dia sem comissao
+  - pendencia de assinatura consorcio
+  palavras_chave: cnp xp consorcio em dia nao rodando assinatura pendencia formalizacao operacoes
+  secao: comissoes#prazos
+  resposta: |
+    <p><span class="v other">Fale com Operações</span></p>
+    <p>Normalmente há uma pendência de assinatura ou de formalização na administradora. Abra com <strong>Operações</strong>, que valida essa etapa.</p>
+    <p>Resolvida a pendência e com o contrato Rodando, as comissões acumuladas são repassadas no mês seguinte.</p>
+
+- id: c-pds
+  area: comissoes
+  parceira: ''
+  pergunta: 'Saúde · Adesão PDS: o cliente contratou, mas não veio comissão.'
+  outras_formas:
+  - plano de saude adesao sem comissao
+  - boleto de adesao
+  palavras_chave: saude adesao pds boleto pago comissao plano de saude especialistas
+  secao: comissoes#prazos
+  resposta: |
+    <p>Nos planos de Adesão PDS, a comissão só existe depois que o cliente paga o <strong>boleto de adesão</strong> emitido pela parceira.</p>
+    <p>Se o boleto foi pago e ainda há dúvida, fale com as <strong>Especialistas de Plano de Saúde</strong>.</p>
+
+- id: c-especialista
+  area: comissoes
+  parceira: ''
+  pergunta: 'Saúde com Especialista: apareceu um valor negativo na minha carteira.'
+  outras_formas:
+  - desconto de especialista
+  - atuacao especialista
+  - lancamento negativo plano de saude
+  palavras_chave: saude especialista especialistas desconto negativo atuacao especialista bp 2026 proporcional plano de saude estrutura lider
+  secao: comissoes#prazos
+  resposta: |
+    <p>Desde <strong>01/01/2026</strong>, quando Especialistas atuam na venda de um Plano de Saúde, eles recebem uma parte da comissão. Essa parte é descontada de <strong>você e da sua estrutura</strong> (líderes), na mesma proporção.</p>
+    <p><strong>Como aparece:</strong> lançamento negativo, sem aviso prévio. No extrato, procure no campo <strong>Observação</strong> pelo nome do cliente ou por <em>Atuação Especialista</em>. Se houve Bônus de PPs desse contrato, ele também tem o desconto.</p>
+    <p><strong>Cálculo:</strong> soma do percentual de todos os Especialistas aplicada sobre o que você recebeu. Ex.: Especialistas somam 20% e você recebeu R$ 100,00 → desconto de R$ 20,00.</p>
+    <ul><li><span class="v ok">Correto</span> contrato de saúde a partir de 01/01/2026 com Especialista.</li>
+    <li><span class="v ticket">Abra ticket · Comissões</span> desconto sem Especialista, contrato antes de 2026, fora de Saúde ou lançado duas vezes no mês.</li></ul>
+
+- id: c-fup
+  area: comissoes
+  parceira: ''
+  pergunta: Como funciona a comissão de FUP?
+  outras_formas:
+  - fup nao veio
+  - nao recebi o acompanhamento
+  - regra do fup
+  palavras_chave: fup acompanhamento mensalidade mes anterior pagamento sem comissao regra
+  secao: comissoes#fup
+  resposta: |
+    <p>A comissão de FUP do mês depende do pagamento do cliente no <strong>mês anterior</strong>. Sem pagamento, não há comissão.</p>
+    <p>Se o cliente regulariza depois, o valor entra no mês seguinte à regularização, normalmente somado ao repasse daquele mês.</p>
+    <p>Para conferir: <strong>Centro Econômico › Assinaturas</strong> › cliente › <strong>Detalhes</strong> › coluna <strong>Situação</strong>.</p>
+
+- id: c-fupconferir
+  area: comissoes
+  parceira: ''
+  pergunta: O cliente pagou o FUP no mês passado e não recebi.
+  outras_formas:
+  - fup pago sem comissao
+  - assinatura paga sem repasse
+  - como conferir fup
+  palavras_chave: fup pago assinaturas detalhes situacao pago vencida conferir
+  secao: comissoes#fup
+  resposta: |
+    <ol><li>Acesse <strong>Menu lateral › Centro Econômico › Assinaturas</strong>.</li>
+    <li>Encontre o cliente e clique em <strong>Detalhes</strong>.</li>
+    <li>Veja a <strong>Situação</strong> da mensalidade do mês anterior.</li></ol>
+    <ul><li><span class="v ticket">Situação: Pago</span> e a comissão não veio → ticket com assunto <strong>Comissões</strong>.</li>
+    <li><span class="v other">Situação: Vencida</span> → não há comissão. Para cobrança ou cancelamento, ticket com assunto <strong>CS - W1 Acompanhamento, Cobrança, Cancelamentos / Dúvidas Gerais</strong>.</li></ul>
+
+- id: c-vencida
+  area: comissoes
+  parceira: ''
+  pergunta: A mensalidade do cliente está vencida. Recebo o FUP?
+  outras_formas:
+  - mensalidade vencida
+  - cliente nao pagou a mensalidade
+  - cobranca do cliente
+  - cancelar assinatura do cliente
+  palavras_chave: mensalidade vencida inadimplente fup cobranca cancelamento cs
+  secao: comissoes#fup
+  resposta: |
+    <p>Não. Sem pagamento no mês anterior, não há FUP no mês atual.</p>
+    <p>Para cobrança ou cancelamento, abra ticket com o assunto <strong>CS - W1 Acompanhamento, Cobrança, Cancelamentos / Dúvidas Gerais</strong>.</p>
+
+- id: c-fupregularizou
+  area: comissoes
+  parceira: ''
+  pergunta: O cliente regularizou o FUP em atraso. Quando recebo?
+  outras_formas:
+  - cliente pagou atrasado
+  - fup atrasado pago depois
+  palavras_chave: fup regularizou atrasadas pagou depois mes seguinte
+  secao: comissoes#fup
+  resposta: |
+    <p><span class="v wait">Aguarde</span></p><p>O valor entra no <strong>mês seguinte à regularização</strong>, normalmente somado ao FUP daquele mês.</p>
+
+- id: c-bonus
+  area: comissoes
+  parceira: ''
+  pergunta: Como funciona o Bônus de PPs históricos? Quando e onde cai?
+  outras_formas:
+  - quando recebo o bonus
+  - bonus de pps
+  - onde vejo o bonus
+  palavras_chave: bonus pps historicos 10 dia util w1 group corretora mes anterior comissao principal
+  secao: comissoes#bonus
+  resposta: |
+    <ul><li><strong>Onde:</strong> só na BU <strong>W1 Group Corretora</strong> (troque o seletor de BU).</li>
+    <li><strong>Quando:</strong> até o <strong>10º dia útil</strong> de cada mês.</li>
+    <li><strong>Sobre o quê:</strong> a comissão principal que você recebeu no mês anterior. Comissão de janeiro gera bônus em fevereiro. Sem comissão principal no mês anterior, não há bônus.</li></ul>
+
+- id: c-bonusnao
+  area: comissoes
+  parceira: ''
+  pergunta: Não encontro o bônus de PPs de um cliente.
+  outras_formas:
+  - bonus nao caiu
+  - bonus nao veio
+  - conferir bonus
+  palavras_chave: bonus pps nao encontro nao caiu conferir extrato contato observacao
+  secao: comissoes#bonus
+  resposta: |
+    <ol><li>No extrato, digite o nome do cliente em <strong>Contato</strong> e confirme que a comissão principal foi paga no mês anterior.</li>
+    <li>Apague o Contato e digite o mesmo nome em <strong>Observação</strong>: é ali que aparece a linha do bônus.</li>
+    <li>Confira se está na BU <strong>W1 Group Corretora</strong> e se já passou do <strong>10º dia útil</strong>.</li></ol>
+    <p>Tudo certo e mesmo assim sem bônus: <span class="v ticket">ticket · Comissões</span></p>
+
+- id: c-realoc
+  area: comissoes
+  parceira: ''
+  pergunta: 'Cliente realocado: de quem é a comissão?'
+  outras_formas:
+  - recebi um cliente de outro consultor
+  - herdei um cliente
+  - realocacao de carteira
+  palavras_chave: realocacao realocado reuniao de servico primeiro evento pagamento consultor anterior novo
+  secao: comissoes#realocacao
+  resposta: |
+    <p>Para receber a comissão de um cliente realocado, você precisa ter feito e <strong>registrado</strong> a <strong>Reunião de Serviço</strong>.</p>
+    <p>A comissão é de quem era o responsável quando aconteceu o <strong>primeiro</strong> destes eventos: a W1 receber o pagamento do cliente, ou o novo consultor fazer a Reunião de Serviço.</p>
+    <ul><li>Pagamento 18/05, reunião 19/05 → <strong>consultor anterior</strong>.</li>
+    <li>Reunião 19/05, pagamento 20/05 → <strong>novo consultor</strong>.</li></ul>
+    <p>Exceções: Business e Patrimonial (sempre do consultor de origem) e AP já entregue.</p>
+
+- id: c-realocreg
+  area: comissoes
+  parceira: ''
+  pergunta: Não registrei a Reunião de Serviço. Perco a comissão?
+  outras_formas:
+  - onde vejo a data da reuniao de servico
+  - reuniao nao registrada
+  palavras_chave: reuniao de servico nao registrada registrar perfil cliente historico data realocacao
+  secao: comissoes#realocacao
+  resposta: |
+    <p>Sem o registro no W1nner, a comissão continua com o consultor anterior. <strong>Reunião não registrada não conta.</strong></p>
+    <p>Registre a reunião: a partir daí vale a regra do primeiro evento. A data e a hora ficam em <strong>Perfil do cliente › Histórico</strong>.</p>
+
+- id: c-realocbiz
+  area: comissoes
+  parceira: ''
+  pergunta: Recebi um cliente Business ou Patrimonial realocado. A comissão é minha?
+  outras_formas:
+  - realocacao holdings
+  - patrimonial realocado
+  palavras_chave: excecao business patrimonial holdings realocacao consultor de origem
+  secao: comissoes#realocacao
+  resposta: |
+    <p>Não. Nesses produtos a comissão fica <strong>sempre com o consultor de origem</strong>, mesmo após a realocação. (Patrimonial é o antigo Holdings.)</p>
+
+- id: c-realocap
+  area: comissoes
+  parceira: ''
+  pergunta: 'AP de cliente realocado: quem recebe as parcelas?'
+  outras_formas:
+  - analise paga realocacao
+  - consultor saiu ap
+  - consultor out ap
+  palavras_chave: ap analise paga realocacao outubro 2025 consultor out saiu entrega modulos c1 c2 c3 c4 parcelas
+  secao: comissoes#realocacao
+  resposta: |
+    <p>Regra desde <strong>outubro de 2025</strong>:</p>
+    <ul><li>O consultor que saiu (OUT) <strong>concluiu a entrega</strong> (módulos C1 a C4): ele continua recebendo as parcelas da AP.</li>
+    <li><strong>Não concluiu</strong>: o novo consultor passa a receber, porque é ele quem termina o serviço.</li></ul>
+
+- id: c-calc
+  area: comissoes
+  parceira: ''
+  pergunta: Quanto vou receber de comissão? Em quantas parcelas?
+  outras_formas:
+  - simular comissao
+  - percentual de comissao da parceira
+  - calculadora de pps
+  palavras_chave: quanto vou receber simular calculadora comissoes pps percentual parcelas contrato novo valor
+  secao: comissoes#calculadora-pps
+  resposta: |
+    <p>Use a <strong>Calculadora de Comissões e PPs</strong> no W1nner: <strong>Menu lateral › Arquivos › Comissões</strong>, pasta da calculadora. Ela tem a mesma tabela que o time de Comissões usa.</p>
+    <ul><li>Simule a comissão de um contrato novo.</li><li>Veja em quantas parcelas o repasse é feito.</li><li>Projete o bônus de PPs da sua carteira.</li></ul>
+    <p><span class="v ok">Não abra ticket para simular valores</span></p>
+
+- id: c-pj2
+  area: comissoes
+  parceira: ''
+  pergunta: O cliente que eu indiquei não aparece na minha carteira.
+  outras_formas:
+  - indicacao nao aparece
+  - formulario pj2
+  - cliente indicado
+  palavras_chave: indiquei indicacao cliente nao localizado base indicados pj2 formulario
+  secao: comissoes#outros
+  resposta: |
+    <p>Se o cliente não está na base de indicados para consultoria, não existe registro formal da indicação no seu nome.</p>
+    <p>Para validar, preencha o <a href="https://share.hsforms.com/2DMiK7-wcTjCWbwWZVTU7mwnv9zs" target="_blank" rel="noopener">formulário de PJ2</a>.</p>
+
+- id: c-leadcapital
+  area: comissoes
+  parceira: ''
+  pergunta: Meu cliente virou Lead Capital e a comissão mudou.
+  outras_formas:
+  - lead capital retroativo
+  - reclassificado lead capital
+  palavras_chave: leadcapital lead capital retroativo reclassificado prospeccao propria w1 capital
+  secao: comissoes#outros
+  resposta: |
+    <p>Quando a base da W1 Capital mostra que o cliente sempre foi Lead Capital, a comissão passa a ser calculada nessa condição, inclusive para trás.</p>
+    <p>Se você tem evidências de que a prospecção foi sua, envie em um ticket com assunto <strong>Comissões</strong>.</p>
+
+- id: c-duplic
+  area: comissoes
+  parceira: ''
+  pergunta: Apareceu um estorno com o texto “duplicidade”.
+  outras_formas:
+  - estorno de duplicidade
+  - comissao paga duas vezes
+  palavras_chave: estorno duplicidade duplicado repasse pago duas vezes indevido dobro
+  secao: comissoes#outros
+  resposta: |
+    <p>É a correção de uma comissão creditada <strong>duas vezes</strong>. O estorno devolve só o valor pago a mais; a comissão correta continua na sua carteira.</p>
+
+- id: c-fiscal
+  area: comissoes
+  parceira: ''
+  pergunta: Dúvida sobre nota fiscal, impostos ou retenções.
+  outras_formas:
+  - imposto na nota
+  - retencao de ir
+  - iss da nota
+  palavras_chave: nota fiscal nf imposto impostos retencao tributo fiscal alcada
+  secao: comissoes#outros
+  resposta: |
+    <p><span class="v other">Fale com o Fiscal</span></p><p>Questões fiscais não são do time de Comissões. Abra o ticket direto na alçada <strong>Fiscal</strong>.</p>
+
+- id: c-cancelparceira
+  area: comissoes
+  parceira: ''
+  pergunta: O cliente cancelou um produto de parceira. Vou ter estorno?
+  outras_formas:
+  - cliente cancelou o seguro
+  - vou devolver comissao
+  - cancelamento gera estorno
+  palavras_chave: cliente cancelou cancelamento estorno parceira seguro vida consorcio saude devolucao
+  secao: estornos#resumo
+  resposta: |
+    <p>Depende da <strong>parceira</strong> e do <strong>tempo que o cliente ficou</strong>. Me pergunte com o nome da parceira (ex.: “estorno Icatu Horizonte”, “MAG cancelou com 3 parcelas”) ou veja o quadro-resumo abaixo.</p>
+    <ul><li>Icatu Horizonte: 24 meses (vendas até set/2025) ou 18 meses (guia out/2025); Essencial: 12 meses.</li>
+    <li>MAG risco/riders: livre a partir da 7ª contribuição; Whole Life: 13ª.</li>
+    <li>SulAmérica Previdência: 36 meses · Prudential: 3 anos · Amil PME/PJ: 12 meses.</li>
+    <li>Consórcios: Magalu e Embracon até a 6ª parcela; CNP 8 a 12 meses; BB sem estorno.</li></ul>
+
+- id: c-quandoticket
+  area: comissoes
+  parceira: ''
+  pergunta: Preciso abrir um ticket? Quando devo abrir?
+  outras_formas:
+  - quando abrir chamado
+  - antes de abrir ticket
+  - checklist ticket
+  palavras_chave: ticket chamado abrir quando preciso checklist verificar suporte
+  secao: comissoes#ticket
+  resposta: |
+    <p>Antes de abrir, confira:</p>
+    <ul><li>O prazo da situação já passou (dia 10, 10º dia útil, 60 dias, 90 dias do consórcio)?</li>
+    <li>Você olhou a <strong>BU certa</strong> e os campos <strong>Contato</strong> e <strong>Observação</strong> do extrato?</li></ul>
+    <p>Se as duas respostas são sim e o valor não está lá, abra o ticket.</p>
+    <p><strong>Não precisam de ticket:</strong> simular valores (use a calculadora), saque fora da janela, parceira com menos de 60 dias, FUP vencido, 2ª parcela de consórcio dentro dos 90 dias.</p>
+
+- id: c-assunto
+  area: comissoes
+  parceira: ''
+  pergunta: Com qual assunto eu abro o ticket?
+  outras_formas:
+  - qual area procurar
+  - para quem abro chamado
+  - alcada do ticket
+  palavras_chave: assunto ticket alcada area comissoes cs cobranca operacoes fiscal especialistas
+  secao: comissoes#ticket
+  resposta: |
+    <table class="t"><tr><th>Situação</th><th>Assunto</th></tr>
+    <tr><td>FUP pago sem comissão · parceira +60 dias · bônus ausente após 10º dia útil · AP/consultoria/Business/Patrimonial sem repasse após dia 10</td><td>Comissões</td></tr>
+    <tr><td>Cobrança, mensalidade vencida, cancelamento</td><td>CS - W1 Acompanhamento, Cobrança, Cancelamentos / Dúvidas Gerais</td></tr>
+    <tr><td>Consórcio XP (CNP) em dia sem Rodando</td><td>Operações</td></tr>
+    <tr><td>Saúde Adesão PDS (boleto)</td><td>Especialistas de Plano de Saúde</td></tr>
+    <tr><td>Nota fiscal, impostos, retenções</td><td>Fiscal</td></tr>
+    <tr><td>Indicação que não aparece</td><td>Formulário de PJ2</td></tr></table>
+
+- id: c-oquemandar
+  area: comissoes
+  parceira: ''
+  pergunta: O que devo colocar no ticket?
+  outras_formas:
+  - informacoes do ticket
+  - dados para o chamado
+  palavras_chave: o que enviar colocar ticket informacoes dados cliente print
+  secao: comissoes#ticket
+  resposta: |
+    <ul><li>Nome completo do cliente, o produto e a parceira.</li>
+    <li>BU e mês de referência que você está conferindo.</li>
+    <li>O que você já verificou: Assinaturas, busca por Contato e Observação, status do report.</li>
+    <li>Print da tela, se ajudar.</li></ul>
+
+- id: c-academy
+  area: comissoes
+  parceira: ''
+  pergunta: Tem vídeo explicando as comissões?
+  outras_formas:
+  - treinamento de comissoes
+  - w1 academy
+  - tutorial
+  palavras_chave: video videos academy treinamento tutorial central economica comissionamento
+  secao: comissoes#academy
+  resposta: |
+    <p>Sim. No <strong>W1 Academy</strong>, curso <strong>Central Econômica e Comissionamento</strong>:</p>
+    <ol><li>Navegando na sua carteira de comissões</li><li>Como consultar o pagamento de FUP</li><li>Entendendo a comissão por realocação</li><li>Prazos de pagamento e status das comissões</li></ol>
+    <p>Também há vídeo e FAQ no W1nner, em <strong>Arquivos › Comissões › Regras</strong>.</p>
+
+- id: e-oque
+  area: estornos
+  parceira: ''
+  pergunta: O que é estorno de comissão?
+  outras_formas:
+  - minha comissao veio negativa
+  - por que tive um valor negativo
+  - desconto na comissao
+  - o que significa estorno
+  palavras_chave: definicao estorno o que e significa devolucao chargeback negativo desconto
+  secao: estornos#conceitos
+  resposta: |
+    <p>É a devolução de uma comissão já paga porque o cliente <strong>cancelou, deixou de pagar, reduziu, resgatou ou portou</strong> o plano antes do prazo mínimo da parceira.</p>
+    <p>Aparece no extrato como lançamento <strong>negativo</strong> no mês em que a parceira identifica o evento. Quase sempre incide sobre o <strong>agenciamento</strong> (comissão inicial).</p>
+
+- id: e-agenciamento
+  area: estornos
+  parceira: ''
+  pergunta: O que é agenciamento (ou angariação)?
+  outras_formas:
+  - angariacao o que e
+  - comissao inicial
+  palavras_chave: definicao agenciamento angariacao comissao inicial primeira parcela primeiro ano
+  secao: estornos#conceitos
+  resposta: |
+    <p>É a comissão maior paga no início do contrato (1ª parcela ou 1º ano). <strong>É sobre ela que quase todo estorno incide.</strong> A Icatu chama de agenciamento; a MAG, de angariação.</p>
+    <p>A comissão recorrente, paga parcela a parcela, chama-se <strong>corretagem, carteira ou vitalício</strong>.</p>
+
+- id: e-corretagem
+  area: estornos
+  parceira: ''
+  pergunta: A corretagem (carteira / vitalício) também é estornada?
+  outras_formas:
+  - estorno de carteira
+  - vitalicio estorna
+  palavras_chave: definicao corretagem carteira vitalicio recorrente estorno
+  secao: estornos#conceitos
+  resposta: |
+    <p>Em geral não tem tabela de estorno própria: se a parcela do cliente é devolvida, a comissão daquela parcela é revertida. Exceções na MAG (VIR e Whole Life Plus com até 4 contribuições pagas, e devolução de contribuição).</p>
+
+- id: e-permanencia
+  area: estornos
+  parceira: ''
+  pergunta: O que é permanência e curva regressiva?
+  outras_formas:
+  - como o percentual de estorno diminui
+  - tabela regressiva
+  palavras_chave: definicao permanencia meses parcelas pagas curva regressiva percentual cai pro rata
+  secao: estornos#conceitos
+  resposta: |
+    <p><strong>Permanência</strong> é quanto tempo o cliente ficou (ou quantas parcelas pagou) até o cancelamento. Quanto maior, menor o percentual estornado. Algumas parceiras contam por <strong>parcela paga</strong>, outras por <strong>mês decorrido</strong>.</p>
+    <p><strong>Curva regressiva</strong> é a tabela em que o percentual cai a cada mês ou parcela até zerar. Ex.: 100% → 83% → 67% → 50% → 33% → 17% → 0%.</p>
+
+- id: e-inadimpl
+  area: estornos
+  parceira: ''
+  pergunta: O cliente parou de pagar (inadimplência). Gera estorno?
+  outras_formas:
+  - cliente atrasou parcelas
+  - cliente deixou de pagar
+  - 3 parcelas atrasadas
+  palavras_chave: inadimplencia atraso parcelas atrasadas deixou de pagar suspensao cota cancelada 3 parcelas
+  secao: estornos#conceitos
+  resposta: |
+    <p>Sim, na maioria das parceiras. Em várias delas, <strong>3 parcelas sem pagamento</strong> suspendem a cobrança ou cancelam a cota, e o estorno é calculado nesse momento (ex.: SulAmérica Previdência, Itaú consórcio).</p>
+    <p>Na SulAmérica, cada contribuição não paga já estorna 2,77% do agenciamento.</p>
+
+- id: e-voltou
+  area: estornos
+  parceira: ''
+  pergunta: O cliente voltou a pagar. Recebo o estorno de volta?
+  outras_formas:
+  - cliente reativou
+  - devolucao do estorno
+  - recuperar estorno
+  palavras_chave: cliente voltou pagar reativou reativacao recuperacao devolucao estorno regularizou
+  secao: estornos#duvidas
+  resposta: |
+    <ul><li><strong>MAG:</strong> sim, se o cliente reativar a proposta e quitar as 6 primeiras parcelas.</li>
+    <li><strong>SulAmérica Previdência:</strong> sim, se pagar as atrasadas e seguir em dia.</li>
+    <li><strong>Demais parceiras:</strong> os documentos não preveem devolução.</li></ul>
+
+- id: e-resumo
+  area: estornos
+  parceira: ''
+  pergunta: Depois de quanto tempo a comissão fica livre de estorno em cada parceira?
+  outras_formas:
+  - quadro resumo de estornos
+  - prazo de estorno das parceiras
+  - ate quando pode ter estorno
+  palavras_chave: quadro resumo prazo livre de estorno todas parceiras quanto tempo ate quando
+  secao: estornos#resumo
+  resposta: |
+    <table class="t"><tr><th>Parceira · produto</th><th>Livre após</th></tr>
+    <tr><td>Icatu Horizonte (até set/2025)</td><td>24 meses</td></tr>
+    <tr><td>Icatu Horizonte (guia out/2025)</td><td>18 meses</td></tr>
+    <tr><td>Icatu Essencial</td><td>12 meses</td></tr>
+    <tr><td>MAG risco e riders</td><td>7ª contribuição</td></tr>
+    <tr><td>MAG Whole Life Integral/Dinâmico/Sucessão</td><td>13ª contribuição</td></tr>
+    <tr><td>SulAmérica Previdência</td><td>36 meses</td></tr>
+    <tr><td>Prudential</td><td>4º ano</td></tr>
+    <tr><td>Amil médico PME/PJ</td><td>12 meses</td></tr>
+    <tr><td>Saúde Mais</td><td>6ª a 8ª parcela · Adesão/PF 90 dias</td></tr>
+    <tr><td>Vila Velha</td><td>prêmio quitado</td></tr>
+    <tr><td>Itaú iConquista</td><td>1 parcela além da curva</td></tr>
+    <tr><td>Consórcio XP (CNP)</td><td>12 / 8 meses</td></tr>
+    <tr><td>Embracon (tabelas 4x)</td><td>6ª parcela em dia</td></tr>
+    <tr><td>Magalu</td><td>7ª parcela</td></tr>
+    <tr><td>BB Consórcio</td><td>sem estorno</td></tr></table>
+
+- id: e-calc
+  area: estornos
+  parceira: ''
+  pergunta: Como calculo quanto vou devolver de estorno?
+  outras_formas:
+  - calculadora de estorno
+  - simular estorno
+  - conferir valor do estorno
+  palavras_chave: calculadora calcular simular estorno quanto vou devolver valor estimado conferir
+  secao: estornos#calculadora
+  resposta: |
+    <p>A <strong>Central de Estornos</strong> tem uma calculadora para <strong>Icatu</strong> e <strong>MAG</strong>: informe o que recebeu do cliente e quantas parcelas ele pagou. Se o estorno já veio, ela compara com o valor lançado.</p>
+    <p>Ela fica no W1nner, em <strong>Menu lateral › Arquivos › Comissões</strong>.</p>
+
+- id: e-mes
+  area: estornos
+  parceira: ''
+  pergunta: Em que mês o estorno aparece no extrato?
+  outras_formas:
+  - estorno veio meses depois
+  - quando o estorno e lancado
+  palavras_chave: quando aparece estorno mes extrato lancado meses depois
+  secao: estornos#duvidas
+  resposta: |
+    <p>No mês em que a parceira <strong>identifica</strong> o cancelamento, a inadimplência ou o resgate, como lançamento negativo. Por isso o estorno pode chegar meses depois da última parcela paga pelo cliente.</p>
+
+- id: e-evitar
+  area: estornos
+  parceira: ''
+  pergunta: Como reduzir o risco de estorno na minha carteira?
+  outras_formas:
+  - evitar estorno
+  - prevenir estorno
+  palavras_chave: como evitar reduzir risco estorno prevencao reter cliente
+  secao: estornos#duvidas
+  resposta: |
+    <ul><li>Acompanhe os clientes até o fim do prazo da parceira.</li>
+    <li>Em consórcio, avalie modalidades sem estorno: Itaú Sem Estorno, tabelas 12x da Embracon, BB Consórcio.</li>
+    <li>Na previdência SulAmérica, oriente sobre o impacto de resgate e portabilidade nos primeiros 3 anos.</li>
+    <li>Inadimplência é a principal causa: 3 parcelas em atraso costumam suspender o plano ou cancelar a cota.</li></ul>
+
+- id: e-naobate
+  area: estornos
+  parceira: ''
+  pergunta: O estorno não bate com a tabela. O que faço?
+  outras_formas:
+  - estorno errado
+  - contestar estorno
+  - divergencia no estorno
+  palavras_chave: estorno nao bate tabela errado contestar divergencia diferente
+  secao: estornos#duvidas
+  resposta: |
+    <p>Confira primeiro a <strong>versão do produto</strong> e a <strong>data de venda</strong> (na Icatu, guia antigo ou guia out/2025) e a última parcela paga.</p>
+    <p>Se continuar diferente, envie ao time de <strong>Comissões</strong> o nome do cliente, o certificado ou a proposta e o mês do extrato.</p>
+
+- id: e-semregra
+  area: estornos
+  parceira: ''
+  pergunta: A parceira que eu procuro não tem regra de estorno aqui.
+  outras_formas:
+  - parceira nao aparece
+  - nao encontrei a parceira
+  palavras_chave: parceira nao aparece sem regra documentada outra parceira
+  secao: estornos#duvidas
+  resposta: |
+    <p>Só estão documentadas as parceiras com regra de estorno registrada pela área de Comissões: Icatu, MAG, SulAmérica Previdência, Prudential, Amil, Saúde Mais, Vila Velha, Itaú, Consórcio XP (CNP), Embracon, Magalu e BB Consórcio.</p>
+    <p>Se a sua não está na lista, confirme com o time de Comissões antes de orientar o cliente.</p>
+
+- id: e-consorcio
+  area: estornos
+  parceira: ''
+  pergunta: Consórcio tem estorno? Resumo por administradora.
+  outras_formas:
+  - estorno no consorcio
+  - cliente cancelou a cota
+  - desistiu do consorcio
+  palavras_chave: consorcio cota estorno resumo administradoras itau cnp embracon magalu bb semestorno
+  secao: estornos#resumo
+  resposta: |
+    <ul><li><strong>Itaú iConquista:</strong> curva conforme a categoria (começa em 80%); livre 1 parcela além da curva. Há modalidade Sem Estorno.</li>
+    <li><strong>Consórcio XP (CNP):</strong> 30% a 50% por 8 ou 12 meses conforme a categoria; Diamante sem estorno.</li>
+    <li><strong>Embracon:</strong> tabelas 4x estornam 0,5% se o cliente não ficar em dia até a 6ª parcela; tabelas 12x sem estorno.</li>
+    <li><strong>Magalu:</strong> 50% da comissão paga se cancelar com até 6 parcelas.</li>
+    <li><strong>BB Consórcio:</strong> sem estorno (só reclamação procedente com devolução).</li></ul>
+    <p>Pergunte pelo nome da administradora para ver a regra completa.</p>
+
+- id: e-saude
+  area: estornos
+  parceira: ''
+  pergunta: Plano de saúde tem estorno? Resumo.
+  outras_formas:
+  - estorno plano de saude
+  - cliente cancelou o plano de saude
+  palavras_chave: saude plano estorno resumo amil saudemais operadora
+  secao: estornos#resumo
+  resposta: |
+    <ul><li><strong>Amil médico PME e PJ</strong> (implantados desde 01/08/2026): estorno de 100% a 30% do total pago, conforme as parcelas, nos 12 primeiros meses.</li>
+    <li><strong>Saúde Mais:</strong> tabela por operadora, livre entre a 6ª e a 8ª parcela; Adesão, Individual e Familiar exigem 90 dias de permanência.</li></ul>
+    <p>Pergunte pela operadora (ex.: “Bradesco Saúde Mais”) para ver a tabela.</p>
+
+- id: e-icatu
+  area: estornos
+  parceira: icatu
+  pergunta: Como funciona o estorno da Icatu?
+  outras_formas:
+  - regra de estorno icatu
+  - icatu cancelou
+  palavras_chave: icatu estorno agenciamento parcela por parcela horizonte essencial regra
+  secao: estornos#icatu
+  resposta: |
+    <p>Na Icatu o estorno incide só sobre o <strong>agenciamento</strong> e é calculado <strong>parcela por parcela</strong>: cada parcela de agenciamento tem sua própria contagem de permanência.</p>
+    <ul><li><strong>Horizonte vendido até set/2025:</strong> livre em 24 meses (cada parcela 12 meses, caindo 1/12 por mês).</li>
+    <li><strong>Horizonte guia out/2025</strong> (Demais, Temporário, Vitalício 5 e 10): livre em 18 meses (90%, 80%, 70%, 60%, 50%, depois 0%).</li>
+    <li><strong>Essencial:</strong> agenciamento na 1ª mensalidade, livre em 12 meses.</li></ul>
+
+- id: e-icatuantigo
+  area: estornos
+  parceira: icatu
+  pergunta: 'Icatu Horizonte vendido até set/2025: tabela de estorno (24 meses).'
+  outras_formas:
+  - horizonte guia antigo
+  - horizonte 24 meses
+  palavras_chave: icatu horizonte antigo guia 2022 2024 24 meses tabela 91,67 83,33 75 66,68 58,35
+  secao: estornos#icatu
+  resposta: |
+    <p>Agenciamento pago nas 12 primeiras parcelas. Cada parcela fica sujeita a estorno por 12 meses a partir dela:</p>
+    <table class="t"><tr><th>Permanência</th><th>Estorno</th></tr>
+    <tr><td>&lt; 1 mês</td><td>100%</td></tr><tr><td>1 a 2</td><td>91,67%</td></tr><tr><td>2 a 3</td><td>83,33%</td></tr><tr><td>3 a 4</td><td>75,00%</td></tr><tr><td>4 a 5</td><td>66,68%</td></tr><tr><td>5 a 6</td><td>58,35%</td></tr><tr><td>6 a 7</td><td>50,00%</td></tr><tr><td>7 a 8</td><td>41,65%</td></tr><tr><td>8 a 9</td><td>33,32%</td></tr><tr><td>9 a 10</td><td>25,00%</td></tr><tr><td>10 a 11</td><td>16,67%</td></tr><tr><td>11 a 12</td><td>8,33%</td></tr><tr><td>12 ou mais</td><td>0%</td></tr></table>
+    <p>12ª parcela + 12 meses = contrato livre no <strong>mês 24</strong>.</p>
+
+- id: e-icatunovo
+  area: estornos
+  parceira: icatu
+  pergunta: 'Icatu Horizonte guia out/2025: tabela de estorno (18 meses).'
+  outras_formas:
+  - horizonte novo
+  - horizonte 18 meses
+  - horizonte demais temporario vitalicio
+  palavras_chave: icatu horizonte novo guia out 2025 outubro demais temporario vitalicio 18 meses 90 80 70 60 50
+  secao: estornos#icatu
+  resposta: |
+    <p>Vale para Demais, Temporário, Vitalício 5 e Vitalício 10. Cada parcela de agenciamento fica sujeita a estorno só por <strong>6 meses</strong>:</p>
+    <table class="t"><tr><th>Permanência</th><th>Estorno</th></tr>
+    <tr><td>&lt; 1 mês</td><td>100%</td></tr><tr><td>1 a 2</td><td>90%</td></tr><tr><td>2 a 3</td><td>80%</td></tr><tr><td>3 a 4</td><td>70%</td></tr><tr><td>4 a 5</td><td>60%</td></tr><tr><td>5 a 6</td><td>50%</td></tr><tr><td>6 ou mais</td><td>0%</td></tr></table>
+    <p>12ª parcela + 6 meses = contrato livre no <strong>mês 18</strong>.</p>
+
+- id: e-icatuess
+  area: estornos
+  parceira: icatu
+  pergunta: 'Icatu Essencial: como é o estorno?'
+  outras_formas:
+  - essencial 12 meses
+  - essencial plataformista estorno
+  palavras_chave: icatu essencial plataformista 12 meses primeira mensalidade agenciamento modulo 200 7 8 9
+  secao: estornos#icatu
+  resposta: |
+    <p>Agenciamento pago na 1ª mensalidade. Estorno proporcional se o cliente não completar <strong>12 meses</strong>, caindo 1/12 por mês (100%, 91,67%, 83,33%, 75%, 66,67%, 58,33%, 50%, 41,67%, 33,33%, 25%, 16,67%, 8,33%, 0%).</p>
+    <p><strong>Exemplo:</strong> agenciamento de R$ 300,00, cliente pagou 4 mensalidades → 66,67% = <strong>R$ 200,00</strong>. Com 13 pagas, sem estorno.</p>
+    <p>Módulos de 200% (7, 8 e 9): agenciamento em duas parcelas de 100% (1ª e 2ª mensalidade), cada uma com sua tabela.</p>
+
+- id: e-icatuversao
+  area: estornos
+  parceira: icatu
+  pergunta: 'Icatu: qual tabela vale para o meu cliente?'
+  outras_formas:
+  - como saber se e guia antigo ou novo
+  - versao do produto icatu
+  palavras_chave: icatu qual tabela vale versao guia data venda horizonte demais antigo novo identificar
+  secao: estornos#icatu
+  resposta: |
+    <p>Depende de <strong>quando a apólice foi vendida</strong>. Horizonte vendido pelo guia antigo (até set/2025) segue a tabela de 12 meses por parcela. No guia de out/2025, o Horizonte passou a ser vendido nas opções <em>Demais</em>, <em>Temporário</em>, <em>Vitalício 5</em> e <em>Vitalício 10</em>, todas com a tabela nova (6 meses por parcela).</p>
+    <p>Essencial e Essencial Plataformista seguem a tabela do Essencial.</p>
+
+- id: e-icatuexemplo
+  area: estornos
+  parceira: icatu
+  pergunta: 'Icatu: exemplo de cliente que pagou 8 parcelas e cancelou.'
+  outras_formas:
+  - exemplo de calculo icatu
+  - cancelou com 8 parcelas
+  palavras_chave: icatu exemplo calculo horizonte 8 parcelas pagas cancelou 500 350
+  secao: estornos#icatu
+  resposta: |
+    <p>Agenciamento de R$ 100,00 por parcela. A 8ª parcela ficou 1 mês, a 7ª ficou 2 meses… a 1ª ficou 8 meses.</p>
+    <ul><li><strong>Guia antigo (até set/2025):</strong> 8 lançamentos de estorno, somando <strong>R$ 500,00</strong> dos R$ 800,00 recebidos.</li>
+    <li><strong>Guia out/2025:</strong> só as 5 últimas parcelas são estornadas (90+80+70+60+50), somando <strong>R$ 350,00</strong>.</li></ul>
+
+- id: e-icatuconferir
+  area: estornos
+  parceira: icatu
+  pergunta: Como confiro um estorno da Icatu?
+  outras_formas:
+  - passo a passo estorno icatu
+  - formula icatu
+  palavras_chave: icatu conferir calcular passo a passo formula ultima parcela mantida permanencia
+  secao: estornos#icatu
+  resposta: |
+    <ol><li>Identifique a <strong>última parcela paga e mantida</strong> pelo cliente.</li>
+    <li>Para cada parcela que pagou agenciamento: permanência = <strong>última parcela mantida − nº da parcela + 1</strong>.</li>
+    <li>Busque o percentual na tabela da versão do produto e multiplique pelo <strong>agenciamento daquela parcela</strong>.</li>
+    <li>Some as parcelas. Permanência fora da tabela = 0%.</li></ol>
+    <p>Ou use a calculadora da Central de Estornos.</p>
+
+- id: e-icatuvarios
+  area: estornos
+  parceira: icatu
+  pergunta: Por que recebi vários estornos da Icatu no mesmo mês para o mesmo cliente?
+  outras_formas:
+  - varios lancamentos icatu
+  - muitos estornos icatu
+  palavras_chave: icatu varios lancamentos estornos mesmo mes mesmo cliente
+  secao: estornos#icatu
+  resposta: |
+    <p>Porque o agenciamento foi pago em várias parcelas, e cada parcela tem sua própria permanência. Um cancelamento gera <strong>um lançamento por parcela</strong> ainda dentro do prazo, cada um com seu percentual.</p>
+
+- id: e-icatu1ano
+  area: estornos
+  parceira: icatu
+  pergunta: O cliente Icatu cancelou depois de 1 ano. Ainda tem estorno?
+  outras_formas:
+  - icatu 13 meses
+  - cancelou depois de 12 meses
+  palavras_chave: icatu cancelou depois de um ano 13 meses 12 meses ainda tem estorno
+  secao: estornos#icatu
+  resposta: |
+    <p><strong>Horizonte: sim.</strong> Como o agenciamento é pago até a 12ª parcela, as últimas ainda estão no prazo: até o mês 24 (guia antigo) ou 18 (guia out/2025).</p>
+    <p><strong>Essencial: não</strong>, após 12 meses não há estorno.</p>
+
+- id: e-icatu100
+  area: estornos
+  parceira: icatu
+  pergunta: Veio estorno de 100% em uma parcela da Icatu. Está certo?
+  outras_formas:
+  - estorno integral icatu
+  palavras_chave: icatu 100% integral parcela menos de um mes
+  secao: estornos#icatu
+  resposta: |
+    <p>Só quando a permanência daquela parcela é <strong>menor que 1 mês</strong> ou quando o pagamento da parcela foi devolvido. Se a parcela ficou 1 mês ou mais, o correto é 91,67% (guia antigo) ou 90% (guia out/2025).</p>
+
+- id: e-icatu24
+  area: estornos
+  parceira: icatu
+  pergunta: O guia da Icatu fala em 24 meses, mas a tabela vai só até 12. Qual vale?
+  outras_formas:
+  - 24 ou 12 meses icatu
+  palavras_chave: icatu 24 meses 12 meses texto guia horizonte diferenca
+  secao: estornos#icatu
+  resposta: |
+    <p>As duas se completam. A tabela vale para <strong>cada parcela</strong> (12 meses a partir dela). Como o agenciamento vai até a 12ª parcela, o contrato só fica totalmente livre no mês 24. No guia out/2025 a lógica é a mesma com 6 meses por parcela: livre no mês 18.</p>
+
+- id: e-icatupme
+  area: estornos
+  parceira: icatu
+  pergunta: 'Icatu PME e Vida em Grupo: tem estorno?'
+  outras_formas:
+  - vida em grupo icatu
+  palavras_chave: icatu pme vidagrupo vida em grupo empresarial reembolso proporcional estipulante
+  secao: estornos#icatu
+  resposta: |
+    <p>Agenciamento de 100% do prêmio da 1ª fatura. Se a apólice ou o segurado for cancelado antes do fim da vigência prevista, o agenciamento é <strong>reembolsado proporcionalmente</strong>. A proposta comercial não traz tabela de percentuais.</p>
+
+- id: e-icatucorret
+  area: estornos
+  parceira: icatu
+  pergunta: Icatu estorna a corretagem? E na co-corretagem?
+  outras_formas:
+  - co-corretagem icatu
+  palavras_chave: icatu corretagem co-corretagem cocorretagem estorna
+  secao: estornos#icatu
+  resposta: |
+    <p>Os guias não preveem estorno de corretagem. Quando o pagamento de uma parcela do cliente é desfeito, a Icatu reverte a comissão daquela parcela inteira (agenciamento e corretagem).</p>
+    <p>Em co-corretagem, a Icatu paga o co-corretor diretamente, sem passar pela W1.</p>
+
+- id: e-mag
+  area: estornos
+  parceira: mag
+  pergunta: Como funciona o estorno da MAG?
+  outras_formas:
+  - regra de estorno mag
+  - mag cancelou
+  - mongeral estorno
+  palavras_chave: mag estorno angariacao contribuicoes pagas grupos politica v6 regra
+  secao: estornos#mag
+  resposta: |
+    <p>A MAG divide os produtos de vida em grupos, cada um com sua tabela (Política de Estorno v6, vigência 10/03/2025). O estorno incide sobre a <strong>angariação</strong> e é contado pelo <strong>número de contribuições pagas</strong>.</p>
+    <ul><li><strong>Coberturas de risco e riders:</strong> livre a partir da 7ª contribuição.</li>
+    <li><strong>Whole Life Integral, Dinâmico e Sucessão:</strong> livre a partir da 13ª.</li>
+    <li>VIR/Whole Life Plus, Private Solutions, Empresariais e Talent/Partner têm regras próprias.</li></ul>
+
+- id: e-magrisco
+  area: estornos
+  parceira: mag
+  pergunta: 'MAG coberturas de risco e riders (Grupo A): tabela de estorno.'
+  outras_formas:
+  - mag dit dih estorno
+  - mag doencas graves estorno
+  - mag 7 parcela
+  palavras_chave: mag risco grupo a riders coberturas dit dih ipa doencas graves saf morte acidente cirurgias reparticao capitalizacao 83,33 66,67
+  secao: estornos#mag
+  resposta: |
+    <p>Angariação paga na 1ª parcela.</p>
+    <table class="t"><tr><th>Contribuições pagas</th><th>Estorno</th></tr>
+    <tr><td>0 ou 1</td><td>100%</td></tr><tr><td>2</td><td>83,33%</td></tr><tr><td>3</td><td>66,67%</td></tr><tr><td>4</td><td>50%</td></tr><tr><td>5</td><td>33,33%</td></tr><tr><td>6</td><td>16,67%</td></tr><tr><td>7 ou mais</td><td>0%</td></tr></table>
+    <p><strong>Exemplo:</strong> angariação de R$ 300,00 e 3 contribuições pagas → 66,67% = <strong>R$ 200,00</strong>.</p>
+
+- id: e-magwl
+  area: estornos
+  parceira: mag
+  pergunta: 'MAG Whole Life Integral, Dinâmico e Sucessão: tabela de estorno.'
+  outras_formas:
+  - mag whole life estorno
+  - wholelife mag
+  palavras_chave: mag wholelife whole life integral dinamico sucessao 12 parcelas 90 80 70 60 13 contribuicao
+  secao: estornos#mag
+  resposta: |
+    <p>Angariação paga nas 12 primeiras parcelas. No cancelamento ou redução antes da 12ª, o percentual vale para <strong>toda a angariação já paga</strong>.</p>
+    <table class="t"><tr><th>Parcelas pagas</th><th>Estorno</th></tr>
+    <tr><td>0 a 2</td><td>100%</td></tr><tr><td>3</td><td>90%</td></tr><tr><td>4</td><td>80%</td></tr><tr><td>5</td><td>70%</td></tr><tr><td>6</td><td>60%</td></tr><tr><td>7</td><td>50%</td></tr><tr><td>8</td><td>40%</td></tr><tr><td>9</td><td>30%</td></tr><tr><td>10</td><td>20%</td></tr><tr><td>11</td><td>10%</td></tr><tr><td>12</td><td>5%</td></tr></table>
+    <p><strong>Exemplo:</strong> R$ 200,00 em cada uma das 5 parcelas pagas (R$ 1.000,00) → 70% = <strong>R$ 700,00</strong>.</p>
+
+- id: e-magvir
+  area: estornos
+  parceira: mag
+  pergunta: 'MAG Vida Inteira Resgatável (VIR) e Whole Life Plus: estorno.'
+  outras_formas:
+  - vir mag
+  - whole life plus
+  palavras_chave: mag vir vida inteira resgatavel wholelife plus carteira 17 8 4 contribuicoes
+  secao: estornos#mag
+  resposta: |
+    <p>Regra desde 11/06/2018. Até 4 contribuições pagas, estorna <strong>100% da angariação e da carteira</strong>. Com 5 pagas, 17% da angariação; com 6, 8%.</p>
+    <p>Redução de capital nos 6 primeiros meses estorna na proporção da redução.</p>
+
+- id: e-magprivate
+  area: estornos
+  parceira: mag
+  pergunta: 'MAG Private Solutions: estorno.'
+  outras_formas:
+  - term life mag
+  - planos 563 579 677 678
+  palavras_chave: mag private solutions 563 579 677 678 term life wholelife 2014 8,33
+  secao: estornos#mag
+  resposta: |
+    <ul><li><strong>Planos 563 e 579:</strong> cancelamento nos 12 primeiros meses estorna toda a comissão paga no período.</li>
+    <li><strong>Planos 677 e 678 (Whole Life e Term Life 2014):</strong> 0 pagas = 100%, depois cai 8,33 p.p. por contribuição (1 = 91,67% … 11 = 8,33%) até 0% com 12 pagas.</li></ul>
+
+- id: e-magemp
+  area: estornos
+  parceira: mag
+  pergunta: 'MAG Empresariais e VG Cotado (Grupo D): estorno.'
+  outras_formas:
+  - mag empresarial
+  - vida em grupo mag
+  palavras_chave: mag empresarial empresariais vg cotado grupo d pro rata exclusao segurados vidagrupo
+  secao: estornos#mag
+  resposta: |
+    <p>Proporcional ao tempo que faltava: <strong>(angariação paga ÷ prazo do contrato) × meses restantes</strong>. Vale para cancelamento ou exclusão de segurados.</p>
+    <p>Ex.: R$ 1.200,00 de angariação, contrato de 12 meses, cancelado no 4º mês → 1.200 ÷ 12 × 8 = <strong>R$ 800,00</strong>.</p>
+
+- id: e-magtalent
+  area: estornos
+  parceira: mag
+  pergunta: 'MAG Talent e Partner (Grupo F): estorno.'
+  outras_formas:
+  - talent mag
+  - partner mag
+  palavras_chave: mag talent partner grupo f capital medio 2 milhoes 36 meses
+  secao: estornos#mag
+  resposta: |
+    <p>Nos 12 primeiros meses, regra do Grupo A. Do 13º ao 36º mês, se a saída de segurados derrubar o capital médio do convênio abaixo de <strong>R$ 2 milhões</strong>, estorna-se toda a comissão dos 12 primeiros meses da proposta que causou a redução.</p>
+
+- id: e-maggerais
+  area: estornos
+  parceira: mag
+  pergunta: 'MAG: troca de proposta, reativação e outras regras gerais.'
+  outras_formas:
+  - mag nova proposta
+  - cliente trocou de proposta mag
+  - mag reativou
+  palavras_chave: mag regras gerais 6 meses nova proposta substituicao troca reativacao devolucao contribuicao dobro
+  secao: estornos#mag
+  resposta: |
+    <ul><li><strong>Troca de proposta:</strong> cancelou e contratou outra em até 6 meses → estorna-se a angariação da cancelada na carteira de quem vendeu a nova, limitado à nova angariação.</li>
+    <li><strong>Sem estorno em dobro:</strong> nova proposta em até 6 meses de um cancelamento já estornado não gera novo estorno.</li>
+    <li><strong>Devolução de contribuição:</strong> estorna também a carteira correspondente.</li>
+    <li><strong>Reativação:</strong> reativou e quitou as 6 primeiras parcelas → a MAG devolve o estorno.</li></ul>
+
+- id: e-magcarteira
+  area: estornos
+  parceira: mag
+  pergunta: Recebi estorno de carteira da MAG, não só de angariação. Por quê?
+  outras_formas:
+  - mag estornou carteira
+  palavras_chave: mag estorno carteira devolucao contribuicao vir
+  secao: estornos#mag
+  resposta: |
+    <p>Acontece quando a MAG <strong>devolve contribuição</strong> ao cliente (a carteira daquela contribuição é revertida) e nos produtos <strong>VIR e Whole Life Plus</strong> com até 4 contribuições pagas.</p>
+
+- id: e-magreduz
+  area: estornos
+  parceira: mag
+  pergunta: O cliente MAG reduziu a contribuição. Tem estorno?
+  outras_formas:
+  - reducao de capital mag
+  - diminuiu o seguro mag
+  palavras_chave: mag cliente reduziu reducao contribuicao capital diminuiu
+  secao: estornos#mag
+  resposta: |
+    <p>Sim. Coberturas de risco: redução até a 6ª parcela segue a tabela do Grupo A. Whole Life Integral/Dinâmico/Sucessão: redução antes da 12ª segue a tabela de 100% a 5%. VIR e Whole Life Plus: estorno na proporção da redução de capital.</p>
+
+- id: e-sula
+  area: estornos
+  parceira: sulamerica
+  pergunta: 'SulAmérica Previdência: como funciona o estorno?'
+  outras_formas:
+  - estorno previdencia
+  - sulamerica 36 meses
+  - pgbl vgbl estorno
+  palavras_chave: sulamerica previdencia agenciamento 70 36 meses 2,77 1/36 contribuicao nao paga
+  secao: estornos#sulamerica
+  resposta: |
+    <p>O agenciamento (70% da 1ª parcela) é pago de uma vez, mas o participante precisa contribuir por pelo menos <strong>36 meses</strong>. Cada contribuição mensal não paga estorna <strong>2,77% (1/36)</strong> do agenciamento recebido.</p>
+    <p>Ex.: agenciamento de R$ 1.000,00 e 3 contribuições não pagas → 8,31% = <strong>R$ 83,10</strong>.</p>
+
+- id: e-sulasusp
+  area: estornos
+  parceira: sulamerica
+  pergunta: 'SulAmérica: o que acontece com 3 parcelas inadimplentes?'
+  outras_formas:
+  - cobranca suspensa sulamerica
+  palavras_chave: sulamerica suspensao 3 parcelas inadimplentes cobranca suspensa de uma vez
+  secao: estornos#sulamerica
+  resposta: |
+    <p>Com 3 parcelas inadimplentes seguidas, ou 3 não seguidas em 12 meses, a cobrança fica <strong>suspensa</strong>. Nesse momento, todo o estorno ainda devido é cobrado de uma só vez.</p>
+
+- id: e-sulaparcel
+  area: estornos
+  parceira: sulamerica
+  pergunta: 'SulAmérica: o estorno é cobrado à vista ou parcelado?'
+  outras_formas:
+  - parcelamento do estorno
+  palavras_chave: sulamerica parcelamento estorno 500 2000 4x 6x a vista cobrado
+  secao: estornos#sulamerica
+  resposta: |
+    <table class="t"><tr><th>Valor do estorno</th><th>Forma</th></tr><tr><td>Até R$ 500,00</td><td>À vista</td></tr><tr><td>R$ 500,01 a R$ 2.000,00</td><td>4x</td></tr><tr><td>A partir de R$ 2.000,01</td><td>6x</td></tr></table>
+
+- id: e-sularesgate
+  area: estornos
+  parceira: sulamerica
+  pergunta: 'SulAmérica: resgate, aporte ou portabilidade geram estorno?'
+  outras_formas:
+  - cliente resgatou previdencia
+  - portabilidade previdencia estorno
+  - portou o plano
+  palavras_chave: sulamerica resgate aporte esporadico portabilidade saida entrada especialista prestige
+  secao: estornos#sulamerica
+  resposta: |
+    <p>Resgate ou portabilidade de valor que gerou comissão: <strong>2,77% por mês</strong> que faltava até o 36º, proporcional ao valor resgatado.</p>
+    <p>Ex.: comissão de R$ 500,00 sobre um aporte resgatado inteiro no 10º mês → 26 × 2,77% = 72,02% = <strong>R$ 360,10</strong>.</p>
+    <p>Portabilidade de <strong>entrada</strong> só gera estorno no produto <strong>Especialista</strong>; no padrão e no Prestige, não.</p>
+
+- id: e-sulaoutros
+  area: estornos
+  parceira: sulamerica
+  pergunta: 'SulAmérica: redução de contribuição, troca de corretor e risco.'
+  outras_formas:
+  - recusa ipca sulamerica
+  - troca de corretor previdencia
+  palavras_chave: sulamerica reducao contribuicao ipca reajuste troca corretor carencia risco 30 vitalicio recuperacao
+  secao: estornos#sulamerica
+  resposta: |
+    <ul><li>Redução da contribuição ou recusa do reajuste pelo IPCA: estorno proporcional ao valor reduzido.</li>
+    <li>Cliente volta a pagar as atrasadas e segue em dia: o estorno é devolvido.</li>
+    <li>Troca de corretor na carência: o antigo é estornado proporcionalmente e o novo recebe a parte restante.</li>
+    <li>Risco (30% vitalício): sem agenciamento e sem estorno.</li></ul>
+
+- id: e-pru
+  area: estornos
+  parceira: prudential
+  pergunta: 'Prudential: como funciona o recapture (estorno)?'
+  outras_formas:
+  - recapture
+  - prudential cancelou
+  palavras_chave: prudential recapture apolice cobertura 50 30 15 ano vigencia 4 ano
+  secao: estornos#prudential
+  resposta: |
+    <p>Quando uma apólice ou cobertura é cancelada, a Prudential gera o <strong>recapture</strong> sobre toda a comissão paga referente a ela:</p>
+    <table class="t"><tr><th>Cancelamento no</th><th>Estorno</th></tr><tr><td>1º ano</td><td>50%</td></tr><tr><td>2º ano</td><td>30%</td></tr><tr><td>3º ano</td><td>15%</td></tr><tr><td>4º ano em diante</td><td>0%</td></tr></table>
+    <p>Ex.: R$ 4.000,00 recebidos e cancelamento no 2º ano → <strong>R$ 1.200,00</strong>. Cancelar só um adicional estorna apenas aquela cobertura.</p>
+
+- id: e-amil
+  area: estornos
+  parceira: amil
+  pergunta: 'Amil médico PME e PJ: como é o estorno?'
+  outras_formas:
+  - amil cancelou
+  - plano de saude amil estorno
+  palavras_chave: amil pme pj medico coletivo 2 a 99 vidas 100 vidas implantacao 01/08/2026 12 meses saude
+  secao: estornos#amil
+  resposta: |
+    <p>Vale para planos <strong>médicos</strong> coletivos PME (2 a 99 vidas) e PJ (100+ vidas) implantados a partir de <strong>01/08/2026</strong> e cancelados em até 12 meses. Incide sobre o <strong>total das comissões pagas</strong>. Odontológico e contratos anteriores não entram.</p>
+    <table class="t"><tr><th>Parcelas pagas</th><th>1–3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th><th>12</th></tr><tr><td>Estorno</td><td>100%</td><td>83%</td><td>79%</td><td>75%</td><td>60%</td><td>50%</td><td>45%</td><td>40%</td><td>35%</td><td>30%</td></tr></table>
+    <p>Ex.: R$ 3.000,00 em 5 parcelas e cancelamento → 79% = <strong>R$ 2.370,00</strong>.</p>
+
+- id: e-sm
+  area: estornos
+  parceira: saudemais
+  pergunta: 'Saúde Mais: como é o estorno dos planos de saúde?'
+  outras_formas:
+  - saude mais cancelou
+  - corretora saude mais estorno
+  palavras_chave: saudemais saude bradesco omint sulamerica amil notredame 7 parcela 90 dias adesao individual familiar kipp qsaude operadora
+  secao: estornos#saudemais
+  resposta: |
+    <p>Cada operadora tem a sua tabela. Regras gerais da grade:</p>
+    <ul><li><strong>Bradesco, Omint, SulAmérica, Amil e NotreDame</strong> estornam 100% de propostas não confirmadas até a 7ª parcela.</li>
+    <li>Planos <strong>Adesão, Individual e Familiar</strong>: o cliente precisa ficar pelo menos <strong>90 dias</strong> para não haver estorno.</li>
+    <li>Kipp e QSaúde têm tabela específica.</li></ul>
+
+- id: e-smtab
+  area: estornos
+  parceira: saudemais
+  pergunta: 'Saúde Mais: tabela de estorno por operadora.'
+  outras_formas:
+  - bradesco saude estorno
+  - porto seguro saude estorno
+  - dentaluni estorno
+  - cruz saude
+  palavras_chave: saudemais operadora tabela amil cruz saude pme bradesco cruz pf familiar porto seguro dentaluni
+  secao: estornos#saudemais
+  resposta: |
+    <table class="t"><tr><th>Parcelas pagas</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr>
+    <tr><td>Amil e Cruz Saúde PME</td><td>80%</td><td>70%</td><td>60%</td><td>50%</td><td>40%</td><td>30%</td></tr>
+    <tr><td>Bradesco</td><td>80%</td><td>75%</td><td>65%</td><td>55%</td><td>45%</td><td>35%</td></tr>
+    <tr><td>Cruz Saúde PF e Familiar</td><td>50%</td><td>40%</td><td>25%</td><td>10%</td><td>5%</td><td>—</td></tr>
+    <tr><td>Porto Seguro PME/Empresarial*</td><td>80%</td><td>70%</td><td>60%</td><td>50%</td><td>40%</td><td>30%</td></tr>
+    <tr><td>DentalUni</td><td>75%</td><td>65%</td><td>55%</td><td>45%</td><td>35%</td><td>25%</td></tr></table>
+    <p>Percentual sobre o total de comissão paga até a parcela. *Porto: sobre o agenciamento total pago; 0% na 7ª.</p>
+
+- id: e-smnotre
+  area: estornos
+  parceira: saudemais
+  pergunta: 'Saúde Mais: SulAmérica, NotreDame Intermédica, Leader e NotreLife.'
+  outras_formas:
+  - notredame estorno
+  - intermedica estorno
+  - fatura nao paga saude
+  palavras_chave: saudemais sulamerica notredame intermedica leader notrelife fatura nao paga
+  secao: estornos#saudemais
+  resposta: |
+    <p>Aqui a base é a <strong>fatura não paga</strong>: devolve-se 100% da parcela de agenciamento correspondente.</p>
+    <ul><li>Pagou só a 1ª: 100% da 1ª parcela de agenciamento.</li><li>Pagou 1ª e 2ª: 100% da 2ª.</li><li>Pagou de 3 a 5 faturas: 100% da 3ª.</li>
+    <li>Zera quando a fatura não paga é a 7ª (SulAmérica) ou a 8ª (NotreDame e Leader). NotreLife tem só as duas primeiras faixas.</li></ul>
+
+- id: e-vv
+  area: estornos
+  parceira: vilavelha
+  pergunta: 'Vila Velha (seguro auto e demais ramos): como é o estorno?'
+  outras_formas:
+  - seguro auto estorno
+  - seguro de carro cancelou
+  palavras_chave: vilavelha seguro auto carro ramos comissao antecipada premio a vista parcelado pro rata saldo
+  secao: estornos#vilavelha
+  resposta: |
+    <p>A comissão é paga na emissão, sobre o <strong>prêmio total à vista</strong>, mesmo que o cliente parcele.</p>
+    <ul><li>1ª parcela não paga: estorno <strong>integral</strong>.</li><li>Deixou de pagar parcelas seguintes: estorno <strong>proporcional ao saldo não pago</strong>.</li></ul>
+    <p>Ex.: seguro em 10 parcelas, cancelado depois da 3ª → estorno de <strong>7/10</strong> da comissão.</p>
+
+- id: e-itau
+  area: estornos
+  parceira: itau
+  pergunta: 'Itaú consórcio (iConquista): como é o estorno?'
+  outras_formas:
+  - itau cancelou consorcio
+  - curva de estorno itau
+  palavras_chave: itau iconquista consorcio categoria diamante ouro prata bronze curva 80 parcela alem da curva imovel auto linear reduzida
+  secao: estornos#itau
+  resposta: |
+    <p>Comissão e curva de estorno dependem da <strong>categoria</strong> do escritório (Diamante, Ouro, Prata ou Bronze), do bem (imóvel ou auto) e do tipo de parcela (linear ou reduzida).</p>
+    <p>As curvas começam em <strong>80% de estorno</strong> e caem a cada parcela paga. Para não haver estorno, o cliente precisa pagar <strong>uma parcela além da curva</strong> (curva de 6 meses → 7ª parcela).</p>
+    <p>Há também a modalidade <strong>Sem Estorno</strong>.</p>
+
+- id: e-itausem
+  area: estornos
+  parceira: itau
+  pergunta: 'Itaú: como funciona a modalidade Sem Estorno?'
+  outras_formas:
+  - consorcio sem estorno itau
+  palavras_chave: itau iconquista semestorno sem estorno modalidade imovel 16x 0,25 auto 10x 0,40 4%
+  secao: estornos#itau
+  resposta: |
+    <p>Comissão de <strong>4%</strong> sem risco de devolução, recebida em mais parcelas:</p>
+    <ul><li><strong>Imóvel:</strong> 16 × 0,25%</li><li><strong>Auto:</strong> 10 × 0,40%</li></ul>
+
+- id: e-itaucat
+  area: estornos
+  parceira: itau
+  pergunta: 'Itaú: como é definida a categoria do escritório?'
+  outras_formas:
+  - categoria diamante itau
+  palavras_chave: itau categoria criterios diamante ouro prata bronze cancelamento producao trimestre
+  secao: estornos#itau
+  resposta: |
+    <ul><li><strong>Diamante:</strong> produção acima de R$ 3 mi/mês e cancelamento abaixo de 10%.</li>
+    <li><strong>Ouro:</strong> R$ 1 a 3 mi/mês e cancelamento abaixo de 20%.</li>
+    <li><strong>Prata:</strong> até R$ 1 mi/mês e cancelamento abaixo de 30%.</li>
+    <li><strong>Bronze:</strong> cancelamento acima de 30%.</li></ul><p>Revisão trimestral. A taxa de cancelamento pesa mais que o volume.</p>
+
+- id: e-itauinad
+  area: estornos
+  parceira: itau
+  pergunta: 'Itaú consórcio: cliente com parcelas em atraso.'
+  outras_formas:
+  - itau 3 parcelas atrasadas
+  - cota cancelada itau
+  palavras_chave: itau inadimplencia 3 parcelas atraso cota cancelada automaticamente redutor 50 12x 18x
+  secao: estornos#itau
+  resposta: |
+    <p>Com <strong>3 parcelas em atraso</strong>, a cota é cancelada automaticamente. Cota em atraso não gera comissão e, se cancelada, a comissão já paga pode ser estornada.</p>
+    <p>Grupos com redutor de 50%: modelo 12x tem estorno; modelo 18x é sem estorno (desde 24/03/2026).</p>
+
+- id: e-cnp
+  area: estornos
+  parceira: cnp
+  pergunta: 'Consórcio XP (CNP): como é o estorno?'
+  outras_formas:
+  - cnp cancelou
+  - estorno consorcio xp
+  palavras_chave: cnp xp consorcio categoria diamante ouro prata bronze parcela reduzida cheia estorno 30 40 50 adimplencia 13 mes
+  secao: estornos#cnp
+  resposta: |
+    <p>A categoria do escritório define comissão e estorno (reavaliada a cada trimestre pela adimplência no 13º mês).</p>
+    <table class="t"><tr><th>Categoria</th><th>Parcela reduzida</th><th>Parcela cheia</th></tr>
+    <tr><td>Diamante</td><td>4% em 12x · sem estorno</td><td>4% em 6x · sem estorno</td></tr>
+    <tr><td>Ouro</td><td>4% em 12x · 30% por 12 meses</td><td>4% em 8x · 30% por 8 meses</td></tr>
+    <tr><td>Prata</td><td>3,75% em 12x · 40% por 12 meses</td><td>3,5% em 8x · 40% por 8 meses</td></tr>
+    <tr><td>Bronze</td><td>3,5% em 12x · 50% por 12 meses</td><td>3% em 8x · 50% por 8 meses</td></tr></table>
+
+- id: e-cnpdesist
+  area: estornos
+  parceira: cnp
+  pergunta: 'CNP: desistência, cota inadimplente e vendas em condição exclusiva.'
+  outras_formas:
+  - cnp desistencia
+  - venda para funcionario cnp
+  palavras_chave: cnp desistencia inadimplente vicio comercializacao condicao exclusiva colaboradores assessores dedicados
+  secao: estornos#cnp
+  resposta: |
+    <p>Cota cancelada ou inadimplente não gera comissão; na <strong>desistência</strong>, o estorno é proporcional ao valor pago pelo cliente e compensado nas comissões seguintes. Vício de comercialização comprovado também gera estorno.</p>
+    <p>Vendas em condição exclusiva (colaboradores, assessores e dedicados) <strong>não têm comissão</strong>.</p>
+
+- id: e-embracon
+  area: estornos
+  parceira: embracon
+  pergunta: 'Embracon: como é o estorno?'
+  outras_formas:
+  - embracon cancelou
+  - tabela 4x embracon
+  - embracon 12x
+  palavras_chave: embracon 12x semestorno sem estorno 4x com estorno 0,5 sexta 6 parcela em dia tabelas select parcelinha xp
+  secao: estornos#embracon
+  resposta: |
+    <ul><li>Tabelas <strong>“12x sem estorno”</strong>: comissão de 0,333% ao mês, sem estorno (Imóvel Parcela Reduzida 1x e 12x, Imóvel Parceria Nacional B, Auto Exclusiva XP, Pesados Parcelinha).</li>
+    <li>Tabelas <strong>“4x com estorno de 0,5%”</strong>: comissão 1,5% + 1,0% + 1,0% + 0,5%. O consorciado precisa ficar em dia até, no mínimo, a <strong>6ª parcela</strong>; se não, estorno de 0,5% (Select Mais imóvel/auto, Pesados, Serviços, Moto).</li></ul>
+
+- id: e-embfase
+  area: estornos
+  parceira: embracon
+  pergunta: 'Embracon: por que a proposta não pagou comissão?'
+  outras_formas:
+  - fase da proposta embracon
+  - fase 23
+  palavras_chave: embracon fase 22 24 44 23 nao paga comissao cota nao alocada
+  secao: estornos#embracon
+  resposta: |
+    <p>Proposta nas fases <strong>22, 24 ou 44</strong> não paga comissão; só a <strong>fase 23</strong> (analisada, sem inconsistência). Cota não alocada, inadimplente, em atraso ou cancelada também não gera comissão.</p>
+
+- id: e-magalu
+  area: estornos
+  parceira: magalu
+  pergunta: 'Consórcio Magalu: como é o estorno?'
+  outras_formas:
+  - magalu cancelou
+  - magalu 6 parcelas
+  palavras_chave: magalu consorcio cancelamento ate 6 parcelas 50 comissao funcionarios auto moto eletro imovel caminhao
+  secao: estornos#magalu
+  resposta: |
+    <p>Cancelamento com <strong>até 6 parcelas pagas</strong> estorna <strong>50% da comissão já paga</strong>, em todos os segmentos. A comissão só é paga conforme o cliente paga as parcelas. Plano de funcionários não gera comissão.</p>
+    <p>Ex.: 1,9% recebidos sobre R$ 100 mil (R$ 1.900,00) e cancelamento com 4 parcelas → <strong>R$ 950,00</strong>.</p>
+
+- id: e-bb
+  area: estornos
+  parceira: bb
+  pergunta: BB Consórcio tem estorno?
+  outras_formas:
+  - banco do brasil consorcio estorno
+  palavras_chave: bb consorcio banco do brasil semestorno sem estorno reclamacao procedente devolucao 75 dias conformidade
+  secao: estornos#bb
+  resposta: |
+    <p><strong>Não por desistência.</strong> A exceção: reclamação procedente com devolução ao consorciado estorna todas as comissões do contrato.</p>
+    <p>Atenção ao prazo de conformidade: documentação entregue após <strong>75 dias</strong> da alocação faz a comissão deixar de ser devida.</p>
