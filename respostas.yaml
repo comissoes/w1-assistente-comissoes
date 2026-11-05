@@ -59,7 +59,7 @@ respostas:
 - id: c-janela
   area: comissoes
   parceira: ''
-  pergunta: TESTE Até que dia posso pedir o pagamento (saque) das comissões?
+  pergunta: Até que dia posso pedir o pagamento (saque) das comissões?
   outras_formas:
   - quando posso sacar
   - prazo para solicitar pagamento
@@ -68,7 +68,7 @@ respostas:
   palavras_chave: saque solicitar pagamento janela dia 1 20 prazo nota fiscal
   secao: comissoes#w1nner
   resposta: |
-    <p>O pedido de pagamento é feito no W1nner <strong>entre os dias 1 e 20</strong> de cada mês, com a <strong>nota fiscal de cada BU</strong> anexada.</p>
+    <p>O TESTE pedido de pagamento é feito no W1nner <strong>entre os dias 1 e 20</strong> de cada mês, com a <strong>nota fiscal de cada BU</strong> anexada.</p>
     <p>O pagamento <strong>não é automático</strong>: sem a solicitação, o valor fica parado em <em>Disponível para receber</em>.</p>
 
 - id: c-perdi20
