@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Central de Comissões W1</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap">
+<style>
+/* Layout: barra de busca fixa; índice lateral por assunto (faixa rolável no celular); conteúdo em blocos pesquisáveis.
+   Começa pelo diagnóstico "preciso abrir ticket?" e pelo calendário do mês. Brandbook W1: Petróleo, subtons, Turquesa como acento, Public Sans. */
+:root{
+  --bg:#ebf0f0; --surface:#ffffff; --surface-2:#f4f7f7; --ink:#022028; --ink-2:#3e6a6d; --muted:#5f8a8b;
+  --line:#d3e0df; --line-strong:#afcecd; --accent:#5fded4; --accent-ink:#1d6d67; --accent-soft:#dff7f4;
+  --band:#022028; --band-2:#0a181c; --band-ink:#ffffff; --band-muted:#afcecd; --band-line:#1f4148; --band-cell:#04222a;
+  --bar:#bfeee9; --hi:#fff1b8; --hi-ink:#022028;
+  --risk:#b23c3c; --risk-soft:#fbe4e4; --warn:#a96a08; --warn-soft:#fff1d9; --ok:#3f7a2f; --ok-soft:#e5f3df; --info:#2d5f8a; --info-soft:#e3eef8;
+  --font:"Public Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0a181c; --surface:#0f2329; --surface-2:#132a31; --ink:#ebf0f0; --ink-2:#afcecd; --muted:#84afaf;
+  --line:#1f4148; --line-strong:#3e6a6d; --accent:#5fded4; --accent-ink:#5fded4; --accent-soft:#12383a;
+  --band:#022028; --band-2:#061215; --band-ink:#ffffff; --band-muted:#afcecd; --band-line:#1f4148; --band-cell:#04222a;
+  --bar:#1d4a4c; --hi:#5fded4; --hi-ink:#022028;
+  --risk:#f08a8a; --risk-soft:#3a1c1f; --warn:#f0b65a; --warn-soft:#3a2c12; --ok:#8fcf7c; --ok-soft:#1c3319; --info:#8cbbe6; --info-soft:#16283a;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0a181c; --surface:#0f2329; --surface-2:#132a31; --ink:#ebf0f0; --ink-2:#afcecd; --muted:#84afaf;
+  --line:#1f4148; --line-strong:#3e6a6d; --accent:#5fded4; --accent-ink:#5fded4; --accent-soft:#12383a;
+  --band:#022028; --band-2:#061215; --band-ink:#ffffff; --band-muted:#afcecd; --band-line:#1f4148; --band-cell:#04222a;
+  --bar:#1d4a4c; --hi:#5fded4; --hi-ink:#022028;
+  --risk:#f08a8a; --risk-soft:#3a1c1f; --warn:#f0b65a; --warn-soft:#3a2c12; --ok:#8fcf7c; --ok-soft:#1c3319; --info:#8cbbe6; --info-soft:#16283a;
+  color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15.5px;line-height:1.6;-webkit-font-smoothing:antialiased;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--band)}
+h1,h2,h3,h4{line-height:1.2;text-wrap:balance;margin:0}
+p{margin:0}
+a{color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.wrap{max-width:1240px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+td,th,.num{font-variant-numeric:tabular-nums}
+.path{display:inline-block;font-weight:600;color:var(--ink);background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:1px 8px;font-size:.92em;white-space:normal}
+.subj{font-weight:700;color:var(--ink)}
+.th3{font-size:15px;font-weight:700;margin:6px 0 8px}
+.q{scroll-margin-top:110px}
+@keyframes flash{0%,40%{box-shadow:0 0 0 3px var(--accent)}100%{box-shadow:0 0 0 3px transparent}}
+.flash{animation:flash 2.2s ease-out;border-radius:var(--r)}
+.vlinks{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:auto}
+.watch{display:inline-flex;align-items:center;gap:6px;background:var(--ink);color:var(--bg);text-decoration:none;font-weight:600;font-size:14px;padding:7px 14px;border-radius:999px}
+.watch:hover{opacity:.9}
+small.mut{color:var(--muted);font-size:12px}
+.sec>.q>.th3:first-child{margin-top:0}
+
+/* ---------- topo ---------- */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--band);color:var(--band-ink);border-bottom:3px solid var(--accent)}
+.top .wrap{display:flex;align-items:center;gap:20px;padding-block:12px}
+.brand{display:flex;align-items:center;gap:12px;color:var(--band-ink);text-decoration:none;flex-shrink:0}
+.brand svg{width:44px;height:22px;display:block}
+.brand span{font-weight:600;font-size:15px;letter-spacing:.01em;border-left:1px solid #3e6a6d;padding-left:12px;white-space:nowrap}
+.search{flex:1;display:flex;align-items:center;gap:10px;background:#ffffff;border-radius:8px;padding:0 12px;min-width:0;border:2px solid transparent}
+.search:focus-within{border-color:var(--accent)}
+.search svg{width:18px;height:18px;flex-shrink:0;color:#3e6a6d}
+.search input{flex:1;min-width:0;border:0;outline:0;background:transparent;font:500 15px var(--font);color:#022028;padding-block:11px}
+.search input::-webkit-search-cancel-button{display:none}
+.search input::placeholder{color:#6d9899;font-weight:400}
+.kbd{font:600 11px var(--font);color:#3e6a6d;border:1px solid #afcecd;border-radius:4px;padding:1px 6px}
+.clear{border:0;background:#ebf0f0;color:#1f4148;font:600 12px var(--font);border-radius:5px;padding:5px 10px;cursor:pointer}
+@media (max-width:720px){.brand span{display:none}.kbd{display:none}.top .wrap{gap:12px}}
+
+/* ---------- abertura ---------- */
+.intro{background:linear-gradient(180deg,var(--band) 0%,var(--band-2) 100%);color:var(--band-ink)}
+.intro .wrap{padding-block:36px 30px;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:40px;align-items:end}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.intro h1{font-size:clamp(30px,4.4vw,46px);font-weight:700;letter-spacing:-.02em;margin-top:10px}
+.intro p.lead{color:var(--band-muted);font-size:16.5px;max-width:60ch;margin-top:14px;font-weight:300}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.chip{border:1px solid #3e6a6d;background:transparent;color:var(--band-ink);font:500 13px var(--font);padding:6px 12px;border-radius:999px;cursor:pointer}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--band-line);border:1px solid var(--band-line);border-radius:var(--r);overflow:hidden}
+.fact{background:var(--band-cell);padding:14px 16px}
+.fact b{display:block;font-size:22px;font-weight:700;color:var(--band-ink);letter-spacing:-.01em}
+.fact small{display:block;color:var(--band-muted);font-size:12.5px;line-height:1.4;margin-top:2px}
+@media (max-width:860px){.intro .wrap{grid-template-columns:1fr;gap:24px}}
+
+/* ---------- corpo ---------- */
+.layout{display:grid;grid-template-columns:240px minmax(0,1fr);gap:36px;padding-block:28px 64px}
+@media (max-width:980px){.layout{grid-template-columns:minmax(0,1fr);gap:20px}}
+.side{position:sticky;top:calc(env(safe-area-inset-top,0px) + 82px);align-self:start;max-height:calc(100vh - 100px);overflow:auto}
+.side h4{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:14px 0 6px}
+.side h4:first-child{margin-top:0}
+.side nav{display:flex;flex-direction:column;gap:2px}
+.side nav a{display:flex;justify-content:space-between;gap:8px;align-items:baseline;text-decoration:none;color:var(--ink);font-size:14px;padding:5px 10px;border-radius:6px}
+.side nav a:hover{background:var(--surface)}
+.side nav a small{color:var(--muted);font-size:11.5px;white-space:nowrap}
+.side nav a.dim{opacity:.35}
+.side nav a.star{font-weight:700}
+@media (max-width:980px){
+  .side{position:static;max-height:none;overflow:visible}
+  .side nav{flex-direction:row;overflow-x:auto;gap:6px;padding-bottom:6px}
+  .side nav a{white-space:nowrap;background:var(--surface);border:1px solid var(--line)}
+  .side nav a small{display:none}
+  .side h4{display:none}
+  .side{display:flex;flex-direction:column}
+  .side nav.all{display:flex}
+}
+
+.status{display:none;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:8px;padding:10px 14px;font-size:14px}
+.status.on{display:flex}
+.empty{background:var(--surface);border:1px dashed var(--line-strong);border-radius:var(--r);padding:32px 24px;text-align:center;color:var(--ink-2)}
+.empty h3{color:var(--ink);font-size:18px;margin-bottom:6px}
+
+main{min-width:0;display:flex;flex-direction:column;gap:44px}
+.part{display:flex;align-items:baseline;gap:14px;margin-bottom:-24px;color:var(--muted)}
+.part b{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-ink);font-weight:700;white-space:nowrap}
+.part span{flex:1;height:1px;background:var(--line-strong)}
+.sec{scroll-margin-top:96px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:10px}
+.sec-head h2{font-size:clamp(22px,2.6vw,28px);font-weight:700;letter-spacing:-.015em}
+.sec-head .tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:4px;background:var(--surface-2);color:var(--ink-2);border:1px solid var(--line)}
+.tag.acc{background:var(--accent-soft);color:var(--accent-ink);border-color:transparent}
+.sec-sub{color:var(--ink-2);max-width:75ch}
+.sec.featured .sec-head{border-bottom-color:var(--accent)}
+
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:860px){.grid2,.grid3{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;min-width:0;display:flex;flex-direction:column;gap:10px}
+.card h3{font-size:16.5px;font-weight:700}
+.k{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.card p,.card li{color:var(--ink-2)}
+.card ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.card strong{color:var(--ink)}
+.big{font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1;color:var(--ink)}
+.big small{font-size:14px;font-weight:500;color:var(--ink-2);letter-spacing:0}
+
+.note{border-radius:8px;padding:12px 14px;font-size:14.5px;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-2)}
+.note strong{color:var(--ink)}
+.note.warn{background:var(--warn-soft);border-color:transparent}
+.note.risk{background:var(--risk-soft);border-color:transparent}
+.note.ok{background:var(--ok-soft);border-color:transparent}
+.note.acc{background:var(--accent-soft);border-color:transparent}
+
+/* tabelas */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th{background:var(--surface-2);color:var(--ink-2);font-weight:600;text-align:left;padding:9px 12px;font-size:12.5px;letter-spacing:.02em;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:8px 12px;border-top:1px solid var(--line);vertical-align:top}
+tbody tr:first-child td{border-top:0}
+td.p{position:relative;font-weight:600;white-space:nowrap;background:linear-gradient(90deg,var(--bar) calc(var(--p,0)*1%),transparent 0);background-clip:padding-box}
+td.p.z{color:var(--ok)}
+td.p.full{color:var(--risk)}
+.tcap{font-size:12.5px;color:var(--muted);margin-top:6px}
+table.sum td:first-child{font-weight:600;white-space:nowrap}
+table.sum td a{text-decoration:none;color:var(--ink)}
+table.sum td a:hover{color:var(--accent-ink)}
+
+/* régua de parcelas (exemplo Icatu) */
+.strip{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:4px}
+.cell{border-radius:6px;padding:6px 2px 7px;text-align:center;background:var(--surface-2);border:1px solid var(--line);font-size:12px;line-height:1.25;min-width:0}
+.cell b{display:block;font-size:13px;color:var(--ink)}
+.cell.h{background:var(--accent-soft);border-color:var(--accent)}
+.cell.n{opacity:.45}
+.cell span{display:block;color:var(--ink-2)}
+.stripl{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--ink-2);margin-bottom:6px;flex-wrap:wrap}
+@media (max-width:620px){.strip{grid-template-columns:repeat(6,minmax(0,1fr))}}
+
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;counter-reset:s}
+.steps li{position:relative;padding-left:34px;color:var(--ink-2)}
+.steps li::before{counter-increment:s;content:counter(s);position:absolute;left:0;top:1px;width:22px;height:22px;border-radius:50%;background:var(--ink);color:var(--bg);font-size:12px;font-weight:700;display:grid;place-items:center}
+
+/* FAQ / acordeões */
+details.qa{background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+details.qa>summary{cursor:pointer;list-style:none;padding:13px 44px 13px 16px;font-weight:600;position:relative}
+details.qa>summary::-webkit-details-marker{display:none}
+details.qa>summary::after{content:"+";position:absolute;right:16px;top:50%;transform:translateY(-50%);font-weight:400;font-size:20px;color:var(--muted)}
+details.qa[open]>summary::after{content:"–"}
+details.qa[open]{border-color:var(--line-strong)}
+details.qa>div{padding:0 16px 16px;color:var(--ink-2);display:flex;flex-direction:column;gap:10px}
+details.qa>div ul,details.qa>div ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
+details.qa strong{color:var(--ink)}
+.faq{display:flex;flex-direction:column;gap:8px}
+
+details.more{border-top:1px dashed var(--line-strong);padding-top:10px}
+details.more>summary{cursor:pointer;font-weight:600;color:var(--accent-ink);font-size:14px}
+details.more>div{margin-top:12px;display:flex;flex-direction:column;gap:12px}
+
+.partner{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:flex;flex-direction:column;gap:14px;scroll-margin-top:96px;min-width:0}
+.partner>header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.partner h3{font-size:20px;font-weight:700}
+.partner .when{text-align:right}
+.partner .when b{display:block;font-size:20px;font-weight:700;line-height:1.1}
+.partner .when small{color:var(--muted);font-size:12px}
+@media (max-width:620px){.partner .when{text-align:left}}
+
+/* selos de decisão (ticket) */
+.verdict{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:999px;white-space:nowrap}
+.verdict::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.verdict.ok{background:var(--ok-soft);color:var(--ok)}
+.verdict.wait{background:var(--warn-soft);color:var(--warn)}
+.verdict.ticket{background:var(--risk-soft);color:var(--risk)}
+.verdict.other{background:var(--info-soft);color:var(--info)}
+.decide{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (max-width:620px){.decide{grid-template-columns:minmax(0,1fr)}}
+.decide>div{border:1px solid var(--line);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;background:var(--surface)}
+
+/* diagnóstico */
+.diag{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:18px;align-items:start}
+@media (max-width:860px){.diag{grid-template-columns:minmax(0,1fr)}}
+.diag-list{display:flex;flex-direction:column;gap:14px}
+.dgroup h4{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:6px}
+.dopts{display:flex;flex-direction:column;gap:4px}
+.dopt{text-align:left;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:500 14px/1.35 var(--font);padding:8px 12px;border-radius:8px;cursor:pointer}
+.dopt:hover{border-color:var(--line-strong)}
+.dopt[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:var(--bg)}
+.dres{position:sticky;top:calc(env(safe-area-inset-top,0px) + 96px);background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+@media (max-width:860px){.dres{position:static}}
+.dres-top{background:var(--band);color:var(--band-ink);padding:16px 20px;display:flex;flex-direction:column;gap:8px}
+.dres-top .lb{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--band-muted);font-weight:600}
+.dres-top h3{font-size:19px;font-weight:700}
+.dres-body{padding:16px 20px 18px;display:flex;flex-direction:column;gap:10px;color:var(--ink-2)}
+.dres-body strong{color:var(--ink)}
+.dres-body ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.dres-body a.go{font-weight:600;text-decoration:none}
+.dres-body a.go:hover{text-decoration:underline}
+
+/* calendário do mês */
+.cal{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px 18px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.cal-scale,.cal-row .bar{display:grid;grid-template-columns:repeat(31,minmax(0,1fr));gap:2px}
+.cal-scale span{font-size:10.5px;color:var(--muted);text-align:center}
+.cal-scale span.mk{color:var(--ink);font-weight:700}
+.cal-row{display:flex;flex-direction:column;gap:5px}
+.cal-row .lbl{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:14px}
+.cal-row .lbl b{color:var(--ink)}
+.cal-row .lbl small{color:var(--muted);font-size:12.5px}
+.cal-row .bar i{display:block;height:14px;border-radius:3px;background:var(--surface-2);border:1px solid var(--line)}
+.cal-row .bar i.on{background:var(--accent);border-color:var(--accent)}
+.cal-row .bar i.soft{background:var(--accent-soft);border-color:var(--accent);border-style:dashed}
+.cal-legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
+.cal-legend i{display:inline-block;width:14px;height:10px;border-radius:2px;vertical-align:-1px;margin-right:6px;background:var(--accent)}
+.cal-legend i.soft{background:var(--accent-soft);border:1px dashed var(--accent)}
+
+/* calculadora */
+.calc{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:18px}
+@media (max-width:860px){.calc{grid-template-columns:minmax(0,1fr)}}
+.tabs2{display:flex;gap:6px;flex-wrap:wrap}
+.tab2{border:1px solid var(--line-strong);background:var(--surface);color:var(--ink-2);font:600 13.5px var(--font);padding:7px 14px;border-radius:999px;cursor:pointer}
+.tab2[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.fld{display:flex;flex-direction:column;gap:5px}
+.fld label{font-size:13px;font-weight:600;color:var(--ink)}
+.fld small{color:var(--muted);font-size:12px;line-height:1.4}
+.fld input,.fld select{font:15px var(--font);color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:8px;padding:9px 11px;width:100%}
+.seg{display:flex;border:1px solid var(--line-strong);border-radius:8px;overflow:hidden}
+.seg button{flex:1;border:0;background:var(--surface);color:var(--ink-2);font:600 13px var(--font);padding:8px 6px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent-ink)}
+.res{background:var(--band);color:var(--band-ink);border-radius:var(--r);padding:18px 20px;display:flex;flex-direction:column;gap:6px}
+.res .lb{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--band-muted);font-weight:600}
+.res .v{font-size:34px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.res .s{color:var(--band-muted);font-size:14px}
+.verd{border-radius:8px;padding:10px 12px;font-size:14px}
+.verd.ok{background:var(--ok-soft);color:var(--ok)} .verd.up{background:var(--risk-soft);color:var(--risk)} .verd.dn{background:var(--warn-soft);color:var(--warn)}
+mark{background:var(--hi);color:var(--hi-ink);border-radius:2px;padding:0 1px}
+footer{border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+footer .wrap{padding-block:24px 40px;display:flex;flex-direction:column;gap:8px}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+</style>
+<style>[hidden]{display:none!important}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#inicio" aria-label="W1 Central de Comissões">
+      <svg viewBox="0 0 72 36" aria-hidden="true"><path fill="currentColor" d="M45.2869 8.52863H56.5388L34.9322 35.9999L26.6178 35.9932C24.1433 35.9932 22.1383 33.965 22.1383 31.4672V22.7596L11.7349 35.9999H4.48394C2.00714 35.9999 0 33.9739 0 31.4739V8.52863H8.99446V25.2596L22.1406 8.52863H31.1062V26.5767L45.2869 8.52863ZM72 4.52366C72 2.02363 69.9929 -0.00233459 67.5161 -0.00233459H51.9862L47.9963 5.07599H59.2327V35.9977H71.9978V4.5259L72 4.52366Z"/></svg>
+      <span>Central de Comissões</span>
+    </a>
+    <label class="search" for="q">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" autocomplete="off" placeholder="Busque: nota fiscal, FUP, bônus, realocação, 60 dias, Rodando, consórcio…" aria-label="Buscar na Central de Comissões">
+      <span class="kbd" aria-hidden="true">/</span>
+      <button class="clear" id="clear" type="button" hidden>Limpar</button>
+    </label>
+  </div>
+</header>
+
+<section class="intro" id="inicio">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">Departamento de Comissões · Consulta para consultores</div>
+      <h1>Sua comissão, do cliente até a sua conta</h1>
+      <p class="lead">Prazos, regras de repasse, FUP, bônus de PPs, realocação e nota fiscal em um só lugar. Antes de abrir um ticket, faça o diagnóstico abaixo: a maioria das dúvidas se resolve aqui em menos de um minuto.</p>
+      <div class="chips" aria-label="Buscas rápidas">
+        <button class="chip" data-go="diagnostico">Preciso abrir ticket?</button>
+        <button class="chip" data-q="nota fiscal">Nota fiscal</button>
+        <button class="chip" data-q="FUP">FUP</button>
+        <button class="chip" data-q="bônus">Bônus de PPs</button>
+        <button class="chip" data-q="realocação">Realocação</button>
+        <button class="chip" data-q="60 dias">60 dias</button>
+        <button class="chip" data-q="rodando">Status Rodando</button>
+      </div>
+    </div>
+    <div class="facts">
+      <div class="fact"><b>Dia 1 a 20</b><small>Solicitar pagamento no W1nner e anexar a nota fiscal (uma por BU)</small></div>
+      <div class="fact"><b>Até o dia 10</b><small>Repasse de AP, FUP, Business e Patrimonial pagos no mês anterior</small></div>
+      <div class="fact"><b>10º dia útil</b><small>Bônus de PPs históricos, só na BU W1 Group Corretora</small></div>
+      <div class="fact"><b>Até 60 dias</b><small>Para o 1º repasse de parceira; depois, até 5 dias úteis após a W1 receber</small></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap layout">
+  <aside class="side" aria-label="Navegação">
+    <nav id="nav" class="all">
+      <h4>Comece aqui</h4>
+      <a href="#diagnostico" data-for="diagnostico" class="star">Preciso abrir ticket? <small>diagnóstico</small></a>
+      <a href="#calendario" data-for="calendario">Calendário do mês <small>prazos</small></a>
+      <h4>Recebimento</h4>
+      <a href="#w1nner" data-for="w1nner">W1nner e nota fiscal <small>dia 1 a 20</small></a>
+      <a href="#prazos" data-for="prazos">Prazos de repasse <small>próprios · parceiras</small></a>
+      <a href="#fup" data-for="fup">FUP <small>mensalidade</small></a>
+      <a href="#bonus" data-for="bonus">Bônus de PPs <small>10º dia útil</small></a>
+      <a href="#realocacao" data-for="realocacao">Realocação <small>de quem é?</small></a>
+      <a href="#calculadora-pps" data-for="calculadora-pps">Calculadora de comissões <small>no W1nner</small></a>
+      <h4>Regras dos produtos W1</h4>
+      <a href="#regras-ap" data-for="regras-ap">Análise Paga (AP) <small>desde 01/08/2026</small></a>
+      <a href="#regras-fup" data-for="regras-fup">Acompanhamento (FUP) <small>planos e %</small></a>
+      <a href="#outros" data-for="outros">Outros casos <small>PJ2, Lead Capital…</small></a>
+      <h4>Suporte</h4>
+      <a href="#ticket" data-for="ticket">Como abrir ticket <small>assuntos</small></a>
+      <a href="#academy" data-for="academy">Vídeos W1 Academy <small>tutoriais</small></a>
+    </nav>
+  </aside>
+
+  <main id="conteudo">
+    <div class="status" id="status" role="status" aria-live="polite"><span id="statusText"></span><button class="clear" id="clear2" type="button">Limpar busca</button></div>
+    <div class="empty" id="empty" hidden>
+      <h3>Nada encontrado</h3>
+      <p>Tente outra palavra: <em>nota</em>, <em>saque</em>, <em>rodando</em>, <em>cartão</em>, <em>consórcio</em>, <em>especialista</em>, <em>cancelou</em>. Se não achar a resposta, veja <a href="#ticket">como abrir um ticket</a>.</p>
+    </div>
+
+    <!-- ===================== DIAGNÓSTICO ===================== -->
+    <section class="sec featured" id="diagnostico">
+      <div class="sec-head"><h2>Preciso abrir um ticket?</h2><div class="tags"><span class="tag acc">Diagnóstico rápido</span></div></div>
+      <p class="sec-sub q" data-k="diagnostico ticket chamado abrir suporte duvida situacao preciso">Escolha a situação mais parecida com a sua. A resposta diz se é caso de aguardar, de resolver sozinho ou de abrir ticket, e com qual assunto.</p>
+      <div class="diag">
+        <div class="diag-list" id="diagList"></div>
+        <div class="dres" id="dres" aria-live="polite">
+          <div class="dres-top"><div class="lb">Orientação</div><div id="dVerdict"></div><h3 id="dTitle"></h3></div>
+          <div class="dres-body" id="dBody"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== CALENDÁRIO ===================== -->
+    <section class="sec" id="calendario">
+      <div class="sec-head"><h2>Calendário do mês</h2><div class="tags"><span class="tag">Quando cada valor cai</span></div></div>
+      <p class="sec-sub q" data-k="calendario prazos mes quando cai dia 1 20 10 dia util repasse janela">O que acontece em cada dia do mês com as suas comissões. Os prazos de produtos próprios e de bônus se referem a pagamentos e comissões do <strong>mês anterior</strong>.</p>
+      <div class="cal">
+        <div class="cal-scale" id="calScale" aria-hidden="true"></div>
+        <div class="cal-row q" data-k="solicitar pagamento saque nota fiscal nf janela dia 1 a 20" data-from="1" data-to="20"><div class="lbl"><b>Solicitar pagamento e anexar nota fiscal</b><small>dia 1 ao dia 20</small></div><div class="bar"></div></div>
+        <div class="cal-row q" data-k="produtos proprios ap fup business patrimonial repasse dia 10" data-from="1" data-to="10"><div class="lbl"><b>Repasse de produtos próprios</b><small>AP, FUP, Business e Patrimonial · até o dia 10</small></div><div class="bar"></div></div>
+        <div class="cal-row q" data-k="bonus pps historicos decimo dia util w1 group corretora" data-from="1" data-to="12" data-soft="13-14"><div class="lbl"><b>Bônus de PPs históricos</b><small>até o 10º dia útil · BU W1 Group Corretora</small></div><div class="bar"></div></div>
+        <div class="cal-row q" data-k="parceiras produtos financeiros todo dia util 5 dias uteis" data-from="1" data-to="31" data-style="soft"><div class="lbl"><b>Comissões de parceiras</b><small>qualquer dia útil · até 5 dias úteis depois que a parceira paga a W1</small></div><div class="bar"></div></div>
+        <div class="cal-legend"><span><i></i>prazo fixo</span><span><i class="soft"></i>varia (dias úteis ou data de pagamento da parceira)</span></div>
+      </div>
+    </section>
+
+    <div class="part" aria-hidden="true"><b>Recebimento</b><span></span></div>
+
+    <!-- ===================== W1NNER E NF ===================== -->
+    <section class="sec" id="w1nner">
+      <div class="sec-head"><h2>W1nner, saque e nota fiscal</h2><div class="tags"><span class="tag">Centro Econômico</span></div></div>
+      <p class="sec-sub">Tudo o que você recebe aparece em <span class="path">Menu lateral › Centro Econômico › Comissões</span>. O pagamento <strong>não é automático</strong>: você precisa pedir o saque e anexar a nota fiscal.</p>
+      <div class="grid2">
+        <div class="card q" id="q-saldos" data-k="disponivel para receber solicitado para receber saldo paineis bu soma">
+          <div class="k">Os dois saldos do topo</div>
+          <p><strong>Disponível para receber:</strong> o que você já pode solicitar.</p>
+          <p><strong>Solicitado para receber:</strong> o que você já pediu e está com o Financeiro.</p>
+          <p>À esquerda aparece a soma de todas as BUs; à direita, só a BU selecionada.</p>
+        </div>
+        <div class="card q" data-k="bu unidade de negocio seletor empresa w1 group corretora holdings extrato separado">
+          <div class="k">Uma carteira por BU</div>
+          <p>Cada empresa do grupo (BU) tem o seu extrato. Troque a BU no seletor do topo da tela para ver cada saldo. Exemplo: o bônus de PPs só aparece na <strong>W1 Group Corretora</strong>.</p>
+        </div>
+      </div>
+      <div class="card q" data-k="como solicitar pagamento saque passo a passo nota fiscal anexar status solicitacoes">
+        <div class="k">Como pedir o pagamento</div>
+        <ol class="steps">
+          <li>Com valor em <strong>Disponível para receber</strong>, clique em <strong>Solicitar pagamento</strong>.</li>
+          <li>Escolha a <strong>BU</strong>, informe o valor e anexe a <strong>nota fiscal daquela BU</strong>.</li>
+          <li>Acompanhe na tabela <strong>Solicitações de pagamento</strong>, mais abaixo. A coluna <em>Status</em> mostra o retorno do Financeiro: aprovado, processado ou com pendência.</li>
+        </ol>
+        <div class="note warn"><strong>Duas regras sem exceção:</strong> uma nota fiscal para cada BU de que você pedir pagamento, e pedido feito <strong>entre os dias 1 e 20</strong> do mês.</div>
+      </div>
+      <div class="faq">
+        <details class="qa q" id="q-prazo20" data-k="perdi prazo dia 20 nao solicitei saque fora do prazo"><summary>Perdi o dia 20 e não pedi o pagamento. E agora?</summary><div><p>Faça o pedido na próxima janela, entre os dias 1 e 20 do mês seguinte. Não é preciso abrir ticket.</p></div></details>
+        <details class="qa q" id="q-nf-bu" data-k="uma nota fiscal varias bus somando nf rejeitada"><summary>Posso emitir uma única nota fiscal somando todas as BUs?</summary><div><p>Não. O Financeiro exige <strong>uma nota fiscal por BU</strong>. Uma nota com o total de várias empresas é devolvida e o pagamento atrasa. Emita uma nota para cada BU e faça uma solicitação para cada uma.</p></div></details>
+        <details class="qa q" id="q-extrato" data-k="gerar extrato excel email planilha"><summary>Como baixo meu extrato em Excel?</summary><div><p>Em <span class="path">Centro Econômico › Comissões</span>, clique em <strong>Gerar extrato</strong>. A planilha detalhada é enviada para o seu e-mail.</p></div></details>
+        <details class="qa q" data-k="procurar cliente extrato filtro contato observacao"><summary>Como encontro um cliente no extrato?</summary><div><p>Role até <strong>Extrato de comissões</strong> e use os filtros:</p><ul><li><strong>Contato:</strong> comissões principais do cliente.</li><li><strong>Observação:</strong> bônus de PPs, AP e FUP, que são lançados com o nome do cliente nesse campo.</li></ul><p>Se o cliente não aparecer em um, procure no outro. E confira se a BU selecionada é a certa.</p></div></details>
+        <details class="qa q" data-k="regras oficiais documentos arquivos comissoes onde encontro"><summary>Onde ficam os documentos oficiais de regras de comissão?</summary><div><p>No W1nner, em <span class="path">Menu lateral › Arquivos › Comissões</span>. Lá ficam a pasta da Calculadora de Comissões e PPs, a pasta de Regras (com vídeos e FAQ), esta Central de Comissões e a Central de Estornos. Em caso de conflito, vale o documento oficial mais recente.</p></div></details>
+      </div>
+    </section>
+
+    <!-- ===================== PRAZOS ===================== -->
+    <section class="sec" id="prazos">
+      <div class="sec-head"><h2>Prazos de repasse</h2><div class="tags"><span class="tag">Quando o dinheiro entra</span></div></div>
+      <p class="sec-sub">O prazo depende de quem recebe o dinheiro do cliente: a própria W1 (produtos próprios) ou uma parceira, que primeiro paga a W1.</p>
+      <div class="grid2">
+        <div class="card q" id="q-proprios" data-k="produtos proprios ap fup mensal dia 10 mes anterior parcelada">
+          <div class="k">Produtos próprios</div>
+          <div class="big">Dia 10 <small>do mês seguinte</small></div>
+          <p>AP e FUP: repasse mensal até o dia 10, sobre o que os clientes pagaram no mês anterior.</p>
+          <p><strong>AP parcelada:</strong> o repasse também é parcelado. O percentual incide sobre cada parcela paga pelo cliente.</p>
+        </div>
+        <div class="card q" id="q-parceiras" data-k="parceiras produtos financeiros 5 dias uteis nao ha dia fixo rodando">
+          <div class="k">Produtos de parceiras</div>
+          <div class="big">5 dias úteis <small>após a W1 receber</small></div>
+          <p>Cada parceira paga a W1 uma vez por mês, sobre as mensalidades que os clientes pagaram no mês anterior. Não há dia fixo: pode ser até o último dia do mês, e às vezes a parceira atrasa. Depois que o valor entra na W1, o repasse para você ocorre em até 5 dias úteis.</p>
+          <p>O <strong>primeiro</strong> repasse de um contrato pode levar até <strong>60 dias</strong> depois do 1º pagamento do cliente.</p>
+        </div>
+      </div>
+      <div class="faq">
+        <details class="qa q" id="q-rodando" data-k="status rodando significa report parceira 60 dias primeiro repasse"><summary>O que significa o status “Rodando” e por que esperar 60 dias?</summary><div>
+          <p>Quando a parceira paga a primeira comissão daquele contrato para a W1, o repasse para você é feito e o report muda automaticamente para <strong>Rodando</strong>. É a confirmação de que a parceira começou a pagar e de que o repasse interno já foi processado.</p>
+          <p>Depois do 1º pagamento do cliente, a parceira tem <strong>até 60 dias</strong> para fazer esse primeiro repasse. Pode acontecer antes, mas a janela é essa.</p>
+          <div class="decide"><div><span class="verdict wait">Aguarde</span><p>Menos de 60 dias desde o 1º pagamento do cliente.</p></div><div><span class="verdict ticket">Abra ticket</span><p>Passou de 60 dias e o report não está Rodando: assunto <span class="subj">Comissões</span>.</p></div></div>
+        </div></details>
+        <details class="qa q" id="q-cartao" data-k="business patrimonial cartao credito adquirente bandeira 30 dias compensacao"><summary>Business e Patrimonial: o cliente pagou no cartão e o valor não apareceu.</summary><div>
+          <p>Business (planejamento para empresas) e Patrimonial seguem a regra dos produtos próprios: repasse até o dia 10 do mês seguinte ao <strong>recebimento</strong> do pagamento pela W1.</p>
+          <p>No cartão de crédito, a operadora do cartão tem <strong>até 30 dias</strong> para passar o valor à W1. Só depois disso o pagamento conta como recebido e entra no repasse do mês seguinte. Confira a data da compra no cartão antes de reportar.</p>
+        </div></details>
+        <details class="qa q" id="q-consorcio" data-k="consorcio segunda parcela 2 90 dias encerramento grupo validacao"><summary>Consórcio: a 2ª parcela da comissão ainda não caiu.</summary><div>
+          <p>Entre o repasse da 1ª e o da 2ª parcela pode haver um intervalo de <strong>até 90 dias</strong>. Nesse período a administradora valida a venda, faz a análise de crédito e encerra o grupo.</p>
+          <p>Da 2ª parcela em diante, o repasse volta a ser mensal, desde que o cliente continue em dia.</p>
+        </div></details>
+        <details class="qa q" id="q-cnp-parcela" data-k="cnp consorcio xp parcela 1 valor menor quebrada fracionada residual 01/04/2026"><summary>Consórcio XP (CNP): a 1ª parcela veio com valor menor.</summary><div>
+          <p>Em contratos fechados a partir de <strong>01/04/2026</strong>, a 1ª parcela de comissão é paga em duas partes: a principal, no repasse normal, e o restante até o último dia do mesmo mês. Espere o fim do mês antes de reportar.</p>
+        </div></details>
+        <details class="qa q" id="q-cnp-rodando" data-k="cnp consorcio em dia nao esta rodando assinatura pendencia operacoes"><summary>Consórcio XP (CNP): o cliente está pagando, mas o contrato não está Rodando.</summary><div>
+          <p>Normalmente há uma pendência de assinatura ou de formalização na administradora: o contrato foi iniciado, mas não foi concluído. Fale com <span class="subj">Operações</span>, que valida essa etapa.</p>
+          <p>Resolvida a pendência e com o contrato Rodando, as comissões acumuladas são repassadas no mês seguinte.</p>
+        </div></details>
+        <details class="qa q" id="q-pds" data-k="saude adesao pds boleto pago comissao especialistas plano de saude"><summary>Saúde · Adesão PDS: o cliente contratou, mas não veio comissão.</summary><div>
+          <p>Nos planos de Adesão PDS, a comissão só existe depois que o cliente paga o <strong>boleto de adesão</strong> emitido pela parceira. Sem esse pagamento, não há comissão.</p>
+          <p>Se o boleto foi pago e ainda há dúvida, fale com as <span class="subj">Especialistas de Plano de Saúde</span>.</p>
+        </div></details>
+        <details class="qa q" id="q-especialista" data-k="saude especialista desconto bp estorno 2026 proporcional plano de saude receita repasse"><summary>Saúde com Especialista: apareceu um desconto no meu BP.</summary><div>
+          <p>Nas vendas de <strong>Plano de Saúde</strong> feitas com a ajuda de um Especialista do time de Saúde, uma parte da receita que a parceira paga à W1 vai para o Especialista. Essa parte é descontada da comissão de toda a estrutura comercial: a sua e a dos seus líderes.</p>
+          <ul>
+            <li><strong>Quanto é descontado:</strong> a soma dos percentuais dos Especialistas que atuaram no contrato, calculados sobre a receita da W1. Varia de contrato para contrato, de 5% a 32,5%.</li>
+            <li><strong>Como é aplicado:</strong> o mesmo percentual sai, proporcionalmente, da comissão de cada pessoa da estrutura. A comissão nunca fica negativa.</li>
+            <li><strong>Desde quando:</strong> vendas de Plano de Saúde fechadas a partir de <strong>01/01/2026</strong>. Não há desconto retroativo, e nada é descontado em Consórcio ou Seguro de Vida.</li>
+          </ul>
+          <div class="note"><strong>Exemplo:</strong> dois Especialistas atuaram no contrato, um com 5% e outro com 30%, total de <strong>35%</strong>. Uma comissão de R$ 20,82 passa a R$ 13,53 (R$ 20,82 − 35%). O líder que receberia R$ 45,80 passa a receber R$ 29,77.</div>
+        </div></details>
+      </div>
+    </section>
+
+    <!-- ===================== FUP ===================== -->
+    <section class="sec" id="fup">
+      <div class="sec-head"><h2>FUP</h2><div class="tags"><span class="tag">Mensalidade do cliente</span></div></div>
+      <p class="sec-sub q" id="q-fup-regra" data-k="fup regra mensalidade nao pagou mes anterior sem comissao regularizou">A comissão de FUP do mês depende do pagamento do cliente no <strong>mês anterior</strong>. Sem pagamento, não há comissão. Se o cliente regulariza depois, o valor entra no mês seguinte à regularização, normalmente somado ao repasse daquele mês.</p>
+      <div class="card q" id="q-fup-verificar" data-k="verificar fup assinaturas detalhes situacao pago vencida passo a passo">
+        <div class="k">Confira antes de abrir ticket</div>
+        <ol class="steps">
+          <li>Acesse <span class="path">Menu lateral › Centro Econômico › Assinaturas</span>.</li>
+          <li>Na lista <em>Listando assinaturas</em>, encontre o cliente e clique em <strong>Detalhes</strong>.</li>
+          <li>Veja a coluna <strong>Situação</strong> da mensalidade do mês anterior.</li>
+        </ol>
+        <div class="decide">
+          <div><span class="verdict ticket">Situação: Pago</span><p>O cliente pagou e a comissão não veio. Abra ticket com o assunto <span class="subj">Comissões</span>.</p></div>
+          <div><span class="verdict other">Situação: Vencida</span><p>Não há comissão. Para cobrança ou cancelamento, abra ticket com o assunto <span class="subj">CS - W1 Acompanhamento, Cobrança, Cancelamentos / Dúvidas Gerais</span>.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== BÔNUS ===================== -->
+    <section class="sec" id="bonus">
+      <div class="sec-head"><h2>Bônus de PPs</h2><div class="tags"><span class="tag">Produtos financeiros</span><span class="tag">W1 Group Corretora</span></div></div>
+      <p class="sec-sub q" data-k="bonus pps o que e complemento diferenca percentual total base produtos financeiros parceiras">O bônus de PPs é um complemento da comissão de <strong>produtos financeiros (parceiras)</strong>. Ele paga a diferença entre o percentual total que você conquistou e o percentual base da sua posição, que já caiu no repasse normal.</p>
+      <div class="grid3">
+        <div class="card q" data-k="bonus onde cai bu w1 group corretora seletor"><div class="k">Onde cai</div><p>Só na BU <strong>W1 Group Corretora</strong>. Troque o seletor de BU no topo da tela para ver.</p></div>
+        <div class="card q" data-k="bonus quando recebo 10 dia util mes seguinte"><div class="k">Quando</div><p>Até o <strong>10º dia útil</strong> do mês seguinte ao repasse da comissão base.</p></div>
+        <div class="card q" data-k="bonus referencia mes anterior comissao principal janeiro fevereiro fonte propria lead"><div class="k">Sobre o quê</div><p>Sobre a comissão base de parceira que você recebeu no mês anterior: comissão de janeiro gera bônus em fevereiro. Só clientes de <strong>fonte própria</strong> geram bônus.</p></div>
+      </div>
+
+      <div class="faq">
+        <details class="qa q" id="q-bonus-faltou" data-k="nao recebi bonus pps porque motivo sem bonus zerado faltando"><summary>Não recebi o bônus de PPs de um cliente. Por quê?</summary><div>
+          <p>Confira, nesta ordem:</p>
+          <ol>
+            <li><strong>Houve comissão base no mês anterior?</strong> O bônus só existe no mês seguinte a um repasse da parceira. Sem repasse, não há bônus.</li>
+            <li><strong>O cliente é de fonte própria?</strong> Cliente lead (repassado pela W1, marketing, outra unidade) não gera bônus.</li>
+            <li><strong>Você tinha percentual de bônus quando o contrato foi fechado?</strong> Na regra atual, o percentual vale para os contratos fechados no trimestre <em>seguinte</em> ao que você bateu a meta. Contrato fechado antes disso recebe só a base.</li>
+            <li><strong>Olhou no lugar certo?</strong> BU <strong>W1 Group Corretora</strong>, campo <strong>Observação</strong> do extrato, depois do 10º dia útil.</li>
+          </ol>
+          <p>Tudo certo e mesmo assim sem bônus: abra ticket com o assunto <span class="subj">Comissões</span>.</p>
+        </div></details>
+        <details class="qa q" id="q-bonus-diferente" data-k="bonus percentual diferente contratos valores diferentes mesmo cliente trimestre vinculado"><summary>Por que contratos diferentes têm percentuais de bônus diferentes?</summary><div>
+          <p>Na regra atual, cada contrato fica <strong>preso ao percentual que valia no trimestre em que foi fechado</strong>. Se você subiu de patamar depois, só os contratos novos recebem o percentual maior. Se caiu, os antigos não perdem nada.</p>
+        </div></details>
+      </div>
+
+      <div class="card q" id="q-bonus" data-k="como conferir bonus extrato contato observacao duas etapas auditar">
+        <div class="k">Como conferir o bônus de um cliente</div>
+        <ol class="steps">
+          <li>No extrato, digite o nome do cliente em <strong>Contato</strong> e confirme que a comissão base foi paga no mês anterior.</li>
+          <li>Apague o Contato e digite o mesmo nome em <strong>Observação</strong>. É ali que aparece a linha do bônus (e também as de AP e FUP).</li>
+          <li>Confira se está na BU <strong>W1 Group Corretora</strong>.</li>
+        </ol>
+      </div>
+
+      <h3 class="th3 q" data-k="regra atual bonus pps 01/07/2026 faixa a faixa b trimestral" style="margin-top:8px">Regra atual · desde 01/07/2026 <span class="tag acc" style="vertical-align:middle;margin-left:6px">Constância trimestral</span></h3>
+      <div class="note acc q" data-k="formula bonus repasse parceira valor bruto percentual total devido base repassada"><strong>Bônus (R$) = Repasse da parceira (valor bruto) × (% total da sua faixa − % base da sua posição)</strong>. Exemplo: FA IV (base 20%) com 45% conquistado, repasse de R$ 10.000 → R$ 10.000 × 25% = <strong>R$ 2.500</strong>.</div>
+      <div class="grid2">
+        <div class="card q" id="q-bonus-regra" data-k="faixa a faixa b meta 1000 750 pps trimestre teto 45 40 conquista tri">
+          <div class="k">Fase Conquista · duas trilhas</div>
+          <p>A cada trimestre em que você bate a meta, o percentual sobe um passo. Os PPs contam por trimestre do calendário (jan–mar, abr–jun, jul–set, out–dez) e só a <strong>produção própria</strong>.</p>
+          <div class="tw"><table><thead><tr><th>Trilha</th><th>Meta/tri</th><th>Tri 1</th><th>Tri 2</th><th>Tri 3</th><th>Tri 4 (teto)</th></tr></thead><tbody>
+            <tr><td><strong>Faixa A</strong></td><td>1.000 PPs</td><td>30%</td><td>35%</td><td>40%</td><td>45%</td></tr>
+            <tr><td><strong>Faixa B</strong></td><td>750 PPs</td><td>25%</td><td>30%</td><td>35%</td><td>40%</td></tr>
+          </tbody></table></div>
+          <p>As duas trilhas correm em paralelo, cada uma com sua contagem, e você recebe sempre o <strong>maior</strong> percentual entre elas. Quem bate 1.000 PPs avança nas duas. Trimestres da Faixa B não contam para a Faixa A.</p>
+        </div>
+        <div class="card q" data-k="vigencia percentual contrato trimestre seguinte vinculado permanente">
+          <div class="k">Quando o percentual passa a valer</div>
+          <p>O percentual conquistado em um trimestre vale para os contratos fechados no <strong>trimestre seguinte</strong>, e fica ligado ao contrato para sempre.</p>
+          <div class="tw"><table><thead><tr><th>Tri</th><th>Resultado</th><th>Contratos do tri seguinte</th></tr></thead><tbody>
+            <tr><td>T1</td><td>Bateu 1.000 PPs</td><td>30%</td></tr>
+            <tr><td>T2</td><td>Bateu de novo</td><td>35% (os do T2 seguem em 30%)</td></tr>
+            <tr><td>T3</td><td>Não bateu</td><td>30% (os do T3 seguem em 35%)</td></tr>
+          </tbody></table></div>
+          <p class="tcap">Os contratos fechados no T1 recebem só a base.</p>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="card q" data-k="manutencao teto 4 trimestres meta reduzida 500 375 400 300 equipe 3000 2250 partner">
+          <div class="k">Fase Manutenção · depois de 4 trimestres seguidos</div>
+          <p>Chegou ao teto, você o mantém com uma meta menor. Partners e acima podem bater a meta própria <strong>ou</strong> a da equipe.</p>
+          <div class="tw"><table><thead><tr><th>Perfil</th><th>A · própria</th><th>A · equipe</th><th>B · própria</th><th>B · equipe</th></tr></thead><tbody>
+            <tr><td><strong>FA</strong></td><td>500 PPs</td><td>—</td><td>375 PPs</td><td>—</td></tr>
+            <tr><td><strong>Partner+</strong></td><td>400 PPs</td><td>3.000 PPs</td><td>300 PPs</td><td>2.250 PPs</td></tr>
+          </tbody></table></div>
+          <p class="tcap">No trimestre em que o líder forma um novo Partner, a meta de equipe cai pela metade (1.500 e 1.125 PPs).</p>
+        </div>
+        <div class="card q" data-k="reversao nao bateu meta perde 5 pontos 10 volta base reinicia interrupcao licenca afastamento">
+          <div class="k">Não bateu a meta · reversão</div>
+          <div class="tw"><table><thead><tr><th>Situação</th><th>Novos contratos</th><th>Como recuperar</th></tr></thead><tbody>
+            <tr><td>1 tri sem bater</td><td>−5 p.p.</td><td>Bata no próximo tri</td></tr>
+            <tr><td>2 tris seguidos</td><td>−10 p.p.</td><td>2 tris seguidos batendo</td></tr>
+            <tr><td>3 ou mais tris</td><td>Volta à base</td><td>Recomeça no Tri 1</td></tr>
+            <tr><td>Interrupção formal</td><td>Sem perda</td><td>Retoma de onde parou</td></tr>
+          </tbody></table></div>
+          <p>Nenhuma trilha fica abaixo do seu Tri 1 (30% na A, 25% na B): se cair abaixo disso, volta à base e recomeça. <strong>Interrupção</strong> é o trimestre em que você comunica formalmente um afastamento (licença, saúde): não perde nem avança.</p>
+        </div>
+      </div>
+      <div class="note warn q" data-k="direito adquirido 2000 3000 pps historicos 31/07/2026 40 45 sem manutencao"><strong>Direito adquirido:</strong> quem tinha <strong>2.000 PPs históricos</strong> até 31/07/2026 mantém <strong>40%</strong>, e quem tinha <strong>3.000</strong> mantém <strong>45%</strong>, para sempre e sem meta trimestral. Quem não chegou a esses marcos segue só o modelo novo.</div>
+
+      <details class="more q" data-k="regra anterior bonus pps historicos 01/07/2024 31/07/2026 30/06/2024 1000 1500 2000 3000 diferenca posicao"><summary>Regra anterior · 01/07/2024 a 31/07/2026 (PPs históricos)</summary><div>
+        <p>O percentual total dependia dos <strong>PPs históricos válidos</strong> acumulados, sem meta por trimestre.</p>
+        <div class="tw"><table><thead><tr><th>PPs históricos válidos</th><th>% total mínimo</th></tr></thead><tbody>
+          <tr><td>2.000 a 2.999,99</td><td>40%</td></tr><tr><td>3.000 ou mais</td><td>45%</td></tr>
+        </tbody></table></div>
+        <p class="tcap">Transição de 2024: quem tinha 1.000 a 1.499,99 PPs em 30/06/2024 manteve mínimo de 40%; com 1.500 ou mais, 45%.</p>
+        <h3 class="th3">Bônus por posição (diferença sobre a base)</h3>
+        <div class="tw"><table><thead><tr><th>Posição</th><th>% base</th><th>Até 1.999,99 PPs</th><th>2.000 a 2.999,99</th><th>3.000 ou mais</th></tr></thead><tbody>
+          <tr><td>FA I</td><td>7,5%</td><td>0%</td><td>32,5%</td><td>37,5%</td></tr>
+          <tr><td>FA II</td><td>15%</td><td>0%</td><td>25%</td><td>30%</td></tr>
+          <tr><td>FA III</td><td>17,5%</td><td>0%</td><td>22,5%</td><td>27,5%</td></tr>
+          <tr><td>FA IV</td><td>20%</td><td>0%</td><td>20%</td><td>25%</td></tr>
+          <tr><td>Partner</td><td>24%</td><td>0%</td><td>16%</td><td>21%</td></tr>
+          <tr><td>Senior Partner</td><td>27,5%</td><td>0%</td><td>12,5%</td><td>17,5%</td></tr>
+          <tr><td>Associate Partner</td><td>30%</td><td>0%</td><td>10%</td><td>15%</td></tr>
+          <tr><td>Principal</td><td>30,25%</td><td>0%</td><td>9,75%</td><td>14,75%</td></tr>
+          <tr><td>Managing Partner</td><td>30,5%</td><td>0%</td><td>9,5%</td><td>14,5%</td></tr>
+          <tr><td>Member of Board</td><td>30,5%*</td><td>0%</td><td>9,5%*</td><td>14,5%*</td></tr>
+        </tbody></table></div>
+        <p class="tcap">(*) MOB recebe também 0,5% da receita líquida dos produtos de toda a empresa, dividido entre os MOBs na proporção da produção. Até 30/06/2024 as faixas eram 1.000 PPs (40%) e 1.500 PPs (45%).</p>
+      </div></details>
+    </section>
+
+    <!-- ===================== REALOCAÇÃO ===================== -->
+    <section class="sec" id="realocacao">
+      <div class="sec-head"><h2>Realocação de clientes</h2><div class="tags"><span class="tag">De quem é a comissão</span></div></div>
+      <p class="sec-sub q" data-k="realocacao regra principal reuniao de servico primeiro evento pagamento">Para receber a comissão de um cliente realocado, você precisa ter feito e registrado a <strong>Reunião de Serviço</strong>. A comissão é de quem era o responsável quando aconteceu o <strong>primeiro</strong> destes dois eventos: a W1 receber o pagamento do cliente, ou o novo consultor fazer a Reunião de Serviço.</p>
+      <div class="grid2">
+        <div class="card q" id="q-real-pag" data-k="exemplo pagamento veio primeiro 18 maio 19 consultor anterior"><div class="k">Pagamento veio primeiro</div><p>A W1 recebeu o pagamento em <strong>18/05</strong> e a Reunião de Serviço foi em <strong>19/05</strong>.</p><span class="verdict other" style="align-self:flex-start">Comissão do consultor anterior</span></div>
+        <div class="card q" id="q-real-reu" data-k="exemplo reuniao veio primeiro 19 maio 20 novo consultor"><div class="k">Reunião veio primeiro</div><p>A Reunião de Serviço foi em <strong>19/05</strong> e a W1 recebeu o pagamento em <strong>20/05</strong>.</p><span class="verdict ok" style="align-self:flex-start">Comissão do novo consultor</span></div>
+      </div>
+      <p class="q" id="q-real-registro" data-k="onde conferir data reuniao perfil cliente historico" style="color:var(--ink-2)">A data e a hora da Reunião de Serviço ficam em <span class="path">Perfil do cliente › Histórico</span>. <strong>Reunião não registrada no W1nner não conta:</strong> sem o registro, a comissão continua com o consultor anterior.</p>
+      <div class="grid2">
+        <div class="card q" id="q-real-exc" data-k="excecao business patrimonial holdings realocacao responsavel origem sempre">
+          <div class="k">Exceção · Business e Patrimonial</div>
+          <p>Mesmo depois da realocação, as comissões de Business e Patrimonial (antiga Holdings) continuam <strong>sempre com o consultor de origem</strong>.</p>
+        </div>
+        <div class="card q" id="q-real-ap" data-k="ap outubro 2025 consultor out concluiu entrega modulos c1 c2 c3 c4 parcelas">
+          <div class="k">AP · regra desde outubro de 2025</div>
+          <ul>
+            <li>Consultor que saiu (OUT) <strong>concluiu a entrega</strong> (módulos C1 a C4): ele continua recebendo as parcelas da AP.</li>
+            <li>Consultor OUT <strong>não concluiu</strong>: o novo consultor passa a receber a AP, porque é ele quem dá continuidade e termina o serviço.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="part" aria-hidden="true"><b>Regras dos produtos W1</b><span></span></div>
+
+    <!-- ===================== REGRAS FUP ===================== -->
+    <section class="sec" id="regras-fup">
+      <div class="sec-head"><h2>Regras de comissão · Acompanhamento (FUP)</h2><div class="tags"><span class="tag">Regra de 12/08/2024</span></div></div>
+      <p class="sec-sub q" data-k="fup acompanhamento follow up regra comissao percentual depende fatores">A comissão sobre a mensalidade de FUP depende de quatro coisas: a <strong>fonte de captação</strong> do cliente, a sua <strong>posição comercial</strong>, a sua <strong>estrutura</strong> (spread do líder) e a <strong>data de criação do contrato</strong>, que define qual tabela vale. É paga no mês seguinte ao pagamento do cliente.</p>
+      <div class="grid2">
+        <div class="card q" data-k="fonte de captacao propria contato proprio rede recomendacao cliente">
+          <div class="k">Contato próprio</div>
+          <p>Cliente da sua própria rede de contatos ou recomendado por um cliente seu.</p>
+        </div>
+        <div class="card q" id="q-fonte" data-k="outras fontes lead w1 capital marketing recomendacao de lead primeira conversao">
+          <div class="k">Outras fontes (lead)</div>
+          <p>Contato repassado pela W1: recomendado pela W1 Capital, enviado pelo marketing etc.</p>
+          <p><strong>Recomendação de lead</strong> conta como contato próprio, <strong>exceto</strong> lead do marketing: as recomendações dele continuam sendo lead. É lead do marketing quem tem a data de 1ª conversão anterior à data de criação no W1nner.</p>
+        </div>
+      </div>
+      <div class="q" data-k="tabela fup propria contratos a partir 01/09/2024 standard premium infinity private 149,90 199,90 349,90 649,90 50 58 62">
+        <h3 class="th3">Contratos criados a partir de 01/09/2024 · contato próprio</h3>
+        <div class="tw"><table class=""><thead><tr><th>Posição</th><th>Standard <small class="mut">(R$ 149,90)</small></th><th>Premium <small class="mut">(R$ 199,90)</small></th><th>Infinity <small class="mut">(R$ 349,90)</small></th><th>Private <small class="mut">(R$ 649,90)</small></th></tr></thead><tbody><tr><td><strong>Financial Advisor (FA)</strong></td><td>R$ 74,95 <small class="mut">(50%)</small></td><td>R$ 99,95 <small class="mut">(50%)</small></td><td>R$ 174,95 <small class="mut">(50%)</small></td><td>R$ 324,95 <small class="mut">(50%)</small></td></tr><tr><td><strong>Partner (P)</strong></td><td>R$ 86,94 <small class="mut">(58%)</small></td><td>R$ 115,94 <small class="mut">(58%)</small></td><td>R$ 202,94 <small class="mut">(58%)</small></td><td>R$ 376,94 <small class="mut">(58%)</small></td></tr><tr><td><strong>Senior Partner (SP)</strong></td><td>R$ 92,94 <small class="mut">(62%)</small></td><td>R$ 123,94 <small class="mut">(62%)</small></td><td>R$ 216,94 <small class="mut">(62%)</small></td><td>R$ 402,94 <small class="mut">(62%)</small></td></tr><tr><td><strong>Associate Partner (AP)</strong></td><td>R$ 93,39 <small class="mut">(62,3%)</small></td><td>R$ 124,54 <small class="mut">(62,3%)</small></td><td>R$ 217,99 <small class="mut">(62,3%)</small></td><td>R$ 404,89 <small class="mut">(62,3%)</small></td></tr><tr><td><strong>Principal (PR)</strong></td><td>R$ 93,76 <small class="mut">(62,55%)</small></td><td>R$ 125,04 <small class="mut">(62,55%)</small></td><td>R$ 218,86 <small class="mut">(62,55%)</small></td><td>R$ 406,51 <small class="mut">(62,55%)</small></td></tr><tr><td><strong>Managing Partner (MP)</strong></td><td>R$ 94,14 <small class="mut">(62,8%)</small></td><td>R$ 125,54 <small class="mut">(62,8%)</small></td><td>R$ 219,74 <small class="mut">(62,8%)</small></td><td>R$ 408,14 <small class="mut">(62,8%)</small></td></tr><tr><td><strong>Member of Board (MOB)</strong></td><td>R$ 94,14 <small class="mut">(62,8%*)</small></td><td>R$ 125,54 <small class="mut">(62,8%*)</small></td><td>R$ 219,74 <small class="mut">(62,8%*)</small></td><td>R$ 408,14 <small class="mut">(62,8%*)</small></td></tr></tbody></table></div>
+      </div>
+      <div class="q" data-k="tabela fup outras fontes lead contratos a partir 01/09/2024 25 35 29 39 31 41">
+        <h3 class="th3">Contratos criados a partir de 01/09/2024 · outras fontes</h3>
+        <div class="tw"><table class=""><thead><tr><th>Posição</th><th>Standard <small class="mut">(R$ 149,90)</small></th><th>Premium <small class="mut">(R$ 199,90)</small></th><th>Infinity <small class="mut">(R$ 349,90)</small></th><th>Private <small class="mut">(R$ 649,90)</small></th></tr></thead><tbody><tr><td><strong>Financial Advisor (FA)</strong></td><td>R$ 37,48 <small class="mut">(25%)</small></td><td>R$ 69,97 <small class="mut">(35%)</small></td><td>R$ 122,47 <small class="mut">(35%)</small></td><td>R$ 227,47 <small class="mut">(35%)</small></td></tr><tr><td><strong>Partner (P)</strong></td><td>R$ 43,47 <small class="mut">(29%)</small></td><td>R$ 77,96 <small class="mut">(39%)</small></td><td>R$ 136,46 <small class="mut">(39%)</small></td><td>R$ 253,46 <small class="mut">(39%)</small></td></tr><tr><td><strong>Senior Partner (SP)</strong></td><td>R$ 46,47 <small class="mut">(31%)</small></td><td>R$ 81,96 <small class="mut">(41%)</small></td><td>R$ 143,46 <small class="mut">(41%)</small></td><td>R$ 266,46 <small class="mut">(41%)</small></td></tr><tr><td><strong>Associate Partner (AP)</strong></td><td>R$ 46,69 <small class="mut">(31,15%)</small></td><td>R$ 82,26 <small class="mut">(41,15%)</small></td><td>R$ 143,98 <small class="mut">(41,15%)</small></td><td>R$ 267,43 <small class="mut">(41,15%)</small></td></tr><tr><td><strong>Principal (PR)</strong></td><td>R$ 46,88 <small class="mut">(31,275%)</small></td><td>R$ 82,51 <small class="mut">(41,275%)</small></td><td>R$ 144,42 <small class="mut">(41,275%)</small></td><td>R$ 268,25 <small class="mut">(41,275%)</small></td></tr><tr><td><strong>Managing Partner (MP)</strong></td><td>R$ 47,07 <small class="mut">(31,4%)</small></td><td>R$ 82,76 <small class="mut">(41,4%)</small></td><td>R$ 144,86 <small class="mut">(41,4%)</small></td><td>R$ 269,06 <small class="mut">(41,4%)</small></td></tr><tr><td><strong>Member of Board (MOB)</strong></td><td>R$ 47,07 <small class="mut">(31,4%*)</small></td><td>R$ 82,76 <small class="mut">(41,4%*)</small></td><td>R$ 144,86 <small class="mut">(41,4%*)</small></td><td>R$ 269,06 <small class="mut">(41,4%*)</small></td></tr></tbody></table></div>
+        <p class="tcap">No Standard o percentual de lead é 10 p.p. menor que nos outros planos. (*) MOB: além do percentual, recebe 0,5% da receita líquida de FUP de toda a empresa, dividido entre os MOBs na proporção da produção; os FUPs que ele mesmo fecha entram nessa conta.</p>
+      </div>
+      <details class="more q" data-k="spread lideranca fup lider equipe percentual posicao vendedor"><summary>Spread de liderança no FUP (para líderes)</summary><div>
+        <p>Percentual que o líder recebe sobre o FUP vendido por alguém da sua estrutura, conforme a posição de cada um.</p>
+        <h3 class="th3">Contato próprio</h3>
+        <div class="tw"><table class=""><thead><tr><th>Vendedor ↓ · Líder →</th><th>FA</th><th>P</th><th>SP</th><th>AP</th><th>PR</th><th>MP</th><th>MOB</th></tr></thead><tbody><tr><td><strong>FA</strong></td><td>0%</td><td>8%</td><td>12%</td><td>12,3%</td><td>12,55%</td><td>12,8%</td><td>**</td></tr><tr><td><strong>P</strong></td><td>0%</td><td>0%</td><td>4%</td><td>4,3%</td><td>4,55%</td><td>4,8%</td><td>**</td></tr><tr><td><strong>SP</strong></td><td>0%</td><td>0%</td><td>0%</td><td>0,3%</td><td>0,55%</td><td>0,8%</td><td>**</td></tr><tr><td><strong>AP</strong></td><td>0%</td><td>0%</td><td>0%</td><td>0%</td><td>0,25%</td><td>0,5%</td><td>**</td></tr><tr><td><strong>PR</strong></td><td>0%</td><td>0%</td><td>0%</td><td>0%</td><td>0%</td><td>0,25%</td><td>**</td></tr><tr><td><strong>MP</strong></td><td>0%</td><td>0%</td><td>0%</td><td>0%</td><td>0%</td><td>0,5%*</td><td>**</td></tr><tr><td><strong>MOB</strong></td><td>0%</td><td>0%</td><td>0%</td><td>0%</td><td>0%</td><td>0%</td><td>**</td></tr></tbody></table></div>
+        <h3 class="th3">Outras fontes</h3>
+        <div class="tw"><table class=""><thead><tr><th>Vendedor ↓ · Líder →</th><th>FA</th><th>P</th><th>SP</th><th>AP</th><th>PR</th><th>MP</th><th>MOB</th></tr></thead><tbody><tr><td><strong>FA</strong></td><td>0%</td><td>4%</td><td>6%</td><td>6,15%</td><td>6,275%</td><td>6,4%</td><td>**</td></tr><tr><td><strong>P</strong></td><td>0%</td><td>0%</td><td>2%</td><td>2,15%</td><td>2,275%</td><td>2,4%</td><td>**</td></tr><tr><td><strong>SP</strong></td><td>0%</td><td>0%</td><td>0%</td><td>0,15%</td><td>0,275%</td><td>0,4%</td><td>**</td></tr><tr><td><strong>AP</strong></td><td>0%</td><td>0%</td><td>0%</td><td>0%</td><td>0,125%</td><td>0,25%</td><td>**</td></tr><tr><td><strong>PR</strong></td><td>0%</td><td>0%</td><td>0%</td><td>0%</td><td>0%</td><td>0,125%</td><td>**</td></tr><tr><td><strong>MP</strong></td><td>0%</td><td>0%</td><td>0%</td><td>0%</td><td>0%</td><td>0,25%*</td><td>**</td></tr><tr><td><strong>MOB</strong></td><td>0%</td><td>0%</td><td>0%</td><td>0%</td><td>0%</td><td>0%</td><td>**</td></tr></tbody></table></div>
+        <p class="tcap">(*) O spread de um MP sobre outro MP depende do número de paralelos (veja os casos na regra de AP). (**) MOB: recebe 0,5% (contato próprio) ou 0,25% (outras fontes) da receita líquida de FUP de toda a empresa, dividido entre os MOBs na proporção da produção.</p>
+      </div></details>
+      <details class="more q" data-k="fup contratos antes de 01/09/2024 tabela antiga 99,90 149,90 299,90 599,90"><summary>Contratos criados antes de 01/09/2024</summary><div>
+        <p>Em 01/09/2024 os planos subiram R$ 50,00. Contratos anteriores seguem os preços e percentuais antigos.</p>
+        <h3 class="th3">Contato próprio</h3>
+        <div class="tw"><table class=""><thead><tr><th>Posição</th><th>Standard <small class="mut">(R$ 99,90)</small></th><th>Premium <small class="mut">(R$ 149,90)</small></th><th>Infinity <small class="mut">(R$ 299,90)</small></th><th>Private <small class="mut">(R$ 599,90)</small></th></tr></thead><tbody><tr><td><strong>Financial Advisor (FA)</strong></td><td>R$ 39,96 <small class="mut">(40%)</small></td><td>R$ 74,95 <small class="mut">(50%)</small></td><td>R$ 149,95 <small class="mut">(50%)</small></td><td>R$ 299,95 <small class="mut">(50%)</small></td></tr><tr><td><strong>Partner (P)</strong></td><td>R$ 47,95 <small class="mut">(48%)</small></td><td>R$ 86,94 <small class="mut">(58%)</small></td><td>R$ 173,94 <small class="mut">(58%)</small></td><td>R$ 347,94 <small class="mut">(58%)</small></td></tr><tr><td><strong>Senior Partner (SP)</strong></td><td>R$ 51,95 <small class="mut">(52%)</small></td><td>R$ 92,94 <small class="mut">(62%)</small></td><td>R$ 185,94 <small class="mut">(62%)</small></td><td>R$ 371,94 <small class="mut">(62%)</small></td></tr><tr><td><strong>Associate Partner (AP)</strong></td><td>R$ 52,25 <small class="mut">(52,3%)</small></td><td>R$ 93,39 <small class="mut">(62,3%)</small></td><td>R$ 186,84 <small class="mut">(62,3%)</small></td><td>R$ 373,74 <small class="mut">(62,3%)</small></td></tr></tbody></table></div>
+        <h3 class="th3">Outras fontes</h3>
+        <div class="tw"><table class=""><thead><tr><th>Posição</th><th>Standard <small class="mut">(R$ 99,90)</small></th><th>Premium <small class="mut">(R$ 149,90)</small></th><th>Infinity <small class="mut">(R$ 299,90)</small></th><th>Private <small class="mut">(R$ 599,90)</small></th></tr></thead><tbody><tr><td><strong>Financial Advisor (FA)</strong></td><td>R$ 24,98 <small class="mut">(25%)</small></td><td>R$ 52,47 <small class="mut">(35%)</small></td><td>R$ 104,97 <small class="mut">(35%)</small></td><td>R$ 209,97 <small class="mut">(35%)</small></td></tr><tr><td><strong>Partner (P)</strong></td><td>R$ 28,97 <small class="mut">(29%)</small></td><td>R$ 58,46 <small class="mut">(39%)</small></td><td>R$ 116,96 <small class="mut">(39%)</small></td><td>R$ 233,96 <small class="mut">(39%)</small></td></tr><tr><td><strong>Senior Partner (SP)</strong></td><td>R$ 30,97 <small class="mut">(31%)</small></td><td>R$ 61,46 <small class="mut">(41%)</small></td><td>R$ 122,96 <small class="mut">(41%)</small></td><td>R$ 245,96 <small class="mut">(41%)</small></td></tr><tr><td><strong>Associate Partner (AP)</strong></td><td>R$ 31,12 <small class="mut">(31,15%)</small></td><td>R$ 61,68 <small class="mut">(41,15%)</small></td><td>R$ 123,41 <small class="mut">(41,15%)</small></td><td>R$ 246,86 <small class="mut">(41,15%)</small></td></tr></tbody></table></div>
+        <h3 class="th3">Spread de liderança · contato próprio</h3>
+        <div class="tw"><table class=""><thead><tr><th>Vendedor ↓ · Líder →</th><th>FA</th><th>P</th><th>SP</th><th>AP</th></tr></thead><tbody><tr><td><strong>FA</strong></td><td>0%</td><td>8%</td><td>12%</td><td>12,3%</td></tr><tr><td><strong>P</strong></td><td>0%</td><td>0%</td><td>4%</td><td>4,3%</td></tr><tr><td><strong>SP</strong></td><td>0%</td><td>0%</td><td>0%</td><td>0,3%</td></tr><tr><td><strong>AP</strong></td><td>0%</td><td>0%</td><td>0%</td><td>0%</td></tr></tbody></table></div>
+        <h3 class="th3">Spread de liderança · outras fontes</h3>
+        <div class="tw"><table class=""><thead><tr><th>Vendedor ↓ · Líder →</th><th>FA</th><th>P</th><th>SP</th><th>AP</th></tr></thead><tbody><tr><td><strong>FA</strong></td><td>0%</td><td>4%</td><td>6%</td><td>6,15%</td></tr><tr><td><strong>P</strong></td><td>0%</td><td>0%</td><td>2%</td><td>2,15%</td></tr><tr><td><strong>SP</strong></td><td>0%</td><td>0%</td><td>0%</td><td>0,15%</td></tr><tr><td><strong>AP</strong></td><td>0%</td><td>0%</td><td>0%</td><td>0%</td></tr></tbody></table></div>
+      </div></details>
+    </section>
+
+    <!-- ===================== REGRAS AP ===================== -->
+    <section class="sec" id="regras-ap">
+      <div class="sec-head"><h2>Regras de comissão · Análise Paga (AP)</h2><div class="tags"><span class="tag acc">APs pagas desde 01/08/2026</span></div></div>
+      <p class="sec-sub q" data-k="ap analise paga regra formula comissao mensal base fator fq">A comissão de AP é calculada <strong>mês a mês</strong>, com duas variáveis do mês corrente: o seu <strong>faturamento total de AP</strong>, que define o % Base, e a <strong>quantidade de APs de clientes únicos</strong>, que define o Fator FQ. Um mês não interfere no outro.</p>
+      <div class="note acc q" id="q-ap-formula" data-k="formula percentual comissao final base vezes fator piso 20 teto 55"><strong>% de comissão = % Base × Fator FQ</strong>, com piso de <strong>20%</strong> e teto de <strong>55%</strong> (27,5% para outras fontes). A fonte de captação segue a mesma definição do FUP: <a href="#regras-fup">contato próprio ou outras fontes</a>.</div>
+      <div class="grid2">
+        <div class="card q" data-k="percentual base faixa faturamento propria 20 35 40 45 50 52,5">
+          <div class="k">% Base · contato próprio</div>
+          <div class="tw"><table class=""><thead><tr><th>Faturamento de AP no mês</th><th>% Base</th></tr></thead><tbody><tr><td>R$ 0 a 4.999,99</td><td>20%</td></tr><tr><td>R$ 5.000 a 7.499,99</td><td>35%</td></tr><tr><td>R$ 7.500 a 14.999,99</td><td>40%</td></tr><tr><td>R$ 15.000 a 29.999,99</td><td>45%</td></tr><tr><td>R$ 30.000 a 49.999,99</td><td>50%</td></tr><tr><td>R$ 50.000 ou mais</td><td>52,5%</td></tr></tbody></table></div>
+        </div>
+        <div class="card q" data-k="fator fq quantidade aps unicas 0,80 0,90 1,10 1,20 baixa regular boa excelente">
+          <div class="k">Fator FQ · quantidade de APs no mês</div>
+          <div class="tw"><table class=""><thead><tr><th>APs únicas no mês</th><th>Classificação</th><th>Fator</th></tr></thead><tbody><tr><td>0 a 1</td><td>Baixa</td><td>×0,80</td></tr><tr><td>2</td><td>Regular</td><td>×0,90</td></tr><tr><td>3</td><td>Boa</td><td>×1,10</td></tr><tr><td>4 ou mais</td><td>Excelente</td><td>×1,20</td></tr></tbody></table></div>
+          <p>Substitui o antigo critério de PPs históricos.</p>
+        </div>
+      </div>
+      <div class="q" data-k="tabela completa ap faturamento quantidade percentual final propria">
+        <h3 class="th3">Tabela completa · contato próprio</h3>
+        <div class="tw"><table class=""><thead><tr><th>Faturamento de AP no mês</th><th>% Base</th><th>0–1 AP (×0,80)</th><th>2 APs (×0,90)</th><th>3 APs (×1,10)</th><th>4+ APs (×1,20)</th></tr></thead><tbody><tr><td>R$ 0 a 4.999,99</td><td>20%</td><td>20,00% *</td><td>20,00% *</td><td>—</td><td>—</td></tr><tr><td>R$ 5.000 a 7.499,99</td><td>35%</td><td>28,00%</td><td>31,50%</td><td>38,50%</td><td>—</td></tr><tr><td>R$ 7.500 a 14.999,99</td><td>40%</td><td>32,00%</td><td>36,00%</td><td>44,00%</td><td>48,00%</td></tr><tr><td>R$ 15.000 a 29.999,99</td><td>45%</td><td>36,00%</td><td>40,50%</td><td>49,50%</td><td>54,00%</td></tr><tr><td>R$ 30.000 a 49.999,99</td><td>50%</td><td>40,00%</td><td>45,00%</td><td>55,00%</td><td>55,00%</td></tr><tr><td>R$ 50.000 ou mais</td><td>52,5%</td><td>42,00%</td><td>47,25%</td><td>55,00%</td><td>55,00%</td></tr></tbody></table></div>
+        <p class="tcap">(*) Piso de 20%. “—”: combinação impossível, porque a AP mínima é R$ 2.000. Teto de 55%.</p>
+      </div>
+      <div class="q" data-k="tabela ap outras fontes lead 20 25 26,25 teto 27,5">
+        <h3 class="th3">Tabela completa · outras fontes</h3>
+        <div class="tw"><table class=""><thead><tr><th>Faturamento de AP no mês</th><th>% Base</th><th>0–1 AP (×0,80)</th><th>2 APs (×0,90)</th><th>3 APs (×1,10)</th><th>4+ APs (×1,20)</th></tr></thead><tbody><tr><td>R$ 0 a 9.999,99</td><td>20%</td><td>20,00% *</td><td>20,00% *</td><td>—</td><td>—</td></tr><tr><td>R$ 10.000 a 49.999,99</td><td>25%</td><td>20,00%</td><td>22,50%</td><td>27,50%</td><td>27,50%</td></tr><tr><td>R$ 50.000 ou mais</td><td>26,25%</td><td>21,00%</td><td>23,63%</td><td>27,50%</td><td>27,50%</td></tr></tbody></table></div>
+        <p class="tcap">(*) Piso de 20%. Teto de 27,5%.</p>
+      </div>
+      <div class="grid2">
+        <div class="card q" data-k="cliente unico carencia 6 meses mesma ap reconta fator fq">
+          <div class="k">Cliente único · carência de 6 meses</div>
+          <p>O mesmo cliente só conta de novo para o Fator FQ <strong>6 meses</strong> depois da AP anterior com ele. A AP repetida é paga normalmente; só não entra na contagem.</p>
+          <div class="tw"><table class=""><thead><tr><th>Mês</th><th>AP</th><th>Conta no FQ?</th></tr></thead><tbody><tr><td>Janeiro</td><td>Cliente X</td><td>Sim</td></tr><tr><td>Março</td><td>Cliente Y</td><td>Sim</td></tr><tr><td>Abril</td><td>Cliente X (3 meses depois)</td><td>Não</td></tr><tr><td>Julho</td><td>Cliente X (6 meses depois)</td><td>Sim</td></tr></tbody></table></div>
+        </div>
+        <div class="card q" data-k="ap parcelada pagamento parcelado percentual definido mes pagamento data parcelas">
+          <div class="k">AP parcelada</div>
+          <p>O percentual é definido no <strong>mês do pagamento do cliente</strong> e vale para todas as parcelas, mesmo que nos meses seguintes você mude de faixa.</p>
+          <p>Cada parcela vence no mesmo dia do fechamento da AP: AP fechada em 30/01 tem parcelas em 28/02, 30/03, 30/04…</p>
+        </div>
+      </div>
+      <div class="card q" id="q-ap-estorno" data-k="estorno ap cliente pediu devolucao 14 dias 30 dias 60 dias 100 50 25">
+        <div class="k">Estorno da AP</div>
+        <p>Se o cliente pede o estorno da AP, ele recebe de volta conforme o tempo desde a consultoria, e o seu estorno é <strong>proporcional</strong> ao valor devolvido a ele.</p>
+        <div class="tw"><table class=""><thead><tr><th>Pedido feito</th><th>Devolvido ao cliente</th></tr></thead><tbody><tr><td>0 a 14 dias após a consultoria</td><td>100%</td></tr><tr><td>15 a 30 dias</td><td>50%</td></tr><tr><td>31 a 60 dias</td><td>25%</td></tr><tr><td>Depois de 60 dias</td><td>Não é possível pedir estorno</td></tr></tbody></table></div>
+      </div>
+      <details class="more q" data-k="fa iv piso 40 25 acima de 10.000 regra especial"><summary>Regra especial FA IV</summary><div>
+        <p>Mesma fórmula, com um piso extra: com faturamento de AP <strong>acima de R$ 10.000</strong> no mês, a comissão nunca fica abaixo de <strong>40%</strong> (contato próprio) ou <strong>25%</strong> (outras fontes). Abaixo de R$ 10.000 vale o piso de 20%.</p>
+        <h3 class="th3">FA IV · contato próprio</h3>
+        <div class="tw"><table class=""><thead><tr><th>Faturamento de AP no mês</th><th>% Base</th><th>0–1 AP (×0,80)</th><th>2 APs (×0,90)</th><th>3 APs (×1,10)</th><th>4+ APs (×1,20)</th></tr></thead><tbody><tr><td>R$ 0 a 4.999,99</td><td>20%</td><td>20,00% *</td><td>20,00% *</td><td>—</td><td>—</td></tr><tr><td>R$ 5.000 a 7.499,99</td><td>35%</td><td>28,00%</td><td>31,50%</td><td>38,50%</td><td>—</td></tr><tr><td>R$ 7.500 a 9.999,99</td><td>40%</td><td>32,00%</td><td>36,00%</td><td>44,00%</td><td>48,00%</td></tr><tr><td>R$ 10.000 a 14.999,99</td><td>40%</td><td>40,00% ▲</td><td>40,00% ▲</td><td>44,00%</td><td>48,00%</td></tr><tr><td>R$ 15.000 a 29.999,99</td><td>45%</td><td>40,00% ▲</td><td>40,50%</td><td>49,50%</td><td>54,00%</td></tr><tr><td>R$ 30.000 a 49.999,99</td><td>50%</td><td>40,00%</td><td>45,00%</td><td>55,00%</td><td>55,00%</td></tr><tr><td>R$ 50.000 ou mais</td><td>52,5%</td><td>42,00%</td><td>47,25%</td><td>55,00%</td><td>55,00%</td></tr></tbody></table></div>
+        <h3 class="th3">FA IV · outras fontes</h3>
+        <div class="tw"><table class=""><thead><tr><th>Faturamento de AP no mês</th><th>% Base</th><th>0–1 AP (×0,80)</th><th>2 APs (×0,90)</th><th>3 APs (×1,10)</th><th>4+ APs (×1,20)</th></tr></thead><tbody><tr><td>R$ 0 a 9.999,99</td><td>20%</td><td>20,00% *</td><td>20,00% *</td><td>—</td><td>—</td></tr><tr><td>R$ 10.000 a 49.999,99</td><td>25%</td><td>25,00% ▲</td><td>25,00% ▲</td><td>27,50%</td><td>27,50%</td></tr><tr><td>R$ 50.000 ou mais</td><td>26,25%</td><td>25,00% ▲</td><td>25,00% ▲</td><td>27,50%</td><td>27,50%</td></tr></tbody></table></div>
+        <p class="tcap">▲ Piso FA IV. (*) Piso de 20%.</p>
+      </div></details>
+      <details class="more q" data-k="partners e acima percentual fixo 40 50 20 25 spread equipe direta lideranca paralelos mp mob"><summary>Partners e acima (sem Fator FQ) e spread de liderança</summary><div>
+        <p>Partners e cargos acima recebem um percentual fixo sobre cada AP, conforme o próprio faturamento de AP no mês.</p>
+        <div class="tw"><table class=""><thead><tr><th>Faturamento de AP no mês</th><th>Contato próprio</th><th>Outras fontes</th></tr></thead><tbody><tr><td>R$ 0 a 9.999,99</td><td>40% · AP de R$ 8.000 → R$ 3.200</td><td>20% · AP de R$ 8.000 → R$ 1.600</td></tr><tr><td>R$ 10.000 ou mais</td><td>50% · AP de R$ 15.000 → R$ 7.500</td><td>25% · AP de R$ 15.000 → R$ 3.750</td></tr></tbody></table></div>
+        <h3 class="th3">Spread sobre a equipe direta</h3>
+        <div class="tw"><table class=""><thead><tr><th>Produção de AP da equipe direta no mês</th><th>Contato próprio</th><th>Outras fontes</th></tr></thead><tbody><tr><td>R$ 0 a 29.999,99</td><td>7,0%</td><td>5,0%</td></tr><tr><td>R$ 30.000 a 49.999,99</td><td>8,0%</td><td>5,0%</td></tr><tr><td>R$ 50.000 a 74.999,99</td><td>9,0%</td><td>5,0%</td></tr><tr><td>R$ 75.000 a 149.999,99</td><td>10,5%</td><td>5,25%</td></tr><tr><td>R$ 150.000 a 249.999,99</td><td>11,5%</td><td>5,75%</td></tr><tr><td>R$ 250.000 ou mais</td><td>12,5%</td><td>6,25%</td></tr></tbody></table></div>
+        <p class="tcap">O líder não recebe spread de equipe direta sobre os próprios contratos.</p>
+        <h3 class="th3">Spread por cargo · contato próprio</h3>
+        <div class="tw"><table class=""><thead><tr><th>Quem fez a AP ↓ · Líder →</th><th>P</th><th>SP</th><th>AP</th><th>PR</th><th>MP</th><th>MOB</th></tr></thead><tbody><tr><td><strong>P</strong></td><td>0%</td><td>3,5%</td><td>5%</td><td>5,5%</td><td>6%</td><td>**</td></tr><tr><td><strong>SP</strong></td><td>0%</td><td>0%</td><td>1,5%</td><td>2%</td><td>2,5%</td><td>**</td></tr><tr><td><strong>AP</strong></td><td>0%</td><td>0%</td><td>0%</td><td>0,5%</td><td>1%</td><td>**</td></tr><tr><td><strong>PR</strong></td><td>0%</td><td>0%</td><td>0%</td><td>0%</td><td>0,5%</td><td>**</td></tr><tr><td><strong>MP</strong></td><td>0%</td><td>0%</td><td>0%</td><td>0%</td><td>0,5%*</td><td>**</td></tr><tr><td><strong>MOB</strong></td><td>0%</td><td>0%</td><td>0%</td><td>0%</td><td>0%</td><td>**</td></tr></tbody></table></div>
+        <h3 class="th3">Spread por cargo · outras fontes</h3>
+        <div class="tw"><table class=""><thead><tr><th>Quem fez a AP ↓ · Líder →</th><th>P</th><th>SP</th><th>AP</th><th>PR</th><th>MP</th><th>MOB</th></tr></thead><tbody><tr><td><strong>P</strong></td><td>0%</td><td>1,75%</td><td>2,5%</td><td>2,75%</td><td>3%</td><td>**</td></tr><tr><td><strong>SP</strong></td><td>0%</td><td>0%</td><td>0,75%</td><td>1%</td><td>1,25%</td><td>**</td></tr><tr><td><strong>AP</strong></td><td>0%</td><td>0%</td><td>0%</td><td>0,25%</td><td>0,5%</td><td>**</td></tr><tr><td><strong>PR</strong></td><td>0%</td><td>0%</td><td>0%</td><td>0%</td><td>0,25%</td><td>**</td></tr><tr><td><strong>MP</strong></td><td>0%</td><td>0%</td><td>0%</td><td>0%</td><td>0,25%*</td><td>**</td></tr><tr><td><strong>MOB</strong></td><td>0%</td><td>0%</td><td>0%</td><td>0%</td><td>0%</td><td>**</td></tr></tbody></table></div>
+        <p class="tcap">Somam-se ao spread de equipe direta quando a AP é de alguém da equipe direta do líder. (*) MP sobre MP depende do número de paralelos. (**) MOB: 0,5% (próprio) ou 0,25% (outras fontes) da receita líquida de AP de toda a empresa, dividido entre os MOBs na proporção da produção.</p>
+        <div class="note"><strong>MP sobre MP (contato próprio; em outras fontes os valores caem pela metade):</strong> com dois MPs em linha, o MP1 recebe 0,5% sobre a estrutura do MP2. Com três, o MP1 recebe 0,5% sobre o MP2 e 0,25% sobre o MP3, e o MP2 recebe 0,5% sobre o MP3. Com quatro, o MP1 não recebe sobre o MP4; cada MP recebe 0,5% do paralelo seguinte e 0,25% do segundo.</div>
+      </div></details>
+      <details class="more q" data-k="bonus acelerador inicio onboarding 4 aps 28 dias 2.000 1.000 treinador principal assistente"><summary>Bônus: Acelerador de Início e treinadores</summary><div>
+        <p><strong>Acelerador de Início</strong> (APs pagas desde 01/08/2026): consultor em onboarding que fecha <strong>4 ou mais APs em 28 dias</strong> recebe <strong>R$ 2.000</strong> no BP, e o 1º líder recebe <strong>R$ 1.000</strong>. Pago no fim do trimestre em que a janela de 28 dias termina. Vale uma vez por consultor, só para novos onboardings, e soma com os demais bônus.</p>
+        <h3 class="th3">Treinadores (desde 01/01/2025)</h3>
+        <div class="tw"><table class=""><thead><tr><th>Treinador Partner ou acima · produção da equipe direta</th><th>Principal</th><th>Assistente</th></tr></thead><tbody><tr><td>R$ 0 a 29.999,99</td><td>3%</td><td>1,5%</td></tr><tr><td>R$ 30.000 a 49.999,99</td><td>4%</td><td>2%</td></tr><tr><td>R$ 50.000 a 249.999,99</td><td>5%</td><td>2,5%</td></tr><tr><td>R$ 250.000 ou mais</td><td>6%</td><td>3%</td></tr></tbody></table></div>
+        <div class="tw"><table class=""><thead><tr><th>Treinador FA · produção própria</th><th>Principal</th><th>Assistente</th></tr></thead><tbody><tr><td>R$ 0 a 4.999,99</td><td>3%</td><td>1,5%</td></tr><tr><td>R$ 5.000 a 14.999,99</td><td>4%</td><td>2%</td></tr><tr><td>R$ 15.000 a 29.999,99</td><td>5%</td><td>2,5%</td></tr><tr><td>R$ 30.000 ou mais</td><td>6%</td><td>3%</td></tr></tbody></table></div>
+      </div></details>
+      <details class="more q" data-k="ap regra anterior 01/01/2025 31/07/2026 pps historicos direitos mantidos 1000 1500"><summary>APs pagas de 01/01/2025 a 31/07/2026 (regra anterior)</summary><div>
+        <p>Antes de agosto de 2026, o percentual dependia do faturamento de AP no mês e dos <strong>PPs históricos válidos</strong>. APs pagas nesse período seguem esta tabela.</p>
+        <h3 class="th3">Contato próprio</h3>
+        <div class="tw"><table class=""><thead><tr><th>Faturamento de AP no mês</th><th>Até 1.999,99 PPs</th><th>2.000 a 2.999,99 PPs</th><th>Acima de 3.000 PPs</th></tr></thead><tbody><tr><td>R$ 0 a 4.999,99</td><td>20%*</td><td>40%</td><td>45%</td></tr><tr><td>R$ 5.000 a 7.499,99</td><td>35%</td><td>40%</td><td>45%</td></tr><tr><td>R$ 7.500 a 14.999,99</td><td>40%</td><td>40%</td><td>45%</td></tr><tr><td>R$ 15.000 a 29.999,99</td><td>45%</td><td>45%</td><td>45%</td></tr><tr><td>R$ 30.000 a 49.999,99</td><td>50%</td><td>50%</td><td>50%</td></tr><tr><td>R$ 50.000 ou mais</td><td>52,5%</td><td>52,5%</td><td>52,5%</td></tr></tbody></table></div>
+        <p class="tcap">(*) Líder na faixa 1 com até 1.999,99 PPs recebe um extra conforme a produção da equipe direta: 27% / 28% / 29% / 30,5% / 31,5% / 32,5% nas mesmas faixas do spread de equipe direta. Direitos mantidos: quem tinha 1.000 a 1.499,99 PPs em 30/06/2024 tem mínimo de 40%; acima de 1.500 PPs, 45%.</p>
+        <h3 class="th3">Outras fontes</h3>
+        <div class="tw"><table class=""><thead><tr><th>Faturamento de AP no mês</th><th>% de comissão</th></tr></thead><tbody><tr><td>R$ 0 a 4.999,99</td><td>20%*</td></tr><tr><td>R$ 5.000 a 49.999,99</td><td>25%</td></tr><tr><td>R$ 50.000 ou mais</td><td>26,25%</td></tr></tbody></table></div>
+        <p class="tcap">(*) Líder na faixa 1: 25% / 25,25% / 25,75% / 26,25% conforme a produção da equipe direta. Em outras fontes não há aumento por PPs históricos. Os spreads por cargo e de equipe direta eram os mesmos da regra atual; o líder só recebia spread sobre os próprios contatos se estivesse na faixa 1.</p>
+      </div></details>
+    </section>
+
+    <!-- ===================== CALCULADORA DE COMISSÕES ===================== -->
+    <section class="sec" id="calculadora-pps">
+      <div class="sec-head"><h2>Quanto vou receber?</h2><div class="tags"><span class="tag">Calculadora de comissões e PPs</span></div></div>
+      <div class="card q" id="q-calc" data-k="calculadora comissoes pps simular quanto vou receber parcelas percentual contrato novo arquivos">
+        <p>As regras de AP e FUP estão nesta página (<a href="#regras-ap">AP</a> e <a href="#regras-fup">FUP</a>). Para simular valores e ver percentuais e parcelas dos produtos de parceiras, use a <strong>Calculadora de Comissões e PPs</strong>, no W1nner: <span class="path">Menu lateral › Arquivos › Comissões</span>, na pasta da calculadora.</p>
+        <ul>
+          <li>Simule a comissão de um contrato novo a partir do produto e do valor.</li>
+          <li>Veja em quantas parcelas o repasse é feito.</li>
+          <li>Projete o bônus de PPs históricos da sua carteira.</li>
+        </ul>
+        <div class="note acc"><strong>Não abra ticket para simular valores.</strong> A calculadora tem a mesma tabela que o time de Comissões usa.</div>
+      </div>
+    </section>
+
+    <!-- ===================== OUTROS CASOS ===================== -->
+    <section class="sec" id="outros">
+      <div class="sec-head"><h2>Outros casos frequentes</h2><div class="tags"><span class="tag">Respostas dos tickets</span></div></div>
+      <div class="faq">
+        <details class="qa q" id="q-pj2" data-k="cliente nao localizado base indicados pj2 formulario indicacao"><summary>O cliente que eu indiquei não aparece na minha carteira.</summary><div>
+          <p>Se o cliente não está na base de clientes indicados para consultoria, não existe registro formal da indicação no seu nome, e a comissão não tem como ser atribuída a você.</p>
+          <p>Para validar a indicação, preencha o <strong>formulário de PJ2</strong>: <a href="https://share.hsforms.com/2DMiK7-wcTjCWbwWZVTU7mwnv9zs" target="_blank" rel="noopener">abrir formulário PJ2</a>.</p>
+        </div></details>
+        <details class="qa q" data-k="lead capital retroativo reclassificado comissao mudou prospeccao propria"><summary>Meu cliente virou Lead Capital e a comissão mudou.</summary><div>
+          <p>Quando a base da W1 Capital é atualizada e mostra que o cliente sempre foi Lead Capital, a comissão passa a ser calculada nessa condição, inclusive para trás.</p>
+          <p>Se você tem evidências de que a prospecção foi sua, envie-as em um ticket com o assunto <span class="subj">Comissões</span> para verificação.</p>
+        </div></details>
+        <details class="qa q" id="q-dup" data-k="estorno duplicidade repasse duplicado pago indevidamente"><summary>Apareceu um estorno com o texto “duplicidade”.</summary><div>
+          <p>É a correção de uma comissão que foi creditada duas vezes. O estorno devolve só o valor pago a mais; a comissão correta continua na sua carteira.</p>
+        </div></details>
+        <details class="qa q" id="q-fiscal" data-k="nota fiscal imposto retencao fiscal alcada ticket"><summary>Dúvida sobre nota fiscal, impostos ou retenções.</summary><div>
+          <p>Questões fiscais não são do time de Comissões. Abra o ticket direto na alçada <span class="subj">Fiscal</span>, para não perder tempo com redirecionamento.</p>
+        </div></details>
+        <details class="qa q" id="q-estorno-parc" data-k="estorno parceira cancelou cliente seguro vida consorcio saude devolucao comissao central de estornos"><summary>O cliente cancelou um produto de parceira. Vou ter estorno?</summary><div>
+          <p>Depende da parceira e do tempo que o cliente ficou. As regras de cada parceira estão na <strong>Central de Estornos</strong>, que tem também uma calculadora para Icatu e MAG. Ela fica no W1nner, em <span class="path">Arquivos › Comissões</span>, junto com esta central.</p>
+        </div></details>
+      </div>
+    </section>
+
+    <div class="part" aria-hidden="true"><b>Suporte</b><span></span></div>
+
+    <!-- ===================== TICKET ===================== -->
+    <section class="sec" id="ticket">
+      <div class="sec-head"><h2>Quando e como abrir um ticket</h2><div class="tags"><span class="tag">Assunto certo, resposta mais rápida</span></div></div>
+      <p class="sec-sub q" data-k="antes de abrir ticket checklist verificar">Antes de abrir, confira: o prazo da situação já passou? Você olhou a BU certa e os campos Contato e Observação do extrato? Se a resposta para as duas é sim e o valor não está lá, abra o ticket.</p>
+      <div class="tw q" data-k="assunto ticket comissoes cs cobranca operacoes fiscal especialistas plano de saude">
+        <table>
+          <thead><tr><th>Situação</th><th>Abrir com</th></tr></thead>
+          <tbody>
+            <tr><td>FUP com mensalidade <strong>Paga</strong> no mês anterior e sem comissão</td><td><span class="subj">Comissões</span></td></tr>
+            <tr><td>Produto de parceira com mais de <strong>60 dias</strong> desde o 1º pagamento e sem repasse</td><td><span class="subj">Comissões</span></td></tr>
+            <tr><td>Bônus de PPs ausente depois do 10º dia útil, com comissão principal no mês anterior</td><td><span class="subj">Comissões</span></td></tr>
+            <tr><td>AP, FUP, Business ou Patrimonial paga pelo cliente e sem repasse depois do dia 10 do mês seguinte</td><td><span class="subj">Comissões</span></td></tr>
+            <tr><td>Cobrança, mensalidade vencida, cancelamento do cliente</td><td><span class="subj">CS - W1 Acompanhamento, Cobrança, Cancelamentos / Dúvidas Gerais</span></td></tr>
+            <tr><td>Consórcio XP (CNP) em dia e sem status Rodando</td><td><span class="subj">Operações</span></td></tr>
+            <tr><td>Saúde Adesão PDS: dúvida sobre o boleto de adesão</td><td><span class="subj">Especialistas de Plano de Saúde</span></td></tr>
+            <tr><td>Nota fiscal, impostos, retenções</td><td><span class="subj">Fiscal</span></td></tr>
+            <tr><td>Indicação que não aparece na base</td><td>Formulário de PJ2 (veja <a href="#outros">Outros casos</a>)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card q" data-k="o que enviar no ticket informacoes dados cliente">
+        <div class="k">O que colocar no ticket</div>
+        <ul>
+          <li>Nome completo do cliente e o produto (e a parceira, se for o caso).</li>
+          <li>BU e mês de referência que você está conferindo.</li>
+          <li>O que você já verificou: situação em Assinaturas, busca por Contato e Observação, status do report.</li>
+          <li>Print da tela, se ajudar.</li>
+        </ul>
+      </div>
+      <div class="note acc q" data-k="nao abra ticket simular calculadora aguarde prazo"><strong>Não precisam de ticket:</strong> simular quanto vai receber (use a calculadora), pedir pagamento fora da janela do dia 1 ao 20, produto de parceira com menos de 60 dias, mensalidade de FUP vencida (não gera comissão), 2ª parcela de consórcio dentro dos 90 dias.</div>
+    </section>
+
+    <!-- ===================== ACADEMY ===================== -->
+    <section class="sec" id="academy">
+      <div class="sec-head"><h2>Vídeos no W1 Academy</h2><div class="tags"><span class="tag">Passo a passo na tela</span></div></div>
+      <p class="sec-sub q" data-k="videos academy treinamento tutorial central economica comissionamento drive assistir">Quatro vídeos curtos, com o passo a passo na tela do W1nner. Abra cada um pelo botão <strong>Assistir</strong> ou veja <a href="https://drive.google.com/drive/folders/1eIQGQMrvlp5b2lO9942b8bOeSP0B_htZ" target="_blank" rel="noopener">a pasta com todos os vídeos</a>.</p>
+      <div class="grid2">
+        <div class="card q" data-k="video navegando carteira comissoes saldo solicitar extrato"><div class="k">Vídeo 1</div><h3>Navegando na sua carteira de comissões</h3><p>Saldos, seletor de BU, solicitar pagamento, gerar extrato e filtros Contato e Observação.</p><div class="vlinks"><a class="watch" href="https://drive.google.com/file/d/1ELzk_sq2icC_n4C4kNuy4RR-0H9j3q0m/view" target="_blank" rel="noopener">▶ Assistir</a><a href="#w1nner">Resumo nesta página</a></div></div>
+        <div class="card q" data-k="video consultar pagamento fup assinaturas"><div class="k">Vídeo 2</div><h3>Como consultar o pagamento de FUP</h3><p>A regra do mês anterior e a conferência em Assinaturas › Detalhes.</p><div class="vlinks"><a class="watch" href="https://drive.google.com/file/d/1FAhDM8T4ceehjuUtSahk-gp0_bTo-fvw/view" target="_blank" rel="noopener">▶ Assistir</a><a href="#fup">Resumo nesta página</a></div></div>
+        <div class="card q" data-k="video realocacao comissao exemplos excecoes"><div class="k">Vídeo 3</div><h3>Entendendo a comissão por realocação</h3><p>Qual evento veio primeiro, exemplos e exceções de Business, Patrimonial e AP.</p><div class="vlinks"><a class="watch" href="https://drive.google.com/file/d/1JaFm1KEMYpDbp4jkcPe6rG8g2xLj0wvd/view" target="_blank" rel="noopener">▶ Assistir</a><a href="#realocacao">Resumo nesta página</a></div></div>
+        <div class="card q" data-k="video prazos pagamento status rodando 60 dias"><div class="k">Vídeo 4</div><h3>Prazos de pagamento e status das comissões</h3><p>Dia 10 para AP e FUP, 60 dias para parceiras e o significado de Rodando.</p><div class="vlinks"><a class="watch" href="https://drive.google.com/file/d/1Rlm6SlgWWIXVWPj2j8H7l8We3B_YKBTU/view" target="_blank" rel="noopener">▶ Assistir</a><a href="#prazos">Resumo nesta página</a></div></div>
+      </div>
+    </section>
+  </main>
+</div>
+<footer>
+  <div class="wrap">
+    <p><strong>Fontes:</strong> roteiros dos vídeos de Comissões do W1 Academy, respostas-padrão dos tickets do time de Comissões e regras de comissionamento disponíveis no W1nner (Arquivos › Comissões › Regras).</p>
+    <p>Departamento de Comissões W1 · Atualizado em outubro de 2026. Em caso de dúvida, vale o documento oficial mais recente no W1nner.</p>
+  </div>
+</footer>
+
+<script>
+/* ================= DIAGNÓSTICO ================= */
+(function(){
+  var V={ok:['ok','Não precisa de ticket'],wait:['wait','Aguarde'],ticket:['ticket','Abra ticket'],other:['other','Fale com outra área']};
+  var S=[
+   {g:'Saque e nota fiscal',items:[
+    {t:'Perdi o dia 20 e não pedi o pagamento',v:'wait',h:'<p>O pedido de pagamento só pode ser feito <strong>do dia 1 ao dia 20</strong>. Faça a solicitação na janela do mês seguinte.</p>',go:'q-prazo20'},
+    {t:'Emiti uma nota fiscal só, somando várias BUs',v:'ok',h:'<p>O Financeiro exige <strong>uma nota fiscal por BU</strong>. Emita uma nota para cada empresa e faça uma solicitação para cada uma.</p>',go:'q-nf-bu'},
+    {t:'Não sei onde ver meu saldo ou o extrato',v:'ok',h:'<p>Acesse <span class="path">Centro Econômico › Comissões</span>. No topo: <strong>Disponível</strong> e <strong>Solicitado</strong>. Troque a BU no seletor. O botão <strong>Gerar extrato</strong> envia a planilha para o seu e-mail.</p>',go:'q-saldos'},
+    {t:'Dúvida sobre impostos ou retenção na nota',v:'other',vt:'Fiscal',h:'<p>Assuntos fiscais não são do time de Comissões. Abra o ticket direto na alçada <span class="subj">Fiscal</span>.</p>',go:'q-fiscal'}
+   ]},
+   {g:'Prazos e parceiras',items:[
+    {t:'Parceira: 1º pagamento do cliente há menos de 60 dias',v:'wait',h:'<p>O primeiro repasse de parceira pode levar <strong>até 60 dias</strong> depois do 1º pagamento do cliente. Quando a parceira pagar a W1, o repasse para você é feito e o report muda automaticamente para <strong>Rodando</strong>.</p>',go:'q-rodando'},
+    {t:'Parceira: passaram 60 dias e nada de repasse',v:'ticket',vt:'Comissões',h:'<p>Passado o prazo de 60 dias sem repasse, abra ticket com o assunto <span class="subj">Comissões</span>. Informe o cliente, a parceira e a data do 1º pagamento.</p>',go:'q-rodando'},
+    {t:'Parceira: o repasse do mês ainda não veio',v:'wait',h:'<p>Cada parceira paga a W1 uma vez por mês, sem dia fixo, <strong>até o último dia do mês</strong>. Aguarde o fim do mês; depois que a W1 recebe, o repasse ocorre em até 5 dias úteis.</p>',go:'q-parceiras'},
+    {t:'Qual o meu percentual de AP este mês?',v:'ok',h:'<p>% Base (pelo seu faturamento de AP no mês) × Fator FQ (pela quantidade de APs de clientes únicos no mês), com piso de 20% e teto de 55% (27,5% para lead). Veja a tabela completa.</p>',go:'q-ap-formula'},
+    {t:'O cliente pediu estorno da AP',v:'ok',h:'<p>Até 14 dias após a consultoria o cliente recebe 100%; de 15 a 30 dias, 50%; de 31 a 60 dias, 25%. Depois de 60 dias não há estorno. O seu estorno é proporcional ao valor devolvido.</p>',go:'q-ap-estorno'},
+    {t:'Meu cliente é próprio ou lead?',v:'ok',h:'<p>Próprio: da sua rede ou recomendado por cliente. Lead: repassado pela W1 (W1 Capital, marketing). Recomendação de lead conta como própria, exceto lead do marketing.</p>',go:'q-fonte'},
+    {t:'AP e/ou FUP: quando cai?',v:'ok',h:'<p>Até o <strong>dia 10 do mês seguinte</strong> ao pagamento do cliente. AP parcelada é repassada parcela a parcela.</p>',go:'q-proprios'},
+    {t:'Business ou Patrimonial pago no cartão e não apareceu',v:'wait',h:'<p>No cartão, a operadora tem <strong>até 30 dias</strong> para repassar o valor à W1. Só depois o pagamento entra no repasse do dia 10 do mês seguinte. Confira a data da compra antes de reportar.</p>',go:'q-cartao'},
+    {t:'Consórcio: a 2ª parcela da comissão não caiu',v:'wait',h:'<p>Entre a 1ª e a 2ª parcela pode haver <strong>até 90 dias</strong>: a administradora encerra o grupo e valida a venda. Depois disso o repasse fica mensal, com o cliente em dia.</p>',go:'q-consorcio'},
+    {t:'Consórcio XP (CNP): em dia, mas não está Rodando',v:'other',vt:'Operações',h:'<p>Costuma ser pendência de assinatura ou formalização na administradora. Fale com <span class="subj">Operações</span>. Com o contrato Rodando, as comissões entram no mês seguinte.</p>',go:'q-cnp-rodando'},
+    {t:'Consórcio XP (CNP): 1ª parcela veio menor',v:'wait',h:'<p>Contratos fechados desde <strong>01/04/2026</strong> recebem a 1ª parcela em duas partes; a segunda chega até o último dia do mês. Aguarde o fim do mês.</p>',go:'q-cnp-parcela'},
+    {t:'Saúde Adesão PDS: sem comissão',v:'other',vt:'Especialistas de Saúde',h:'<p>A comissão só existe depois que o cliente paga o <strong>boleto de adesão</strong> da parceira. Se ele foi pago e ainda há dúvida, fale com as <span class="subj">Especialistas de Plano de Saúde</span>.</p>',go:'q-pds'},
+    {t:'Saúde: desconto no BP por Especialista',v:'ok',h:'<p>Desde <strong>01/01/2026</strong>, a parte paga ao Especialista de Saúde é descontada do seu BP na mesma proporção. O desconto está correto.</p>',go:'q-especialista'},
+    {t:'Quanto vou receber / em quantas parcelas?',v:'ok',h:'<p>Use a <strong>Calculadora de Comissões e PPs</strong> em <span class="path">Arquivos › Comissões</span> no W1nner. Não é preciso ticket para simular.</p>',go:'q-calc'}
+   ]},
+   {g:'FUP',items:[
+    {t:'O cliente pagou no mês passado e não recebi',v:'ticket',vt:'Comissões',h:'<p>Confirme em <span class="path">Centro Econômico › Assinaturas › Detalhes</span> se o mês anterior está <strong>Pago</strong>. Se estiver, abra ticket com o assunto <span class="subj">Comissões</span>.</p>',go:'q-fup-verificar'},
+    {t:'A mensalidade do cliente está vencida',v:'other',vt:'CS',h:'<p>Sem pagamento no mês anterior, não há FUP no mês atual. Para cobrança ou cancelamento, abra ticket com o assunto <span class="subj">CS - W1 Acompanhamento, Cobrança, Cancelamentos / Dúvidas Gerais</span>.</p>',go:'q-fup-verificar'},
+    {t:'O cliente regularizou mensalidades atrasadas',v:'wait',h:'<p>O valor entra no mês seguinte à regularização, normalmente somado ao FUP daquele mês.</p>',go:'q-fup-regra'}
+   ]},
+   {g:'Bônus de PPs',items:[
+    {t:'Não recebi o bônus de PPs de um cliente',v:'ok',h:'<ul><li>Houve comissão base da parceira no <strong>mês anterior</strong>?</li><li>O cliente é de <strong>fonte própria</strong>? Lead não gera bônus.</li><li>Você já tinha percentual de bônus no trimestre em que o contrato foi fechado?</li><li>Olhou a BU <strong>W1 Group Corretora</strong>, campo <strong>Observação</strong>, depois do 10º dia útil?</li></ul><p>Tudo certo e mesmo assim sem bônus: ticket <span class="subj">Comissões</span>.</p>',go:'q-bonus-faltou'},
+    {t:'Como subo ou mantenho meu % de bônus?',v:'ok',h:'<p>Desde 01/07/2026: bata <strong>1.000 PPs</strong> (Faixa A) ou <strong>750 PPs</strong> (Faixa B) por trimestre. Cada trimestre batido sobe 5 p.p. até o teto (45% ou 40%); depois, a meta de manutenção é menor. Quem tinha 2.000 ou 3.000 PPs históricos até 31/07/2026 mantém 40% ou 45%.</p>',go:'q-bonus-regra'}
+   ]},
+   {g:'Realocação',items:[
+    {t:'A W1 recebeu antes da minha Reunião de Serviço',v:'ok',h:'<p>O pagamento veio primeiro, então <strong>este repasse é do consultor anterior</strong>. Os próximos já são seus.</p>',go:'q-real-pag'},
+    {t:'Fiz a Reunião de Serviço antes do pagamento',v:'ok',h:'<p>A comissão é <strong>sua</strong>, desde que a reunião esteja registrada no W1nner. Exceções: Business e Patrimonial, e AP já entregue pelo consultor anterior.</p>',go:'q-real-reu'},
+    {t:'Não registrei a Reunião de Serviço',v:'ok',h:'<p>Sem o registro no W1nner, a comissão continua com o consultor anterior. Registre a reunião: a partir daí vale a regra do primeiro evento.</p>',go:'q-real-registro'},
+    {t:'Recebi um cliente Business ou Patrimonial',v:'ok',h:'<p>Nesses produtos a comissão fica <strong>sempre com o consultor de origem</strong>, mesmo após a realocação.</p>',go:'q-real-exc'},
+    {t:'AP: o consultor anterior já entregou C1 a C4',v:'ok',h:'<p>Desde outubro de 2025, se o consultor que saiu concluiu a entrega, <strong>ele continua recebendo</strong> as parcelas da AP. Se não concluiu, quem recebe é o novo consultor, que termina o serviço.</p>',go:'q-real-ap'}
+   ]},
+   {g:'Outros',items:[
+    {t:'Indiquei um cliente e ele não aparece',v:'other',vt:'Formulário PJ2',h:'<p>O cliente não está na base de indicados no seu nome. Preencha o <a href="https://share.hsforms.com/2DMiK7-wcTjCWbwWZVTU7mwnv9zs" target="_blank" rel="noopener">formulário de PJ2</a> para validar a indicação.</p>',go:'q-pj2'},
+    {t:'Apareceu um estorno de duplicidade',v:'ok',h:'<p>É a correção de uma comissão creditada duas vezes. Só o valor pago a mais foi descontado.</p>',go:'q-dup'},
+    {t:'O cliente cancelou um produto de parceira',v:'ok',h:'<p>As regras de estorno de cada parceira estão na <strong>Central de Estornos</strong>, no W1nner em <span class="path">Arquivos › Comissões</span>. Ela tem também calculadora para Icatu e MAG.</p>',go:'q-estorno-parc'}
+   ]}
+  ];
+  var list=document.getElementById('diagList'), vEl=document.getElementById('dVerdict'), tEl=document.getElementById('dTitle'), bEl=document.getElementById('dBody');
+  var btns=[];
+  S.forEach(function(gr){
+    var d=document.createElement('div');d.className='dgroup';
+    var h=document.createElement('h4');h.textContent=gr.g;d.appendChild(h);
+    var o=document.createElement('div');o.className='dopts';
+    gr.items.forEach(function(it){
+      var b=document.createElement('button');b.type='button';b.className='dopt';b.textContent=it.t;b.setAttribute('aria-pressed','false');
+      b.addEventListener('click',function(){show(it,b);if(window.matchMedia('(max-width:860px)').matches)document.getElementById('dres').scrollIntoView({block:'nearest'});});
+      o.appendChild(b);btns.push(b);
+    });
+    d.appendChild(o);list.appendChild(d);
+  });
+  function show(it,b){
+    btns.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});
+    var v=V[it.v];
+    vEl.innerHTML='<span class="verdict '+v[0]+'">'+v[1]+(it.vt?' · '+it.vt:'')+'</span>';
+    tEl.textContent=it.t;
+    bEl.innerHTML=it.h+'<a class="go" href="#'+it.go+'">Ver esta regra em detalhe ›</a>';
+  }
+  show(S[1].items[0],btns[4]);
+})();
+
+/* ================= CALENDÁRIO ================= */
+(function(){
+  var sc=document.getElementById('calScale'), mk={1:1,10:1,20:1,31:1};
+  for(var d=1;d<=31;d++){var s=document.createElement('span');s.textContent=(d===1||d%5===0||d===31)?d:'';if(mk[d])s.className='mk';sc.appendChild(s);}
+  document.querySelectorAll('.cal-row').forEach(function(r){
+    var a=+r.dataset.from,b=+r.dataset.to,soft=r.dataset.soft?r.dataset.soft.split('-').map(Number):null,allSoft=r.dataset.style==='soft';
+    var bar=r.querySelector('.bar');
+    for(var d=1;d<=31;d++){var i=document.createElement('i');
+      if(d>=a&&d<=b)i.className=allSoft?'soft':'on'; else if(soft&&d>=soft[0]&&d<=soft[1])i.className='soft';
+      bar.appendChild(i);}
+  });
+})();
+
+/* ================= BUSCA ================= */
+(function(){
+  var q=document.getElementById('q'), clear=document.getElementById('clear'), clear2=document.getElementById('clear2');
+  var status=document.getElementById('status'), statusText=document.getElementById('statusText'), empty=document.getElementById('empty');
+  var units=[].slice.call(document.querySelectorAll('main .q'));
+  var blocks=[].slice.call(document.querySelectorAll('main .sec'));
+  var parts=[].slice.call(document.querySelectorAll('main .part'));
+  var navLinks=[].slice.call(document.querySelectorAll('#nav a'));
+  function norm(s){return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');}
+  var SYN={nf:'nota',saque:'pagamento',sacar:'pagamento',chamado:'ticket',bonus:'bonus',pp:'pps',realocado:'realoca',realocacao:'realoca',cancelou:'cancel',cancelamento:'cancel'};
+  units.forEach(function(u){u._t=norm(u.textContent+' '+(u.getAttribute('data-k')||'')); u._open=u.tagName==='DETAILS'?u.open:null;});
+  blocks.forEach(function(b){var h=b.querySelector('h2');b._t=norm(h?h.textContent:'');});
+
+  function unmark(){document.querySelectorAll('mark[data-s]').forEach(function(m){var p=m.parentNode;p.replaceChild(document.createTextNode(m.textContent),m);p.normalize();});}
+  function markIn(el,terms){
+    var w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,{acceptNode:function(n){return n.nodeValue.trim()&&!/^(SCRIPT|STYLE)$/.test(n.parentNode.nodeName)?1:2;}});
+    var nodes=[];while(w.nextNode())nodes.push(w.currentNode);
+    nodes.forEach(function(n){
+      var src=n.nodeValue, ns=norm(src), hits=[];
+      terms.forEach(function(t){var i=0;while(t.length>1&&(i=ns.indexOf(t,i))>-1){hits.push([i,i+t.length]);i+=t.length;}});
+      if(!hits.length) return;
+      hits.sort(function(a,b){return a[0]-b[0];});
+      var frag=document.createDocumentFragment(), pos=0;
+      hits.forEach(function(h){if(h[0]<pos)return;frag.appendChild(document.createTextNode(src.slice(pos,h[0])));var m=document.createElement('mark');m.setAttribute('data-s','');m.textContent=src.slice(h[0],h[1]);frag.appendChild(m);pos=h[1];});
+      frag.appendChild(document.createTextNode(src.slice(pos)));
+      n.parentNode.replaceChild(frag,n);
+    });
+  }
+  function apply(){
+    var raw=q.value.trim(), nq=norm(raw);
+    var terms=nq.split(/\s+/).filter(Boolean).map(function(t){return SYN[t]||t;});
+    clear.hidden=!raw;
+    unmark();
+    var shown=0, groups=0;
+    units.forEach(function(u){
+      var b=u.closest('.sec');
+      var hay=u._t+' '+(b?b._t:'');
+      var ok=!terms.length||terms.every(function(t){return hay.indexOf(t)>-1;});
+      u.hidden=!ok;
+      if(u.tagName==='DETAILS') u.open= ok&&terms.length ? true : u._open;
+      if(ok) shown++;
+    });
+    blocks.forEach(function(b){
+      var vis=!terms.length||!!b.querySelector('.q:not([hidden])');
+      b.hidden=!vis; if(vis&&terms.length) groups++;
+      if(vis&&terms.length) b.querySelectorAll('.q:not([hidden])').forEach(function(u){markIn(u,terms);});
+    });
+    parts.forEach(function(p){p.hidden=!!terms.length;});
+    navLinks.forEach(function(a){var t=document.getElementById(a.getAttribute('data-for'));a.classList.toggle('dim',!!t&&t.hidden);});
+    status.classList.toggle('on',!!terms.length&&shown>0);
+    if(terms.length) statusText.textContent=shown+(shown===1?' resposta':' respostas')+' em '+groups+(groups===1?' seção':' seções')+' para "'+raw+'"';
+    empty.hidden=!(terms.length&&shown===0);
+  }
+  var tm;q.addEventListener('input',function(){clearTimeout(tm);tm=setTimeout(apply,120);});
+  function reset(){q.value='';apply();q.focus();}
+  clear.addEventListener('click',reset);clear2.addEventListener('click',reset);
+  document.querySelectorAll('.chip').forEach(function(c){c.addEventListener('click',function(){
+    if(c.dataset.go){q.value='';apply();document.getElementById(c.dataset.go).scrollIntoView();return;}
+    q.value=c.getAttribute('data-q');apply();document.getElementById('conteudo').scrollIntoView();});});
+  document.addEventListener('keydown',function(e){if(e.key==='/'&&document.activeElement!==q&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){e.preventDefault();q.focus();} if(e.key==='Escape'&&document.activeElement===q&&q.value){reset();}});
+  navLinks.forEach(function(a){a.addEventListener('click',function(){var t=document.getElementById(a.getAttribute('data-for'));if(t&&t.hidden){q.value='';apply();}});});
+  function goTo(id){
+    var t=document.getElementById(id); if(!t) return;
+    if(t.hidden||t.closest('[hidden]')){q.value='';apply();}
+    var d=t.closest('details'); while(d){d.open=true; d=d.parentElement&&d.parentElement.closest('details');}
+    if(t.tagName==='DETAILS') t.open=true;
+    t.scrollIntoView({block:'center',behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+    t.classList.remove('flash'); void t.offsetWidth; t.classList.add('flash');
+  }
+  document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href^="#"]');if(!a)return;var id=a.getAttribute('href').slice(1);var t=document.getElementById(id);if(!t)return;
+    if(a.classList.contains('go')||t.matches('.q')){e.preventDefault();goTo(id);} else if(t.hidden){q.value='';apply();}});
+})();
+</script>
+
+</body>
+</html>

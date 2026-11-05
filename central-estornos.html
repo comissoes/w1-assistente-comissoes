@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>[hidden]{display:none!important}body{margin:0}img{max-width:100%}</style>
+<title>Central de Estornos W1</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap">
+<style>
+/* Layout: barra de busca fixa no topo; índice de parceiras à esquerda (chips no celular); conteúdo em blocos pesquisáveis.
+   Paleta e tipografia do Brandbook W1 (Future Brands): Petróleo principal, subtons de petróleo, Turquesa como acento, Public Sans. */
+:root{
+  --bg:#ebf0f0; --surface:#ffffff; --surface-2:#f4f7f7; --ink:#022028; --ink-2:#3e6a6d; --muted:#5f8a8b;
+  --line:#d3e0df; --line-strong:#afcecd; --accent:#5fded4; --accent-ink:#1d6d67; --accent-soft:#dff7f4;
+  --band:#022028; --band-2:#0a181c; --band-ink:#ffffff; --band-muted:#afcecd;
+  --bar:#bfeee9; --hi:#fff1b8; --hi-ink:#022028;
+  --risk:#b23c3c; --risk-soft:#fbe4e4; --warn:#a96a08; --warn-soft:#fff1d9; --ok:#3f7a2f; --ok-soft:#e5f3df;
+  --font:"Public Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0a181c; --surface:#0f2329; --surface-2:#132a31; --ink:#ebf0f0; --ink-2:#afcecd; --muted:#84afaf;
+  --line:#1f4148; --line-strong:#3e6a6d; --accent:#5fded4; --accent-ink:#5fded4; --accent-soft:#12383a;
+  --band:#022028; --band-2:#061215; --band-ink:#ffffff; --band-muted:#afcecd;
+  --bar:#1d4a4c; --hi:#5fded4; --hi-ink:#022028;
+  --risk:#f08a8a; --risk-soft:#3a1c1f; --warn:#f0b65a; --warn-soft:#3a2c12; --ok:#8fcf7c; --ok-soft:#1c3319;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0a181c; --surface:#0f2329; --surface-2:#132a31; --ink:#ebf0f0; --ink-2:#afcecd; --muted:#84afaf;
+  --line:#1f4148; --line-strong:#3e6a6d; --accent:#5fded4; --accent-ink:#5fded4; --accent-soft:#12383a;
+  --band:#022028; --band-2:#061215; --band-ink:#ffffff; --band-muted:#afcecd;
+  --bar:#1d4a4c; --hi:#5fded4; --hi-ink:#022028;
+  --risk:#f08a8a; --risk-soft:#3a1c1f; --warn:#f0b65a; --warn-soft:#3a2c12; --ok:#8fcf7c; --ok-soft:#1c3319;
+  color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15.5px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--band)}
+h1,h2,h3,h4{line-height:1.2;text-wrap:balance;margin:0}
+p{margin:0}
+a{color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.wrap{max-width:1240px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.num,td,th{font-variant-numeric:tabular-nums}
+
+/* ---------- topo ---------- */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--band);color:var(--band-ink);border-bottom:3px solid var(--accent)}
+.top .wrap{display:flex;align-items:center;gap:20px;padding-block:12px}
+.brand{display:flex;align-items:center;gap:12px;color:var(--band-ink);text-decoration:none;flex-shrink:0}
+.brand svg{width:44px;height:22px;display:block}
+.brand span{font-weight:600;font-size:15px;letter-spacing:.01em;border-left:1px solid #3e6a6d;padding-left:12px;white-space:nowrap}
+.search{flex:1;display:flex;align-items:center;gap:10px;background:#ffffff;border-radius:8px;padding:0 12px;min-width:0;border:2px solid transparent}
+.search:focus-within{border-color:var(--accent)}
+.search svg{width:18px;height:18px;flex-shrink:0;color:#3e6a6d}
+.search input{flex:1;min-width:0;border:0;outline:0;background:transparent;font:500 15px var(--font);color:#022028;padding-block:11px}
+.search input::-webkit-search-cancel-button{display:none}
+.search input::placeholder{color:#6d9899;font-weight:400}
+.kbd{font:600 11px var(--font);color:#3e6a6d;border:1px solid #afcecd;border-radius:4px;padding:1px 6px}
+.clear{border:0;background:#ebf0f0;color:#1f4148;font:600 12px var(--font);border-radius:5px;padding:5px 10px;cursor:pointer}
+@media (max-width:720px){.brand span{display:none}.kbd{display:none}.top .wrap{gap:12px}}
+
+/* ---------- abertura ---------- */
+.intro{background:linear-gradient(180deg,var(--band) 0%,var(--band-2) 100%);color:var(--band-ink)}
+.intro .wrap{padding-block:36px 30px;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:40px;align-items:end}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.intro h1{font-size:clamp(30px,4.4vw,46px);font-weight:700;letter-spacing:-.02em;margin-top:10px}
+.intro p.lead{color:var(--band-muted);font-size:16.5px;max-width:60ch;margin-top:14px;font-weight:300}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.chip{border:1px solid #3e6a6d;background:transparent;color:var(--band-ink);font:500 13px var(--font);padding:6px 12px;border-radius:999px;cursor:pointer}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#1f4148;border:1px solid #1f4148;border-radius:var(--r);overflow:hidden}
+.fact{background:#04222a;padding:14px 16px}
+.fact b{display:block;font-size:24px;font-weight:700;color:var(--band-ink);letter-spacing:-.01em}
+.fact small{display:block;color:var(--band-muted);font-size:12.5px;line-height:1.4;margin-top:2px}
+@media (max-width:860px){.intro .wrap{grid-template-columns:1fr;gap:24px}}
+
+/* ---------- corpo ---------- */
+.layout{display:grid;grid-template-columns:230px minmax(0,1fr);gap:36px;padding-block:28px 64px}
+@media (max-width:980px){.layout{grid-template-columns:minmax(0,1fr);gap:20px}}
+.side{position:sticky;top:calc(env(safe-area-inset-top,0px) + 82px);align-self:start;max-height:calc(100vh - 100px);overflow:auto}
+.side h4{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:0 0 8px}
+.side nav{display:flex;flex-direction:column;gap:2px;margin-bottom:20px}
+.side nav a{display:flex;justify-content:space-between;gap:8px;align-items:baseline;text-decoration:none;color:var(--ink);font-size:14px;padding:6px 10px;border-radius:6px}
+.side nav a:hover{background:var(--surface)}
+.side nav a small{color:var(--muted);font-size:11.5px;white-space:nowrap}
+.side nav a.dim{opacity:.35}
+.side nav a.star{font-weight:700}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px}
+.fbtn{border:1px solid var(--line-strong);background:var(--surface);color:var(--ink-2);font:600 12.5px var(--font);padding:5px 10px;border-radius:999px;cursor:pointer}
+.fbtn[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+@media (max-width:980px){
+  .side{position:static;max-height:none;overflow:visible}
+  .side nav{flex-direction:row;overflow-x:auto;gap:6px;padding-bottom:6px;margin-bottom:8px}
+  .side nav a{white-space:nowrap;background:var(--surface);border:1px solid var(--line)}
+  .side nav a small{display:none}
+  .side h4.navh{display:none}
+}
+
+.status{display:none;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:8px;padding:10px 14px;margin-bottom:20px;font-size:14px}
+.status.on{display:flex}
+.empty{background:var(--surface);border:1px dashed var(--line-strong);border-radius:var(--r);padding:32px 24px;text-align:center;color:var(--ink-2)}
+.empty h3{color:var(--ink);font-size:18px;margin-bottom:6px}
+
+main{min-width:0;display:flex;flex-direction:column;gap:44px}
+.sec{scroll-margin-top:96px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:10px}
+.sec-head h2{font-size:clamp(22px,2.6vw,28px);font-weight:700;letter-spacing:-.015em}
+.sec-head .tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:4px;background:var(--surface-2);color:var(--ink-2);border:1px solid var(--line)}
+.tag.acc{background:var(--accent-soft);color:var(--accent-ink);border-color:transparent}
+.tag.warn{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.sec-sub{color:var(--ink-2);max-width:75ch}
+.sec.featured .sec-head{border-bottom-color:var(--accent)}
+
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:860px){.grid2,.grid3{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;min-width:0;display:flex;flex-direction:column;gap:10px}
+.card h3{font-size:16.5px;font-weight:700}
+.card .k{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.card p,.card li{color:var(--ink-2)}
+.card ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.card strong{color:var(--ink)}
+.big{font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1;color:var(--ink)}
+.big small{font-size:14px;font-weight:500;color:var(--ink-2);letter-spacing:0}
+
+.note{border-radius:8px;padding:12px 14px;font-size:14.5px;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-2)}
+.note strong{color:var(--ink)}
+.note.warn{background:var(--warn-soft);border-color:transparent}
+.note.risk{background:var(--risk-soft);border-color:transparent}
+.note.ok{background:var(--ok-soft);border-color:transparent}
+.note.acc{background:var(--accent-soft);border-color:transparent}
+
+/* tabelas */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th{background:var(--surface-2);color:var(--ink-2);font-weight:600;text-align:left;padding:9px 12px;font-size:12.5px;letter-spacing:.02em;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:8px 12px;border-top:1px solid var(--line);vertical-align:top}
+tbody tr:first-child td{border-top:0}
+td.p{position:relative;font-weight:600;white-space:nowrap;background:linear-gradient(90deg,var(--bar) calc(var(--p,0)*1%),transparent 0);background-clip:padding-box}
+td.p.z{color:var(--ok)}
+td.p.full{color:var(--risk)}
+.tcap{font-size:12.5px;color:var(--muted);margin-top:6px}
+table.sum td:first-child{font-weight:600;white-space:nowrap}
+table.sum td a{text-decoration:none;color:var(--ink)}
+table.sum td a:hover{color:var(--accent-ink)}
+
+/* régua de parcelas (exemplo Icatu) */
+.strip{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:4px}
+.cell{border-radius:6px;padding:6px 2px 7px;text-align:center;background:var(--surface-2);border:1px solid var(--line);font-size:12px;line-height:1.25;min-width:0}
+.cell b{display:block;font-size:13px;color:var(--ink)}
+.cell.h{background:var(--accent-soft);border-color:var(--accent)}
+.cell.n{opacity:.45}
+.cell span{display:block;color:var(--ink-2)}
+.stripl{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--ink-2);margin-bottom:6px;flex-wrap:wrap}
+@media (max-width:620px){.strip{grid-template-columns:repeat(6,minmax(0,1fr))}}
+
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;counter-reset:s}
+.steps li{position:relative;padding-left:34px;color:var(--ink-2)}
+.steps li::before{counter-increment:s;content:counter(s);position:absolute;left:0;top:1px;width:22px;height:22px;border-radius:50%;background:var(--ink);color:var(--bg);font-size:12px;font-weight:700;display:grid;place-items:center}
+
+/* FAQ / acordeões */
+details.qa{background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+details.qa>summary{cursor:pointer;list-style:none;padding:13px 44px 13px 16px;font-weight:600;position:relative}
+details.qa>summary::-webkit-details-marker{display:none}
+details.qa>summary::after{content:"+";position:absolute;right:16px;top:50%;transform:translateY(-50%);font-weight:400;font-size:20px;color:var(--muted)}
+details.qa[open]>summary::after{content:"–"}
+details.qa>div{padding:0 16px 16px;color:var(--ink-2);display:flex;flex-direction:column;gap:10px}
+.faq{display:flex;flex-direction:column;gap:8px}
+
+details.more{border-top:1px dashed var(--line-strong);padding-top:10px}
+details.more>summary{cursor:pointer;font-weight:600;color:var(--accent-ink);font-size:14px}
+details.more>div{margin-top:12px;display:flex;flex-direction:column;gap:12px}
+
+.partner{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:flex;flex-direction:column;gap:14px;scroll-margin-top:96px;min-width:0}
+.partner>header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.partner h3{font-size:20px;font-weight:700}
+.partner .when{text-align:right}
+.partner .when b{display:block;font-size:20px;font-weight:700;line-height:1.1}
+.partner .when small{color:var(--muted);font-size:12px}
+@media (max-width:620px){.partner .when{text-align:left}}
+
+
+/* calculadora */
+.calc{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:18px}
+@media (max-width:860px){.calc{grid-template-columns:minmax(0,1fr)}}
+.tabs2{display:flex;gap:6px;flex-wrap:wrap}
+.tab2{border:1px solid var(--line-strong);background:var(--surface);color:var(--ink-2);font:600 13.5px var(--font);padding:7px 14px;border-radius:999px;cursor:pointer}
+.tab2[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.fld{display:flex;flex-direction:column;gap:5px}
+.fld label{font-size:13px;font-weight:600;color:var(--ink)}
+.fld small{color:var(--muted);font-size:12px;line-height:1.4}
+.fld input,.fld select{font:15px var(--font);color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:8px;padding:9px 11px;width:100%}
+.seg{display:flex;border:1px solid var(--line-strong);border-radius:8px;overflow:hidden}
+.seg button{flex:1;border:0;background:var(--surface);color:var(--ink-2);font:600 13px var(--font);padding:8px 6px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent-ink)}
+.res{background:var(--band);color:var(--band-ink);border-radius:var(--r);padding:18px 20px;display:flex;flex-direction:column;gap:6px}
+.res .lb{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--band-muted);font-weight:600}
+.res .v{font-size:34px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.res .s{color:var(--band-muted);font-size:14px}
+.verd{border-radius:8px;padding:10px 12px;font-size:14px}
+.verd.ok{background:var(--ok-soft);color:var(--ok)} .verd.up{background:var(--risk-soft);color:var(--risk)} .verd.dn{background:var(--warn-soft);color:var(--warn)}
+mark{background:var(--hi);color:var(--hi-ink);border-radius:2px;padding:0 1px}
+footer{border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+footer .wrap{padding-block:24px 40px;display:flex;flex-direction:column;gap:8px}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#inicio" aria-label="W1 Central de Estornos">
+      <svg viewBox="0 0 72 36" aria-hidden="true"><path fill="currentColor" d="M45.2869 8.52863H56.5388L34.9322 35.9999L26.6178 35.9932C24.1433 35.9932 22.1383 33.965 22.1383 31.4672V22.7596L11.7349 35.9999H4.48394C2.00714 35.9999 0 33.9739 0 31.4739V8.52863H8.99446V25.2596L22.1406 8.52863H31.1062V26.5767L45.2869 8.52863ZM72 4.52366C72 2.02363 69.9929 -0.00233459 67.5161 -0.00233459H51.9862L47.9963 5.07599H59.2327V35.9977H71.9978V4.5259L72 4.52366Z"/></svg>
+      <span>Central de Estornos</span>
+    </a>
+    <label class="search" for="q">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" autocomplete="off" placeholder="Busque parceira, produto ou termo: Horizonte, portabilidade, 36 meses…" aria-label="Buscar nas regras de estorno">
+      <span class="kbd" aria-hidden="true">/</span>
+      <button class="clear" id="clear" type="button" hidden>Limpar</button>
+    </label>
+  </div>
+</header>
+
+<section class="intro" id="inicio">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">Comissões · Consulta para consultores</div>
+      <h1>Quando o cliente sai, quanto da comissão volta?</h1>
+      <p class="lead">Regras de estorno das parceiras da W1: em quais situações a comissão volta, em que prazo e com qual percentual, com exemplos de cálculo.</p>
+      <div class="chips" aria-label="Buscas rápidas">
+        <button class="chip" data-q="calculadora">Calculadora</button>
+        <button class="chip" data-q="Horizonte">Icatu Horizonte</button>
+        <button class="chip" data-q="Whole Life">MAG Whole Life</button>
+        <button class="chip" data-q="portabilidade">Portabilidade</button>
+        <button class="chip" data-q="inadimplência">Inadimplência</button>
+        <button class="chip" data-q="sem estorno">Sem estorno</button>
+        <button class="chip" data-q="consórcio">Consórcio</button>
+      </div>
+    </div>
+    <div class="facts">
+      <div class="fact"><b>18 meses</b><small>Icatu Horizonte vendido a partir de out/2025</small></div>
+      <div class="fact"><b>7ª parcela</b><small>MAG coberturas de risco e riders: a partir dela, sem estorno</small></div>
+      <div class="fact"><b>36 meses</b><small>SulAmérica Previdência: 2,77% por contribuição não paga</small></div>
+      <div class="fact"><b>12 meses</b><small>Amil médico PME e PJ implantado desde 01/08/2026</small></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap layout">
+  <aside class="side" aria-label="Navegação">
+    <h4>Filtrar por linha</h4>
+    <div class="filters" role="group" aria-label="Filtrar por linha de produto">
+      <button class="fbtn" data-cat="todos" aria-pressed="true">Todas</button>
+      <button class="fbtn" data-cat="vida" aria-pressed="false">Vida e Previdência</button>
+      <button class="fbtn" data-cat="saude" aria-pressed="false">Saúde</button>
+      <button class="fbtn" data-cat="consorcio" aria-pressed="false">Consórcio</button>
+      <button class="fbtn" data-cat="geral" aria-pressed="false">Seguros gerais</button>
+    </div>
+    <h4 class="navh">Parceiras</h4>
+    <nav id="nav">
+      <a href="#conceitos" data-for="conceitos">Conceitos <small>comece aqui</small></a>
+      <a href="#resumo" data-for="resumo">Quadro-resumo <small>todas</small></a>
+      <a href="#calculadora" data-for="calculadora" class="star">Calculadora <small>Icatu · MAG</small></a>
+      <a href="#icatu" data-for="icatu" class="star">Icatu <small>12 a 24 m</small></a>
+      <a href="#mag" data-for="mag" class="star">MAG <small>6ª a 12ª</small></a>
+      <a href="#sulamerica" data-for="sulamerica">SulAmérica Prev <small>36 m</small></a>
+      <a href="#prudential" data-for="prudential">Prudential <small>3 anos</small></a>
+      <a href="#amil" data-for="amil">Amil <small>12 m</small></a>
+      <a href="#saudemais" data-for="saudemais">Saúde Mais <small>90 d a 7ª</small></a>
+      <a href="#vilavelha" data-for="vilavelha">Vila Velha <small>parcelas</small></a>
+      <a href="#itau" data-for="itau">Itaú iConquista <small>curva</small></a>
+      <a href="#cnp" data-for="cnp">Consórcio XP (CNP) <small>8 a 12 m</small></a>
+      <a href="#embracon" data-for="embracon">Embracon <small>6ª parcela</small></a>
+      <a href="#magalu" data-for="magalu">Magalu <small>6ª parcela</small></a>
+      <a href="#bb" data-for="bb">BB Consórcio <small>exceção</small></a>
+      <a href="#duvidas" data-for="duvidas">Dúvidas gerais <small>FAQ</small></a>
+    </nav>
+  </aside>
+
+  <main id="conteudo">
+    <div class="status" id="status" role="status" aria-live="polite"><span id="statusText"></span><button class="clear" id="clear2" type="button">Limpar busca</button></div>
+    <div class="empty" id="empty" hidden>
+      <h3>Nada encontrado</h3>
+      <p>Tente o nome da parceira, do produto ou uma situação: <em>cancelou</em>, <em>resgate</em>, <em>parcela</em>, <em>Essencial</em>, <em>recapture</em>.</p>
+    </div>
+
+    <!-- ===================== CONCEITOS ===================== -->
+    <section class="sec" id="conceitos" data-cat="todos">
+      <div class="sec-head"><h2>Conceitos que aparecem em todas as regras</h2><div class="tags"><span class="tag">Comece aqui</span></div></div>
+      <p class="sec-sub">Cada parceira usa um nome diferente para a mesma coisa. Estes são os termos que você vai encontrar nas tabelas abaixo e nos extratos.</p>
+      <div class="grid3">
+        <div class="card q" data-k="estorno devolucao chargeback desconto negativo"><div class="k">Estorno</div><p>Devolução de uma comissão já paga porque o cliente cancelou, deixou de pagar, reduziu, resgatou ou portou o plano antes do prazo mínimo. Aparece no extrato como lançamento <strong>negativo</strong> no mês em que a parceira identifica o evento.</p></div>
+        <div class="card q" data-k="agenciamento angariacao comissao inicial primeira parcela"><div class="k">Agenciamento ou Angariação</div><p>Comissão maior paga no início do contrato (1ª parcela ou 1º ano). <strong>É sobre ela que quase todo estorno incide.</strong> A Icatu chama de agenciamento; a MAG, de angariação.</p></div>
+        <div class="card q" data-k="corretagem carteira vitalicio recorrente"><div class="k">Corretagem, Carteira ou Vitalício</div><p>Comissão recorrente, paga parcela a parcela enquanto o cliente paga. Em geral não tem tabela de estorno própria: se a parcela do cliente é devolvida, a comissão daquela parcela é revertida.</p></div>
+        <div class="card q" data-k="permanencia meses contribuicoes pagas parcelas pagas"><div class="k">Permanência</div><p>Quanto tempo o cliente ficou (ou quantas parcelas pagou) até o cancelamento. Quanto maior a permanência, menor o percentual estornado. Algumas parceiras contam por <strong>parcela paga</strong>, outras por <strong>mês decorrido</strong>.</p></div>
+        <div class="card q" data-k="curva regressiva tabela proporcional pro rata"><div class="k">Curva regressiva</div><p>Tabela em que o percentual de estorno cai a cada mês ou parcela paga, até zerar. Ex.: 100% → 83% → 67% → 50% → 33% → 17% → 0%.</p></div>
+        <div class="card q" data-k="recapture prudential"><div class="k">Recapture</div><p>Nome que a Prudential dá ao estorno: percentual da comissão paga que volta se a apólice ou cobertura for cancelada nos 3 primeiros anos.</p></div>
+        <div class="card q" data-k="portabilidade saida entrada resgate previdencia"><div class="k">Portabilidade e resgate</div><p>Na previdência (SulAmérica), o dinheiro que sai do plano por resgate ou portabilidade antes de 36 meses gera estorno proporcional da comissão paga sobre aquele valor.</p></div>
+        <div class="card q" data-k="inadimplencia atraso suspensao cobranca"><div class="k">Inadimplência</div><p>Parcelas em atraso. Em várias parceiras, 3 parcelas sem pagamento suspendem a cobrança ou cancelam a cota, e o estorno é calculado nesse momento.</p></div>
+        <div class="card q" data-k="reativacao recuperacao devolucao do estorno"><div class="k">Recuperação do estorno</div><p>Se o cliente volta a pagar as parcelas em atraso, algumas parceiras devolvem o estorno cobrado (MAG e SulAmérica). Veja na seção de cada uma.</p></div>
+      </div>
+    </section>
+
+    <!-- ===================== RESUMO ===================== -->
+    <section class="sec" id="resumo" data-cat="todos">
+      <div class="sec-head"><h2>Quadro-resumo</h2><div class="tags"><span class="tag">Todas as parceiras</span></div></div>
+      <p class="sec-sub">Em quanto tempo a comissão deixa de correr risco de estorno, por parceira e produto. Clique no nome para ver a regra completa.</p>
+      <div class="tw">
+        <table class="sum">
+          <thead><tr><th>Parceira</th><th>Produto</th><th>Sobre o quê</th><th>Livre de estorno após</th><th>Como cai</th></tr></thead>
+          <tbody>
+            <tr class="q" data-cat="vida"><td><a href="#icatu">Icatu</a></td><td>Horizonte (vendas até set/2025)</td><td>Agenciamento de cada parcela</td><td><strong>24 meses</strong></td><td>1/12 por mês a partir de cada parcela</td></tr>
+            <tr class="q" data-cat="vida"><td><a href="#icatu">Icatu</a></td><td>Horizonte guia out/2025 (Demais, Temporário, Vitalício)</td><td>Agenciamento de cada parcela</td><td><strong>18 meses</strong></td><td>90%, 80%, 70%, 60%, 50%, depois 0%</td></tr>
+            <tr class="q" data-cat="vida"><td><a href="#icatu">Icatu</a></td><td>Essencial</td><td>Agenciamento da 1ª mensalidade</td><td><strong>12 meses</strong></td><td>1/12 por mês</td></tr>
+            <tr class="q" data-cat="vida"><td><a href="#mag">MAG</a></td><td>Coberturas de risco (Grupo A) e riders</td><td>Angariação</td><td><strong>7ª contribuição</strong></td><td>100%, 83%, 67%, 50%, 33%, 17%</td></tr>
+            <tr class="q" data-cat="vida"><td><a href="#mag">MAG</a></td><td>Whole Life Integral, Dinâmico e Sucessão</td><td>Angariação paga</td><td><strong>13ª contribuição</strong></td><td>100% até 2 pagas, depois −10 p.p. por parcela; 5% na 12ª</td></tr>
+            <tr class="q" data-cat="vida"><td><a href="#sulamerica">SulAmérica</a></td><td>Previdência</td><td>Agenciamento</td><td><strong>36 meses</strong></td><td>2,77% (1/36) por contribuição não paga ou mês restante</td></tr>
+            <tr class="q" data-cat="vida"><td><a href="#prudential">Prudential</a></td><td>Vida (apólice ou cobertura)</td><td>Comissão paga</td><td><strong>4º ano</strong></td><td>50% / 30% / 15% por ano de vigência</td></tr>
+            <tr class="q" data-cat="saude"><td><a href="#amil">Amil</a></td><td>Médico PME e PJ (implantados a partir de 01/08/2026)</td><td>Total de comissões pagas</td><td><strong>12 meses</strong></td><td>100% até 3 parcelas → 30% na 12ª</td></tr>
+            <tr class="q" data-cat="saude"><td><a href="#saudemais">Saúde Mais</a></td><td>Planos de saúde e odonto por operadora</td><td>Comissão ou agenciamento pago</td><td><strong>6ª a 8ª parcela</strong>; Adesão/PF: 90 dias</td><td>Tabela de cada operadora</td></tr>
+            <tr class="q" data-cat="geral"><td><a href="#vilavelha">Vila Velha</a></td><td>Seguro auto e demais ramos</td><td>Comissão antecipada</td><td><strong>Prêmio quitado</strong></td><td>Proporcional ao saldo não pago</td></tr>
+            <tr class="q" data-cat="consorcio"><td><a href="#itau">Itaú</a></td><td>Consórcio iConquista</td><td>Comissão paga</td><td><strong>1 parcela além da curva</strong></td><td>Curva da categoria, começa em 80%; há modalidade sem estorno</td></tr>
+            <tr class="q" data-cat="consorcio"><td><a href="#cnp">Consórcio XP (CNP)</a></td><td>Parcela reduzida / cheia</td><td>Comissão paga</td><td><strong>12 / 8 meses</strong></td><td>30% a 50% conforme categoria; Diamante sem estorno</td></tr>
+            <tr class="q" data-cat="consorcio"><td><a href="#embracon">Embracon</a></td><td>Tabelas "4x com estorno"</td><td>Comissão paga</td><td><strong>6ª parcela em dia</strong></td><td>Estorno de 0,5%; tabelas 12x não têm estorno</td></tr>
+            <tr class="q" data-cat="consorcio"><td><a href="#magalu">Magalu</a></td><td>Consórcio (todos os segmentos)</td><td>Comissão sobre venda</td><td><strong>7ª parcela</strong></td><td>50% se cancelar com até 6 pagas</td></tr>
+            <tr class="q" data-cat="consorcio"><td><a href="#bb">BB Consórcio</a></td><td>Todas as modalidades</td><td>Comissões do contrato</td><td><strong>Sem estorno</strong></td><td>Só há estorno se reclamação procedente gerar devolução</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===================== CALCULADORA ===================== -->
+    <section class="sec" id="calculadora" data-cat="vida">
+      <div class="sec-head"><h2>Calculadora de estorno</h2><div class="tags"><span class="tag acc">Estimativa</span><span class="tag">Icatu · MAG</span></div></div>
+      <p class="sec-sub q" data-k="calculadora simular simulador quanto vou devolver estorno estimado valor recebido conferir">Informe o que você recebeu do cliente e quantas parcelas ele pagou. A calculadora estima quanto volta, parcela por parcela. Se o estorno já veio, compare com o valor lançado.</p>
+      <div class="tabs2" role="tablist">
+        <button class="tab2" role="tab" aria-selected="true" data-t="icatu" id="tbI">Icatu</button>
+        <button class="tab2" role="tab" aria-selected="false" data-t="mag" id="tbM">MAG vida</button>
+      </div>
+
+      <div class="calc" id="cI">
+        <div class="card" style="gap:14px">
+          <div class="fld"><label for="ciP">Produto</label>
+            <select id="ciP">
+              <option value="novo">Horizonte · vendido a partir de out/2025</option>
+              <option value="antigo">Horizonte · vendido até set/2025</option>
+              <option value="ess">Essencial</option>
+            </select>
+            <small>Na dúvida, use a data da venda.</small></div>
+          <div class="fld"><label for="ciN">Parcelas que o cliente pagou</label>
+            <input id="ciN" type="number" inputmode="numeric" min="1" max="60" value="8"></div>
+          <div class="fld"><label>O que você sabe sobre o que recebeu</label>
+            <div class="seg" role="group"><button type="button" id="ciMm" aria-pressed="true">Valor por mês (1º ano)</button><button type="button" id="ciMt" aria-pressed="false">Total recebido</button></div>
+            <small id="ciHint">O valor que caiu para você por mês desse cliente nos 12 primeiros meses (soma de todas as coberturas).</small></div>
+          <div class="fld"><label for="ciV" id="ciVl">Valor recebido por mês (R$)</label>
+            <input id="ciV" type="number" inputmode="decimal" min="0" step="0.01" value="100"></div>
+          <div class="fld"><label for="ciE">Estorno lançado para você (R$) · opcional</label>
+            <input id="ciE" type="number" inputmode="decimal" min="0" step="0.01" placeholder="Ex.: 350,00">
+            <small>Se o estorno já apareceu no seu repasse, informe o valor (sem o sinal de menos) para comparar.</small></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
+          <div class="res"><div class="lb">Estorno estimado</div><div class="v" id="ciR">R$ 0,00</div><div class="s" id="ciS"></div></div>
+          <div class="verd" id="ciC" hidden></div>
+          <div class="tw"><table id="ciT"></table></div>
+          <p class="tcap" id="ciNote"></p>
+        </div>
+      </div>
+
+      <div class="calc" id="cM" hidden>
+        <div class="card" style="gap:14px">
+          <div class="fld"><label for="cmP">Cobertura cancelada</label>
+            <select id="cmP">
+              <option value="risco">Cobertura de risco ou rider (DIT, DIH, IPA, Doenças Graves, SAF, Cirurgias…)</option>
+              <option value="wl">Whole Life Integral, Dinâmico ou Sucessão</option>
+            </select></div>
+          <div class="fld"><label for="cmN">Contribuições que o cliente pagou</label>
+            <input id="cmN" type="number" inputmode="numeric" min="0" max="60" value="3"></div>
+          <div class="fld"><label for="cmV" id="cmVl">Valor recebido no 1º mês por essa cobertura (R$) · opcional</label>
+            <input id="cmV" type="number" inputmode="decimal" min="0" step="0.01" placeholder="Ex.: 300,00">
+            <small id="cmHint">Só funciona se o cliente tinha apenas essa cobertura, porque o seu repasse soma todas as coberturas da proposta.</small></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
+          <div class="res"><div class="lb">Percentual estornado da angariação</div><div class="v" id="cmR">0%</div><div class="s" id="cmS"></div></div>
+          <div class="note" id="cmNote"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== ICATU ===================== -->
+    <section class="sec featured" id="icatu" data-cat="vida">
+      <div class="sec-head"><h2>Icatu Seguros</h2><div class="tags"><span class="tag">Vida individual</span></div></div>
+      <p class="sec-sub">Na Icatu, o estorno incide só sobre o <strong>agenciamento</strong>, e é calculado <strong>parcela por parcela</strong>: cada parcela de agenciamento tem a sua própria contagem de permanência. Por isso um único cancelamento gera vários lançamentos de estorno no mesmo mês, cada um com um percentual diferente.</p>
+
+      <div class="grid3">
+        <div class="card q" data-k="horizonte antigo guia 2022 2024 24 meses canal corretor"><div class="k">Horizonte · vendas até set/2025</div><div class="big">24 <small>meses</small></div><p>Agenciamento pago nas 12 primeiras parcelas. Cada parcela fica sujeita a estorno por 12 meses, caindo 1/12 por mês. Última parcela de agenciamento (12ª) + 12 meses = mês 24.</p></div>
+        <div class="card q" data-k="horizonte novo guia out 2025 outubro demais temporario vitalicio 18 meses"><div class="k">Horizonte · guia out/2025</div><div class="big">18 <small>meses</small></div><p>Produtos Demais, Temporário, Vitalício 5 e Vitalício 10. Cada parcela de agenciamento fica sujeita a estorno só por 6 meses: 90%, 80%, 70%, 60%, 50% e depois 0%. 12ª parcela + 6 meses = mês 18.</p></div>
+        <div class="card q" data-k="essencial 12 meses primeira mensalidade agenciamento 100 200"><div class="k">Essencial</div><div class="big">12 <small>meses</small></div><p>Agenciamento pago na 1ª mensalidade (ou na 1ª e 2ª, nos módulos de 200%). Estorno proporcional se o cliente não completar 12 meses, caindo 1/12 por mês.</p></div>
+      </div>
+
+      <div class="note acc q" data-k="como identificar versao guia produto data venda horizonte demais"><strong>Qual tabela vale para o meu cliente?</strong> Depende de quando a apólice foi vendida. O Horizonte vendido pelo guia antigo segue a tabela de 12 meses por parcela. No guia de outubro de 2025, o Horizonte passou a ser vendido nas opções <em>Demais</em>, <em>Temporário</em>, <em>Vitalício 5</em> e <em>Vitalício 10</em>, todas com a tabela nova. Essencial e Essencial Plataformista seguem a tabela do Essencial.</div>
+
+      <div class="q" data-k="tabela estorno icatu horizonte essencial permanencia percentual 91,67 83,33 90 80 70">
+        <div class="tw">
+          <table>
+            <thead><tr><th>Permanência a partir da parcela</th><th>Horizonte até set/2025</th><th>Horizonte out/2025</th><th>Essencial</th></tr></thead>
+            <tbody>
+              <tr><td>Menos de 1 mês</td><td class="p full" style="--p:100">100%</td><td class="p full" style="--p:100">100%</td><td class="p full" style="--p:100">100%</td></tr>
+              <tr><td>De 1 a 2 meses</td><td class="p" style="--p:91.67">91,67%</td><td class="p" style="--p:90">90%</td><td class="p" style="--p:91.67">91,67%</td></tr>
+              <tr><td>De 2 a 3 meses</td><td class="p" style="--p:83.33">83,33%</td><td class="p" style="--p:80">80%</td><td class="p" style="--p:83.33">83,33%</td></tr>
+              <tr><td>De 3 a 4 meses</td><td class="p" style="--p:75">75,00%</td><td class="p" style="--p:70">70%</td><td class="p" style="--p:75">75,00%</td></tr>
+              <tr><td>De 4 a 5 meses</td><td class="p" style="--p:66.68">66,68%</td><td class="p" style="--p:60">60%</td><td class="p" style="--p:66.67">66,67%</td></tr>
+              <tr><td>De 5 a 6 meses</td><td class="p" style="--p:58.35">58,35%</td><td class="p" style="--p:50">50%</td><td class="p" style="--p:58.33">58,33%</td></tr>
+              <tr><td>De 6 a 7 meses</td><td class="p" style="--p:50">50,00%</td><td class="p z">0%</td><td class="p" style="--p:50">50,00%</td></tr>
+              <tr><td>De 7 a 8 meses</td><td class="p" style="--p:41.65">41,65%</td><td class="p z">0%</td><td class="p" style="--p:41.67">41,67%</td></tr>
+              <tr><td>De 8 a 9 meses</td><td class="p" style="--p:33.32">33,32%</td><td class="p z">0%</td><td class="p" style="--p:33.33">33,33%</td></tr>
+              <tr><td>De 9 a 10 meses</td><td class="p" style="--p:25">25,00%</td><td class="p z">0%</td><td class="p" style="--p:25">25,00%</td></tr>
+              <tr><td>De 10 a 11 meses</td><td class="p" style="--p:16.67">16,67%</td><td class="p z">0%</td><td class="p" style="--p:16.67">16,67%</td></tr>
+              <tr><td>De 11 a 12 meses</td><td class="p" style="--p:8.33">8,33%</td><td class="p z">0%</td><td class="p" style="--p:8.33">8,33%</td></tr>
+              <tr><td>12 meses ou mais</td><td class="p z">0%</td><td class="p z">0%</td><td class="p z">0%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="tcap">Fontes: Guia Rápido de Vendas Horizonte (ago/2022, mesma tabela em nov/2024), Guia Horizonte out/2025 e Guia Essencial (ago/2022). Os percentuais "quebrados" do Horizonte antigo (66,68%, 58,35%, 41,65%, 33,32%) são os que constam no guia.</p>
+      </div>
+
+      <div class="card q" data-k="exemplo calculo horizonte 8 parcelas pagas cancelou passo a passo">
+        <div class="k">Exemplo · cliente pagou 8 parcelas e cancelou</div>
+        <h3>Agenciamento de R$ 100,00 por parcela</h3>
+        <p>A permanência de cada parcela é contada da parcela até a última paga. A 8ª parcela ficou 1 mês, a 7ª ficou 2 meses, e assim por diante até a 1ª, que ficou 8 meses.</p>
+        <div>
+          <div class="stripl"><span>Parcela · permanência · estorno no guia antigo / guia out/2025</span><span>Parcelas 9 a 12 não chegaram a pagar agenciamento</span></div>
+          <div class="strip" aria-label="Estorno por parcela no exemplo">
+            <div class="cell"><b>1ª</b><span>8 m</span><span>33,32</span><span>0</span></div>
+            <div class="cell"><b>2ª</b><span>7 m</span><span>41,65</span><span>0</span></div>
+            <div class="cell"><b>3ª</b><span>6 m</span><span>50,00</span><span>0</span></div>
+            <div class="cell h"><b>4ª</b><span>5 m</span><span>58,35</span><span>50</span></div>
+            <div class="cell h"><b>5ª</b><span>4 m</span><span>66,68</span><span>60</span></div>
+            <div class="cell h"><b>6ª</b><span>3 m</span><span>75,00</span><span>70</span></div>
+            <div class="cell h"><b>7ª</b><span>2 m</span><span>83,33</span><span>80</span></div>
+            <div class="cell h"><b>8ª</b><span>1 m</span><span>91,67</span><span>90</span></div>
+            <div class="cell n"><b>9ª</b><span>—</span><span>—</span><span>—</span></div>
+            <div class="cell n"><b>10ª</b><span>—</span><span>—</span><span>—</span></div>
+            <div class="cell n"><b>11ª</b><span>—</span><span>—</span><span>—</span></div>
+            <div class="cell n"><b>12ª</b><span>—</span><span>—</span><span>—</span></div>
+          </div>
+        </div>
+        <div class="grid2">
+          <div class="note"><strong>Guia antigo (até set/2025):</strong> 8 lançamentos de estorno, somando <strong>R$ 500,00</strong> dos R$ 800,00 recebidos.</div>
+          <div class="note"><strong>Guia out/2025:</strong> só as 5 últimas parcelas são estornadas, somando <strong>R$ 350,00</strong>. As parcelas 1ª a 3ª, com 6 meses ou mais, ficam livres.</div>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card q" data-k="como calcular passo a passo icatu formula">
+          <div class="k">Como conferir um estorno da Icatu</div>
+          <ol class="steps">
+            <li>Identifique a <strong>última parcela paga e mantida</strong> pelo cliente (a última que não teve a corretagem revertida).</li>
+            <li>Para cada parcela que pagou agenciamento, calcule a permanência: <strong>última parcela mantida − nº da parcela + 1</strong>.</li>
+            <li>Busque o percentual na tabela da versão do produto e multiplique pelo <strong>agenciamento recebido naquela parcela</strong>.</li>
+            <li>Some as parcelas. Parcelas com permanência fora da tabela ficam com 0%.</li>
+          </ol>
+        </div>
+        <div class="card q" data-k="essencial exemplo modulo 200 agenciamento estorno 4 meses">
+          <div class="k">Exemplo · Essencial</div>
+          <h3>Agenciamento de R$ 300,00 na 1ª mensalidade</h3>
+          <p>O cliente pagou 4 mensalidades e cancelou: permanência de 4 meses, estorno de <strong>66,67% = R$ 200,00</strong>. Se tivesse pago 13 mensalidades, não haveria estorno.</p>
+          <p>Nos módulos de 200% (7, 8 e 9), o agenciamento vem em duas parcelas de 100% (1ª e 2ª mensalidade), e cada uma segue a tabela a partir do seu mês.</p>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card q" data-k="pme vida em grupo icatu reembolso proporcional estipulante">
+          <div class="k">PME e Vida em Grupo</div>
+          <p>Agenciamento de 100% do prêmio da 1ª fatura. Se a apólice ou o segurado for cancelado antes do fim da vigência prevista, o agenciamento é <strong>reembolsado proporcionalmente</strong> à Icatu. A proposta comercial não traz tabela de percentuais.</p>
+        </div>
+        <div class="card q" data-k="corretagem estorna icatu co-corretagem">
+          <div class="k">E a corretagem?</div>
+          <p>Os guias não preveem estorno de corretagem. Quando o pagamento de uma parcela do cliente é desfeito, a Icatu reverte a comissão daquela parcela inteira (agenciamento e corretagem). Em co-corretagem, a Icatu paga o co-corretor diretamente, sem passar pela W1.</p>
+        </div>
+      </div>
+
+      <div class="note q" data-k="contestar divergencia nao bate icatu comissoes"><strong>O percentual não bate com a tabela?</strong> Confira a versão do produto e a última parcela paga. Se continuar diferente (por exemplo, duas parcelas seguidas com o mesmo percentual, ou estorno em parcela com mais de 12 meses no guia antigo), fale com o time de Comissões.</div>
+
+      <div class="faq">
+        <details class="qa q" data-k="varios lancamentos mesmo mes icatu"><summary>Por que recebi vários estornos da Icatu no mesmo mês para o mesmo cliente?</summary><div><p>Porque o agenciamento foi pago em várias parcelas, e cada parcela tem sua própria permanência. Um cancelamento gera um lançamento por parcela de agenciamento ainda dentro do prazo, cada um com seu percentual.</p></div></details>
+        <details class="qa q" data-k="cancelou depois de um ano 13 meses icatu"><summary>O cliente cancelou depois de 1 ano. Ainda tem estorno?</summary><div><p>No Horizonte, sim. Como o agenciamento é pago até a 12ª parcela, as últimas parcelas ainda estão dentro do prazo: no guia antigo até o mês 24, no guia out/2025 até o mês 18. No Essencial, após 12 meses não há estorno.</p></div></details>
+        <details class="qa q" data-k="100% parcela estorno integral menos de um mes"><summary>Veio estorno de 100% em uma parcela. Está certo?</summary><div><p>Só quando a permanência daquela parcela é menor que 1 mês (o cliente cancelou logo depois de pagá-la) ou quando o próprio pagamento da parcela foi devolvido. Se a parcela ficou 1 mês ou mais, o correto é 91,67% (guia antigo) ou 90% (guia out/2025).</p></div></details>
+        <details class="qa q" data-k="24 meses 12 meses texto guia horizonte diferenca"><summary>O guia antigo fala em 24 meses, mas a tabela vai só até 12. Qual vale?</summary><div><p>As duas informações se completam. A tabela vale para cada parcela (12 meses a partir dela). Como o agenciamento vai até a 12ª parcela, o contrato só fica totalmente livre de estorno no mês 24. No guia out/2025 a lógica é a mesma, com 6 meses por parcela: livre no mês 18.</p></div></details>
+      </div>
+    </section>
+
+    <!-- ===================== MAG ===================== -->
+    <section class="sec featured" id="mag" data-cat="vida">
+      <div class="sec-head"><h2>MAG Seguros</h2><div class="tags"><span class="tag">Vida</span><span class="tag">Política de Estorno v6 · vigência 10/03/2025</span></div></div>
+      <p class="sec-sub">A MAG divide os produtos de vida em grupos, cada um com sua tabela. O estorno incide sobre a <strong>angariação</strong> (em alguns produtos, também sobre a carteira) e é contado pelo <strong>número de contribuições pagas</strong>.</p>
+
+      <div class="grid2">
+        <div class="card q" data-k="mag risco grupo a reparticao capitalizacao riders coberturas dit dih doencas graves ipa saf">
+          <div class="k">Coberturas de risco e riders · Grupo A</div>
+          <p>DIT, DIH, IPA, Doenças Graves, SAF, Morte por Acidente, Cirurgias e demais coberturas de repartição e capitalização. Angariação paga na 1ª parcela.</p>
+          <div class="tw"><table>
+            <thead><tr><th>Contribuições pagas</th><th>Estorno da angariação</th></tr></thead>
+            <tbody>
+              <tr><td>Nenhuma ou 1</td><td class="p full" style="--p:100">100%</td></tr>
+              <tr><td>2</td><td class="p" style="--p:83.33">83,33%</td></tr>
+              <tr><td>3</td><td class="p" style="--p:66.67">66,67%</td></tr>
+              <tr><td>4</td><td class="p" style="--p:50">50,00%</td></tr>
+              <tr><td>5</td><td class="p" style="--p:33.33">33,33%</td></tr>
+              <tr><td>6</td><td class="p" style="--p:16.67">16,67%</td></tr>
+              <tr><td>7 ou mais</td><td class="p z">0%</td></tr>
+            </tbody>
+          </table></div>
+          <p><strong>Exemplo:</strong> angariação de R$ 300,00; cliente pagou 3 contribuições e cancelou → 66,67% = <strong>R$ 200,00</strong>.</p>
+        </div>
+        <div class="card q" data-k="mag whole life integral dinamico sucessao private 12 parcelas 90 80 70">
+          <div class="k">Whole Life Integral, Dinâmico e Sucessão</div>
+          <p>Angariação paga ao longo das 12 primeiras parcelas. No cancelamento ou redução antes da 12ª, o percentual vale para <strong>toda a angariação já paga</strong>.</p>
+          <div class="tw"><table>
+            <thead><tr><th>Parcelas pagas</th><th>Estorno da angariação</th></tr></thead>
+            <tbody>
+              <tr><td>0 a 2</td><td class="p full" style="--p:100">100%</td></tr>
+              <tr><td>3</td><td class="p" style="--p:90">90%</td></tr>
+              <tr><td>4</td><td class="p" style="--p:80">80%</td></tr>
+              <tr><td>5</td><td class="p" style="--p:70">70%</td></tr>
+              <tr><td>6</td><td class="p" style="--p:60">60%</td></tr>
+              <tr><td>7</td><td class="p" style="--p:50">50%</td></tr>
+              <tr><td>8</td><td class="p" style="--p:40">40%</td></tr>
+              <tr><td>9</td><td class="p" style="--p:30">30%</td></tr>
+              <tr><td>10</td><td class="p" style="--p:20">20%</td></tr>
+              <tr><td>11</td><td class="p" style="--p:10">10%</td></tr>
+              <tr><td>12</td><td class="p" style="--p:5">5%</td></tr>
+            </tbody>
+          </table></div>
+          <p><strong>Exemplo:</strong> R$ 200,00 de angariação em cada uma das 5 parcelas pagas (R$ 1.000,00) → 70% = <strong>R$ 700,00</strong>.</p>
+        </div>
+      </div>
+
+
+      <div class="grid2">
+        <div class="card q" data-k="mag vir vida inteira resgatavel whole life plus carteira 17 8">
+          <div class="k">Vida Inteira Resgatável (VIR) e Whole Life Plus</div>
+          <p>Regra desde 11/06/2018. Até 4 contribuições pagas, estorna <strong>100% da angariação e da carteira</strong>. Com 5 pagas, 17% da angariação; com 6, 8%. Redução de capital nos 6 primeiros meses estorna na proporção da redução.</p>
+        </div>
+        <div class="card q" data-k="mag private solutions 563 579 677 678 term life whole life 2014">
+          <div class="k">Private Solutions</div>
+          <p><strong>Planos 563 e 579:</strong> cancelamento nos 12 primeiros meses estorna toda a comissão paga no período.</p>
+          <p><strong>Planos 677 e 678 (Whole Life e Term Life 2014):</strong> 0 pagas = 100%, depois cai 8,33 p.p. por contribuição (1 = 91,67% … 11 = 8,33%) até 0% com 12 pagas.</p>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card q" data-k="mag empresarial vg cotado pro rata grupo d">
+          <div class="k">Empresariais e VG Cotado · Grupo D</div>
+          <p>Proporcional ao tempo que faltava: <strong>(angariação paga ÷ prazo total do contrato) × meses restantes</strong>. Vale para cancelamento do contrato ou exclusão de segurados.</p>
+          <p>Ex.: R$ 1.200,00 de angariação, contrato de 12 meses, cancelado no 4º mês → 1.200 ÷ 12 × 8 = <strong>R$ 800,00</strong>.</p>
+        </div>
+        <div class="card q" data-k="mag talent partner capital medio 2 milhoes 36 meses">
+          <div class="k">Talent e Partner · Grupo F</div>
+          <p>Nos 12 primeiros meses, regra do Grupo A. Do 13º ao 36º mês, se a saída de segurados derrubar o capital médio do convênio abaixo de R$ 2 milhões, estorna-se toda a comissão dos 12 primeiros meses da proposta que causou a redução.</p>
+        </div>
+      </div>
+
+      <div class="card q" data-k="mag regras gerais 6 meses nova proposta substituicao reativacao devolucao estorno limite">
+        <div class="k">Regras que valem para todos os produtos MAG</div>
+        <ul>
+          <li><strong>Troca de proposta:</strong> se o cliente cancela uma proposta e contrata outra em até 6 meses, estorna-se a angariação da proposta cancelada na carteira de quem vendeu a nova, limitado ao valor da nova angariação.</li>
+          <li><strong>Sem estorno em dobro:</strong> nova proposta implantada em até 6 meses de um cancelamento já estornado não gera novo estorno.</li>
+          <li><strong>Devolução de contribuição:</strong> se a MAG devolve contribuição ao cliente, estorna também a comissão de carteira correspondente, em qualquer parcela.</li>
+          <li><strong>Reativação:</strong> se o cliente reativa a proposta e quita as 6 primeiras parcelas, a MAG devolve o estorno.</li>
+        </ul>
+      </div>
+
+      <div class="faq">
+        <details class="qa q" data-k="mag estorno carteira rider via cartao"><summary>Recebi estorno de carteira da MAG, não só de angariação. Por quê?</summary><div><p>Acontece quando a MAG devolve contribuição ao cliente (a carteira daquela contribuição é revertida) e nos produtos VIR e Whole Life Plus com até 4 contribuições pagas, em que a regra estorna angariação e carteira.</p></div></details>
+        <details class="qa q" data-k="mag cliente reduziu valor contribuicao reducao capital"><summary>O cliente reduziu a contribuição. Tem estorno?</summary><div><p>Sim. Nas coberturas de risco, redução até a 6ª parcela segue a tabela do Grupo A. Nos Whole Life Integral, Dinâmico e Sucessão, redução antes da 12ª parcela segue a tabela de 100% a 5%. Redução de capital nos VIR e Whole Life Plus estorna na proporção da redução.</p></div></details>
+      </div>
+    </section>
+
+    <!-- ===================== DEMAIS PARCEIRAS ===================== -->
+    <section class="sec" id="outras" data-cat="todos">
+      <div class="sec-head"><h2>Demais parceiras</h2><div class="tags"><span class="tag">Regras dos documentos oficiais</span></div></div>
+      <p class="sec-sub">Regras extraídas das políticas, contratos e comunicados de cada parceira. Abra "Ver regra completa" para tabelas e exemplos.</p>
+
+      <!-- SulAmérica -->
+      <article class="partner" id="sulamerica" data-cat="vida">
+        <header><div><div class="k tag">Previdência</div><h3>SulAmérica Previdência</h3></div><div class="when"><b>36 meses</b><small>de contribuição</small></div></header>
+        <p class="q" data-k="sulamerica previdencia agenciamento 2,77 1/36 inadimplencia">O agenciamento (70% da 1ª parcela) é pago de uma vez, mas o participante precisa contribuir por pelo menos <strong>36 meses</strong>. Cada contribuição mensal não paga estorna <strong>2,77% (1/36)</strong> do agenciamento recebido.</p>
+        <details class="more"><summary>Ver regra completa</summary><div>
+          <div class="grid2">
+            <div class="card q" data-k="sulamerica suspensao 3 parcelas cobranca suspensa"><div class="k">Inadimplência e suspensão</div><p>Com 3 parcelas inadimplentes seguidas, ou 3 não seguidas em 12 meses, a cobrança fica suspensa. Ao entrar em cobrança suspensa, todo o estorno ainda devido é cobrado de uma só vez.</p></div>
+            <div class="card q" data-k="sulamerica parcelamento estorno 500 2000 4x 6x a vista"><div class="k">Como o estorno é cobrado</div><div class="tw"><table><thead><tr><th>Valor do estorno</th><th>Forma</th></tr></thead><tbody><tr><td>Até R$ 500,00</td><td>À vista</td></tr><tr><td>R$ 500,01 a R$ 2.000,00</td><td>4x</td></tr><tr><td>A partir de R$ 2.000,01</td><td>6x</td></tr></tbody></table></div></div>
+            <div class="card q" data-k="sulamerica aporte resgate esporadica portabilidade especialista prestige"><div class="k">Resgate, aporte e portabilidade</div><p>Resgate ou portabilidade de valor que gerou comissão: 2,77% por mês que faltava até o 36º, proporcional ao valor resgatado. Portabilidade de entrada só gera estorno no produto <strong>Especialista</strong>; no padrão e no Prestige, não.</p></div>
+            <div class="card q" data-k="sulamerica reducao ipca recuperacao troca de corretor devolucao"><div class="k">Outros casos</div><ul><li>Redução da contribuição ou recusa do reajuste pelo IPCA: estorno proporcional ao valor reduzido.</li><li>Cliente volta a pagar as atrasadas e segue em dia: o estorno é devolvido.</li><li>Troca de corretor na carência: o antigo é estornado proporcionalmente e o novo recebe a parte restante.</li><li>Risco (30% vitalício): sem agenciamento e sem estorno.</li></ul></div>
+          </div>
+          <div class="note q" data-k="sulamerica exemplo calculo"><strong>Exemplos:</strong> agenciamento de R$ 1.000,00 e 3 contribuições não pagas → 3 × 2,77% = 8,31% = <strong>R$ 83,10</strong>. Comissão de R$ 500,00 sobre um aporte resgatado inteiro no 10º mês → 26 meses restantes × 2,77% = 72,02% = <strong>R$ 360,10</strong>.</div>
+        </div></details>
+      </article>
+
+      <!-- Prudential -->
+      <article class="partner" id="prudential" data-cat="vida">
+        <header><div><div class="k tag">Vida</div><h3>Prudential · Recapture</h3></div><div class="when"><b>3 anos</b><small>zera no 4º ano</small></div></header>
+        <p class="q" data-k="prudential recapture apolice cobertura 50 30 15 ano vigencia">Quando uma apólice ou cobertura é cancelada, a Prudential gera o <strong>recapture</strong>: estorno proporcional de toda a comissão paga ao escritório referente àquela apólice ou cobertura.</p>
+        <div class="tw q" data-k="prudential tabela recapture"><table><thead><tr><th>Cancelamento no</th><th>Estorno da comissão paga</th></tr></thead><tbody>
+          <tr><td>1º ano de vigência</td><td class="p" style="--p:50">50%</td></tr>
+          <tr><td>2º ano de vigência</td><td class="p" style="--p:30">30%</td></tr>
+          <tr><td>3º ano de vigência</td><td class="p" style="--p:15">15%</td></tr>
+          <tr><td>A partir do 4º ano</td><td class="p z">0%</td></tr></tbody></table></div>
+        <p class="q" data-k="prudential exemplo">Ex.: R$ 4.000,00 de comissão recebida e cancelamento no 2º ano → <strong>R$ 1.200,00</strong>. Como a regra vale por cobertura, cancelar só um adicional estorna apenas a comissão daquela cobertura.</p>
+      </article>
+
+      <!-- Amil -->
+      <article class="partner" id="amil" data-cat="saude">
+        <header><div><div class="k tag">Saúde</div><h3>Amil · médico PME e PJ</h3></div><div class="when"><b>12 meses</b><small>implantados desde 01/08/2026</small></div></header>
+        <p class="q" data-k="amil pme pj medico coletivo 2 a 99 vidas 100 vidas implantacao 01/08/2026">Vale para planos <strong>médicos</strong> coletivos PME (2 a 99 vidas) e PJ (100+ vidas) implantados a partir de <strong>01/08/2026</strong> e cancelados em até 12 meses. O percentual incide sobre o <strong>total das comissões pagas</strong> (agenciamento e vitalício). Odontológico e contratos anteriores não entram.</p>
+        <div class="tw q" data-k="amil tabela parcelas pagas 83 79 75 60 50 45 40 35 30"><table><thead><tr><th>Parcelas pagas</th><th>1 a 3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th><th>12</th></tr></thead><tbody><tr><td>Estorno</td><td>100%</td><td>83%</td><td>79%</td><td>75%</td><td>60%</td><td>50%</td><td>45%</td><td>40%</td><td>35%</td><td>30%</td></tr></tbody></table></div>
+        <p class="q" data-k="amil exemplo">Ex.: R$ 3.000,00 de comissões pagas em 5 parcelas e cancelamento → 79% = <strong>R$ 2.370,00</strong>.</p>
+      </article>
+
+      <!-- Saúde Mais -->
+      <article class="partner" id="saudemais" data-cat="saude">
+        <header><div><div class="k tag">Saúde · corretora</div><h3>Saúde Mais</h3></div><div class="when"><b>6ª a 8ª</b><small>parcela, conforme operadora</small></div></header>
+        <p class="q" data-k="saude mais regra geral bradesco omint sulamerica amil notredame 7 parcela 90 dias adesao individual familiar">Cada operadora tem a sua tabela. Duas regras gerais da grade: <strong>Bradesco, Omint, SulAmérica, Amil e NotreDame</strong> estornam 100% de propostas não confirmadas até a 7ª parcela; e em planos <strong>Adesão, Individual e Familiar</strong> o cliente precisa permanecer pelo menos <strong>90 dias</strong> para não haver estorno. Kipp e QSaúde têm tabela específica.</p>
+        <details class="more"><summary>Ver tabelas por operadora</summary><div>
+          <div class="tw q" data-k="saude mais amil cruz saude pme bradesco cruz pf familiar porto seguro dentaluni restituicao"><table>
+            <thead><tr><th>Parcelas pagas</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th></tr></thead>
+            <tbody>
+              <tr><td>Amil e Cruz Saúde PME</td><td>80%</td><td>70%</td><td>60%</td><td>50%</td><td>40%</td><td>30%</td><td>—</td></tr>
+              <tr><td>Bradesco</td><td>80%</td><td>75%</td><td>65%</td><td>55%</td><td>45%</td><td>35%</td><td>—</td></tr>
+              <tr><td>Cruz Saúde PF e Familiar</td><td>50%</td><td>40%</td><td>25%</td><td>10%</td><td>5%</td><td>—</td><td>—</td></tr>
+              <tr><td>Porto Seguro PME e Empresarial (sobre agenciamento total)</td><td>80%</td><td>70%</td><td>60%</td><td>50%</td><td>40%</td><td>30%</td><td>0%</td></tr>
+              <tr><td>DentalUni</td><td>75%</td><td>65%</td><td>55%</td><td>45%</td><td>35%</td><td>25%</td><td>—</td></tr>
+            </tbody></table></div>
+          <p class="tcap">Percentual sobre o total de comissão paga até a parcela indicada, salvo Porto Seguro (sobre o agenciamento total pago).</p>
+          <div class="card q" data-k="saude mais sulamerica notredame intermedica leader notrelife fatura nao paga">
+            <div class="k">SulAmérica, NotreDame Intermédica, Leader e NotreLife</div>
+            <p>Aqui a base é a <strong>fatura não paga</strong>: devolve-se 100% da parcela de agenciamento correspondente.</p>
+            <ul><li>Pagou só a 1ª (não pagou a 2ª): 100% da 1ª parcela de agenciamento.</li><li>Pagou 1ª e 2ª (não pagou a 3ª): 100% da 2ª parcela de agenciamento.</li><li>Pagou de 3 a 5 faturas: 100% da 3ª parcela de agenciamento.</li><li>O estorno zera quando a fatura não paga é a 7ª (SulAmérica) ou a 8ª (NotreDame e Leader).</li><li>NotreLife tem só as duas primeiras faixas.</li></ul>
+          </div>
+        </div></details>
+      </article>
+
+      <!-- Vila Velha -->
+      <article class="partner" id="vilavelha" data-cat="geral">
+        <header><div><div class="k tag">Seguros gerais</div><h3>Vila Velha · auto e demais ramos</h3></div><div class="when"><b>Prêmio quitado</b><small>estorno pro rata</small></div></header>
+        <p class="q" data-k="vila velha seguro auto comissao antecipada premio a vista primeira parcela rateio">A comissão é paga na emissão, sobre o <strong>prêmio total à vista</strong>, mesmo que o cliente parcele. Se a 1ª parcela não for paga, o estorno é <strong>integral</strong> (a apólice não se concretiza). Se o cliente deixar de pagar parcelas seguintes, o estorno é <strong>proporcional ao saldo não pago</strong>.</p>
+        <p class="q" data-k="vila velha exemplo 10 parcelas 3 pagas 7/10">Ex.: seguro em 10 parcelas, cancelado depois da 3ª → estorno de <strong>7/10</strong> da comissão recebida.</p>
+      </article>
+
+      <!-- Itaú -->
+      <article class="partner" id="itau" data-cat="consorcio">
+        <header><div><div class="k tag">Consórcio</div><h3>Itaú · programa iConquista</h3></div><div class="when"><b>Curva + 1</b><small>parcela além da curva</small></div></header>
+        <p class="q" data-k="itau iconquista categoria diamante ouro prata bronze curva regressiva 80 parcela adicional">A comissão e a curva de estorno dependem da <strong>categoria</strong> do escritório (Diamante, Ouro, Prata ou Bronze), do bem (imóvel ou auto) e do tipo de parcela (linear ou reduzida). As curvas começam em <strong>80% de estorno</strong> e caem a cada parcela paga. Para não haver estorno, o cliente precisa pagar <strong>uma parcela além da curva</strong>: numa curva de 6 meses, a 7ª parcela.</p>
+        <details class="more"><summary>Ver regra completa</summary><div>
+          <div class="grid2">
+            <div class="card q" data-k="itau sem estorno modalidade imovel 16x 0,25 auto 10x 0,40"><div class="k">Modalidade Sem Estorno</div><p>Comissão de 4% sem risco de devolução, recebida em mais parcelas:</p><ul><li><strong>Imóvel:</strong> 16 × 0,25%</li><li><strong>Auto:</strong> 10 × 0,40%</li></ul><p>É a alternativa para quem prefere previsibilidade.</p></div>
+            <div class="card q" data-k="itau categoria criterios cancelamento producao trimestre"><div class="k">Como a categoria é definida</div><ul><li>Diamante: produção acima de R$ 3 mi/mês e cancelamento abaixo de 10%.</li><li>Ouro: R$ 1 a 3 mi/mês e cancelamento abaixo de 20%.</li><li>Prata: até R$ 1 mi/mês e cancelamento abaixo de 30%.</li><li>Bronze: cancelamento acima de 30%.</li></ul><p>Revisão trimestral. A taxa de cancelamento pesa mais que o volume.</p></div>
+          </div>
+          <div class="card q" data-k="itau inadimplencia 3 parcelas atraso cota cancelada automaticamente"><div class="k">Inadimplência</div><p>Com <strong>3 parcelas em atraso</strong>, a cota é cancelada automaticamente. Cota em atraso não gera comissão e, se cancelada, a comissão já paga pode ser estornada. Grupos com redutor de 50%: modelo 12x tem estorno; modelo 18x é sem estorno (desde 24/03/2026).</p></div>
+          <p class="tcap">A curva exata de cada categoria está no material "iConquista – Versão Representante" (Itaú, set/2026).</p>
+        </div></details>
+      </article>
+
+      <!-- CNP / Consórcio XP -->
+      <article class="partner" id="cnp" data-cat="consorcio">
+        <header><div><div class="k tag">Consórcio</div><h3>Consórcio XP · administradora CNP</h3></div><div class="when"><b>8 a 12 meses</b><small>Diamante sem estorno</small></div></header>
+        <p class="q" data-k="cnp consorcio xp categoria diamante ouro prata bronze parcela reduzida cheia estorno 30 40 50">A categoria do escritório define comissão e estorno. Todo escritório começa como Diamante e é reavaliado a cada trimestre pela adimplência no 13º mês.</p>
+        <div class="tw q" data-k="cnp tabela categoria reduzida cheia"><table><thead><tr><th>Categoria</th><th>Parcela reduzida</th><th>Parcela cheia</th><th>Adimplência no 13º mês</th></tr></thead><tbody>
+          <tr><td>Diamante</td><td>4,00% em 12x · sem estorno</td><td>4,00% em 6x · sem estorno</td><td>68% ou mais</td></tr>
+          <tr><td>Ouro</td><td>4,00% em 12x · estorno de 30% por 12 meses</td><td>4,00% em 8x · estorno de 30% por 8 meses</td><td>60% a 67%</td></tr>
+          <tr><td>Prata</td><td>3,75% em 12x · estorno de 40% por 12 meses</td><td>3,50% em 8x · estorno de 40% por 8 meses</td><td>45% a 59%</td></tr>
+          <tr><td>Bronze</td><td>3,50% em 12x · estorno de 50% por 12 meses</td><td>3,00% em 8x · estorno de 50% por 8 meses</td><td>abaixo de 45%</td></tr>
+        </tbody></table></div>
+        <p class="q" data-k="cnp desistencia vicio comercializacao condicao exclusiva funcionarios">Pelo contrato, cota cancelada ou inadimplente não gera comissão; na desistência, o estorno é proporcional ao valor pago pelo cliente e compensado nas comissões seguintes. Vício de comercialização comprovado também gera estorno. Vendas em condição exclusiva (colaboradores, assessores e dedicados) não têm comissão.</p>
+      </article>
+
+      <!-- Embracon -->
+      <article class="partner" id="embracon" data-cat="consorcio">
+        <header><div><div class="k tag">Consórcio · via XP</div><h3>Embracon</h3></div><div class="when"><b>6ª parcela</b><small>em dia</small></div></header>
+        <p class="q" data-k="embracon 12x sem estorno 4x com estorno 0,5 sexta parcela em dia">Cada tabela da Embracon é de um de dois tipos. Nas tabelas <strong>"12x sem estorno"</strong> a comissão é paga em 0,333% ao mês e não há estorno. Nas tabelas <strong>"4x com estorno de 0,5%"</strong> a comissão vem em 1,5% + 1,0% + 1,0% + 0,5%, e o consorciado precisa manter os pagamentos em dia até, no mínimo, a <strong>6ª parcela</strong>; se não mantiver, aplica-se estorno de 0,5% sobre o valor correspondente.</p>
+        <div class="tw q" data-k="embracon tabelas imovel auto pesados servicos moto select mais parcela reduzida parceria nacional exclusiva xp parcelinha"><table><thead><tr><th>4x com estorno de 0,5%</th><th>12x sem estorno</th></tr></thead><tbody>
+          <tr><td>Imóvel Select Mais · Auto Select Mais · Pesados (2% antecipado e Select) · Serviços · Moto</td><td>Imóvel Parcela Reduzida 1x e 12x · Imóvel Parceria Nacional B · Auto Exclusiva XP · Pesados Parcelinha</td></tr>
+        </tbody></table></div>
+        <p class="q" data-k="embracon fase 22 24 44 23 nao paga comissao">Proposta nas fases 22, 24 ou 44 não paga comissão; só a fase 23 (analisada, sem inconsistência). Cota não alocada, inadimplente, em atraso ou cancelada também não gera comissão.</p>
+      </article>
+
+      <!-- Magalu -->
+      <article class="partner" id="magalu" data-cat="consorcio">
+        <header><div><div class="k tag">Consórcio</div><h3>Consórcio Magalu</h3></div><div class="when"><b>7ª parcela</b><small>estorno de 50%</small></div></header>
+        <p class="q" data-k="magalu cancelamento ate 6 parcelas 50 comissao sobre venda funcionarios">Cancelamento da cota com <strong>até 6 parcelas pagas</strong> estorna <strong>50% da comissão já paga</strong>, em todos os segmentos (auto, moto, eletro, serviço, imóvel e caminhão). A comissão só é paga conforme o cliente paga as parcelas. Vendas no plano de funcionários não geram comissão.</p>
+        <p class="q" data-k="magalu exemplo">Ex.: cota de auto com comissão de 2,8% sobre R$ 100 mil; o cliente pagou 4 parcelas (1,9% recebidos = R$ 1.900,00) e cancelou → estorno de <strong>R$ 950,00</strong>.</p>
+      </article>
+
+      <!-- BB -->
+      <article class="partner" id="bb" data-cat="consorcio">
+        <header><div><div class="k tag">Consórcio</div><h3>BB Consórcio</h3></div><div class="when"><b>Sem estorno</b><small>com uma exceção</small></div></header>
+        <p class="q" data-k="bb consorcio sem estorno reclamacao procedente devolucao 75 dias conformidade">Nenhuma modalidade tem estorno por desistência. A exceção: <strong>reclamação procedente com devolução ao consorciado</strong> estorna todas as comissões do contrato. Atenção também ao prazo de conformidade: documentação entregue após <strong>75 dias</strong> da alocação faz a comissão deixar de ser devida.</p>
+      </article>
+    </section>
+
+    <!-- ===================== FAQ GERAL ===================== -->
+    <section class="sec" id="duvidas" data-cat="todos">
+      <div class="sec-head"><h2>Dúvidas gerais</h2><div class="tags"><span class="tag">FAQ</span></div></div>
+      <div class="faq">
+        <details class="qa q" data-k="por que estorno se cliente pagou cobertura logica justificativa adiantamento agenciamento angariacao regra da parceira nao e da w1 injusto"><summary>Se o cliente pagou pela cobertura, por que a comissão é estornada?</summary><div><p>Porque o agenciamento (na MAG, angariação) não é o pagamento pela cobertura. É um <strong>adiantamento da comissão</strong> que a parceira paga de uma vez, no início do contrato, contando que o cliente vai permanecer. Se ele sai antes do prazo, a parceira recupera a parte adiantada que ainda não tinha sido "ganha" pelo tempo de permanência.</p><p>A comissão recorrente (corretagem ou carteira), que remunera os meses em que o cliente ficou ativo, em geral não tem estorno e continua com você. Por isso, quanto mais tempo o cliente ficou, menor o estorno.</p><p>Essa é uma regra do contrato de cada parceira com as corretoras, não uma regra interna da W1. A W1 apenas repassa ao consultor e à estrutura o estorno que a parceira aplica, na mesma proporção da comissão que cada um recebeu.</p></div></details>
+        <details class="qa q" data-k="quando aparece estorno mes extrato"><summary>Em que mês o estorno aparece?</summary><div><p>No mês em que a parceira identifica o cancelamento, a inadimplência ou o resgate, como lançamento negativo no extrato de comissão. Por isso o estorno pode chegar meses depois da última parcela paga pelo cliente.</p></div></details>
+        <details class="qa q" data-k="como evitar estorno prevencao reter cliente"><summary>Como reduzir o risco de estorno na minha carteira?</summary><div><ul><li>Acompanhe os clientes até o fim do prazo da parceira (veja o quadro-resumo).</li><li>Em consórcio, avalie as modalidades sem estorno: Itaú Sem Estorno, tabelas 12x da Embracon, BB Consórcio.</li><li>Na previdência SulAmérica, oriente o cliente sobre o impacto de resgate e portabilidade nos primeiros 3 anos.</li><li>Inadimplência é a principal causa: 3 parcelas em atraso costumam suspender o plano ou cancelar a cota.</li></ul></div></details>
+        <details class="qa q" data-k="estorno nao bate tabela contestar errado divergencia"><summary>O estorno não bate com a tabela. O que faço?</summary><div><p>Confira primeiro a versão do produto e a data de venda (no caso da Icatu, guia antigo ou guia out/2025). Se continuar diferente, envie ao time de Comissões o nome do cliente, o certificado ou a proposta e o mês do extrato.</p></div></details>
+        <details class="qa q" data-k="cliente voltou pagar reativou devolucao estorno"><summary>O cliente voltou a pagar. Recebo o estorno de volta?</summary><div><p>Na MAG, sim, se ele reativar e quitar as 6 primeiras parcelas. Na SulAmérica Previdência, sim, se pagar as atrasadas e seguir em dia. Nas demais parceiras, os documentos não preveem devolução.</p></div></details>
+        <details class="qa q" data-k="parceira nao aparece sem regra"><summary>A parceira que eu procuro não está aqui.</summary><div><p>Esta central traz só as parceiras com regra de estorno documentada pela área de Comissões. Se a sua não aparece, não há regra de estorno registrada nos documentos que recebemos dela; confirme com o time de Comissões antes de orientar o cliente.</p></div></details>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p><strong>Fontes:</strong> Guias Icatu Horizonte (ago/2022, nov/2024 e out/2025) e Essencial (ago/2022); Política de Estorno MAG v6 (vigência 10/03/2025); Regras de Comissão e Estorno SulAmérica Previdência; comunicado de recapture Prudential; comunicado Amil (vigência 01/08/2026); Política de Estorno Saúde Mais; contrato e e-mail Vila Velha; iConquista Itaú (set/2026); Comissionamento Canal XP e contrato CNP; Fluxo de pagamento Embracon (set/2026); Política Comercial Magalu; Regras de pagamento BB Consórcio.</p>
+    <p>Departamento de Comissões W1 · Atualizado em outubro de 2026. As regras podem mudar a qualquer momento pela parceira; em caso de dúvida, vale o documento oficial mais recente.</p>
+  </div>
+</footer>
+
+<script>
+/* ================= CALCULADORA ================= */
+(function(){
+  const $=id=>document.getElementById(id);
+  const brl=v=>v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+  const pc=v=>(v*100).toLocaleString('pt-BR',{maximumFractionDigits:2})+'%';
+  // Tabelas (as mesmas de regras/regras_estorno.json)
+  const T={antigo:[100,91.67,83.33,75,66.68,58.35,50,41.65,33.32,25,16.67,8.33],
+           novo:[100,90,80,70,60,50],
+           ess:[100,91.67,83.33,75,66.67,58.33,50,41.67,33.33,25,16.67,8.33],
+           risco:[100,100,83.33,66.67,50,33.33,16.67],
+           wl:[100,100,100,90,80,70,60,50,40,30,20,10,5]};
+  // Parte do valor mensal do 1º ano que é agenciamento (padrão observado nos extratos) e
+  // valor mensal a partir do 2º ano em relação ao 1º ano (só corretagem)
+  const SH={antigo:.867,novo:.80}, ANO2={antigo:.14,novo:.21}, ESS_CORR=.30;
+  const LIVRE={antigo:24,novo:18,ess:12};
+  const tab=(t,k)=>k<0?1:(k<t.length?t[k]/100:0);
+  let modo='m';
+  function tabs(t){$('tbI').setAttribute('aria-selected',t==='icatu');$('tbM').setAttribute('aria-selected',t==='mag');$('cI').hidden=t!=='icatu';$('cM').hidden=t!=='mag';}
+  $('tbI').onclick=()=>tabs('icatu');$('tbM').onclick=()=>tabs('mag');
+  function setModo(m){modo=m;$('ciMm').setAttribute('aria-pressed',m==='m');$('ciMt').setAttribute('aria-pressed',m==='t');calcI();}
+  $('ciMm').onclick=()=>setModo('m');$('ciMt').onclick=()=>setModo('t');
+  function calcI(){
+    const p=$('ciP').value, N=Math.max(0,Math.floor(+$('ciN').value||0)), V=Math.max(0,+$('ciV').value||0), E=+$('ciE').value||0;
+    const ess=p==='ess';
+    $('ciVl').textContent=modo==='m'?(ess?'Valor recebido no 1º mês (R$)':'Valor recebido por mês (R$)'):'Total recebido desse cliente até agora (R$)';
+    $('ciHint').textContent=ess?(modo==='m'?'No Essencial o 1º mês é só agenciamento: informe o que caiu para você no primeiro mês desse cliente.':'Total de todos os meses desse cliente. A calculadora separa o agenciamento considerando o módulo mais comum (corretagem de 30%).')
+      :(modo==='m'?'O valor que caiu para você por mês desse cliente nos 12 primeiros meses (soma de todas as coberturas).':'Soma de tudo o que você recebeu desse cliente desde a 1ª parcela.');
+    let rows=[],tot=0,recebido=0;
+    if(N<1){out(0,0,[],E,p,N);return;}
+    if(ess){
+      let A=modo==='m'?V:V/(1+ESS_CORR*(N-1));
+      recebido=modo==='m'?A*(1+ESS_CORR*(N-1)):V;
+      const pct=tab(T.ess,N); rows.push([1,N,pct,A*pct]); tot=A*pct;
+    }else{
+      const n12=Math.min(N,12);
+      const m=modo==='m'?V:V/(n12+ANO2[p]*Math.max(N-12,0));
+      recebido=modo==='m'?m*n12+m*ANO2[p]*Math.max(N-12,0):V;
+      const ag=m*SH[p];
+      for(let n=1;n<=n12;n++){const k=N-n+1,pct=tab(T[p],k);rows.push([n,k,pct,ag*pct]);tot+=ag*pct;}
+    }
+    out(tot,recebido,rows,E,p,N);
+  }
+  function out(tot,rec,rows,E,p,N){
+    $('ciR').textContent=brl(tot);
+    $('ciS').textContent=rec>0?`${pc(tot/rec)} do que você recebeu desse cliente (${brl(rec)})`:'Informe as parcelas pagas e o valor recebido';
+    const livre=LIVRE[p];
+    const vis=rows.filter(r=>r[2]>0);
+    $('ciT').innerHTML=rows.length?`<thead><tr><th>Parcela</th><th>Permanência</th><th>% estornado</th><th>Estorno</th></tr></thead><tbody>`+
+      rows.map(r=>`<tr><td>${r[0]}ª</td><td>${r[1]} ${r[1]===1?'mês':'meses'}</td><td class="p ${r[2]===0?'z':''}" style="--p:${r[2]*100}">${pc(r[2])}</td><td>${brl(r[3])}</td></tr>`).join('')+'</tbody>':'';
+    $('ciNote').textContent=(N>=livre?`Com ${N} parcelas pagas o contrato já passou do prazo de estorno (${livre} meses). `:`Este produto fica livre de estorno a partir de ${livre} meses de permanência. `)+
+      'Valor estimado: considera a divisão padrão da comissão do produto entre agenciamento e corretagem e que o cancelamento ocorreu pelo menos um mês depois da última parcela paga.';
+    const c=$('ciC');
+    if(E>0&&tot>=0){const d=E-tot,tol=Math.max(5,tot*.10);
+      if(Math.abs(d)<=tol){c.className='verd ok';c.textContent=`O estorno lançado (${brl(E)}) é compatível com a regra. Diferença de ${brl(d)}.`;}
+      else if(d>0){c.className='verd up';c.textContent=`O estorno lançado (${brl(E)}) está ${brl(d)} acima do esperado. Envie o nome do cliente ao time de Comissões para conferência.`;}
+      else{c.className='verd dn';c.textContent=`O estorno lançado (${brl(E)}) está ${brl(-d)} abaixo do esperado. Pode haver estorno complementar nos próximos meses.`;}
+      c.hidden=false;}else c.hidden=true;
+  }
+  ['ciP','ciN','ciV','ciE'].forEach(id=>$(id).addEventListener('input',calcI));
+  function calcM(){
+    const p=$('cmP').value,N=Math.max(0,Math.floor(+$('cmN').value||0)),V=+$('cmV').value||0;
+    const pct=tab(T[p],N);
+    $('cmR').textContent=pc(pct);
+    $('cmVl').textContent=p==='wl'?'Valor recebido por mês no 1º ano por essa cobertura (R$) · opcional':'Valor recebido no 1º mês por essa cobertura (R$) · opcional';
+    let s=p==='risco'?`Com ${N} contribuição(ões) paga(s), a MAG estorna ${pc(pct)} da angariação da cobertura. A partir da 7ª, não há estorno.`
+                    :`Com ${N} contribuição(ões) paga(s), a MAG estorna ${pc(pct)} de toda a angariação já recebida. A partir da 13ª, não há estorno.`;
+    if(V>0){const est=p==='risco'?V*pct:V*Math.min(N,12)*pct; s+=` Estorno estimado: ${brl(est)}.`;}
+    $('cmS').textContent=s;
+    $('cmNote').innerHTML='<strong>Por que a MAG não tem cálculo em reais completo?</strong> O seu repasse soma todas as coberturas da proposta, e muitas vezes o cliente cancela só uma delas. Sem saber o valor de cada cobertura, o valor em reais seria um chute. Use o percentual acima e, para conferir um estorno específico, envie o nome do cliente ao time de Comissões.';
+  }
+  ['cmP','cmN','cmV'].forEach(id=>$(id).addEventListener('input',calcM));
+  calcI();calcM();
+})();
+
+(function(){
+  var q=document.getElementById('q'), clear=document.getElementById('clear'), clear2=document.getElementById('clear2');
+  var status=document.getElementById('status'), statusText=document.getElementById('statusText'), empty=document.getElementById('empty');
+  var units=[].slice.call(document.querySelectorAll('.q'));
+  var blocks=[].slice.call(document.querySelectorAll('main .sec, main .partner'));
+  var navLinks=[].slice.call(document.querySelectorAll('#nav a'));
+  var cat='todos';
+  function norm(s){return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');}
+  var SYN={cancelou:'cancel',cancelamento:'cancel',cancelar:'cancel',devolucao:'devol',devolveu:'devol',angariacao:'angaria',agenciamento:'agencia'};
+  units.forEach(function(u){u._t=norm(u.textContent+' '+(u.getAttribute('data-k')||'')); u._open=u.tagName==='DETAILS'?u.open:null;});
+  blocks.forEach(function(b){b._t=norm(b.querySelector('h2,h3')?b.querySelector('h2,h3').textContent:'');});
+
+  function unmark(){document.querySelectorAll('mark[data-s]').forEach(function(m){var p=m.parentNode;p.replaceChild(document.createTextNode(m.textContent),m);p.normalize();});}
+  function markIn(el,terms){
+    if(!terms.length) return;
+    var w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,{acceptNode:function(n){return n.nodeValue.trim()&&!/^(SCRIPT|STYLE)$/.test(n.parentNode.nodeName)?1:2;}});
+    var nodes=[];while(w.nextNode())nodes.push(w.currentNode);
+    nodes.forEach(function(n){
+      var src=n.nodeValue, ns=norm(src), hits=[];
+      terms.forEach(function(t){var i=0;while(t.length>1&&(i=ns.indexOf(t,i))>-1){hits.push([i,i+t.length]);i+=t.length;}});
+      if(!hits.length) return;
+      hits.sort(function(a,b){return a[0]-b[0];});
+      var frag=document.createDocumentFragment(), pos=0;
+      hits.forEach(function(h){if(h[0]<pos)return;frag.appendChild(document.createTextNode(src.slice(pos,h[0])));var m=document.createElement('mark');m.setAttribute('data-s','');m.textContent=src.slice(h[0],h[1]);frag.appendChild(m);pos=h[1];});
+      frag.appendChild(document.createTextNode(src.slice(pos)));
+      n.parentNode.replaceChild(frag,n);
+    });
+  }
+  function blockCat(b){return b.getAttribute('data-cat')||'todos';}
+  function apply(){
+    var raw=q.value.trim(), nq=norm(raw);
+    var terms=nq.split(/\s+/).filter(Boolean).map(function(t){return SYN[t]||t;});
+    clear.hidden=!raw;
+    unmark();
+    var shown=0, groups=new Set();
+    blocks.forEach(function(b){b.hidden=false;});
+    units.forEach(function(u){
+      var b=u.closest('.partner')||u.closest('.sec');
+      var uc=u.getAttribute('data-cat')||(b?blockCat(b):'todos');
+      var catOk=cat==='todos'||uc===cat;
+      var hay=u._t+' '+(b?b._t:'');
+      var txtOk=!terms.length||terms.every(function(t){return hay.indexOf(t)>-1;});
+      var ok=catOk&&txtOk;
+      u.hidden=!ok;
+      if(u.tagName==='DETAILS') u.open= ok&&terms.length ? true : u._open;
+      if(ok){shown++; if(b) groups.add(b.id);}
+    });
+    blocks.forEach(function(b){
+      var vis=b.querySelector('.q:not([hidden])');
+      b.hidden=!vis;
+      if(vis&&terms.length){b.querySelectorAll('details.more').forEach(function(d){if(d.querySelector('.q:not([hidden])'))d.open=true;});}
+      if(!terms.length){b.querySelectorAll('details.more').forEach(function(d){d.open=false;});}
+    });
+    if(terms.length) blocks.forEach(function(b){if(!b.hidden) b.querySelectorAll('.q:not([hidden])').forEach(function(u){markIn(u,terms);});});
+    navLinks.forEach(function(a){var t=document.getElementById(a.getAttribute('data-for'));a.classList.toggle('dim',!!t&&t.hidden);});
+    var filtering=terms.length||cat!=='todos';
+    status.classList.toggle('on',!!filtering&&shown>0);
+    if(filtering){
+      var g=Array.from(groups).filter(function(id){return id!=='outras';}).length;
+      statusText.textContent=shown+(shown===1?' item encontrado':' itens encontrados')+' em '+g+(g===1?' seção':' seções')+(raw?' para "'+raw+'"':'');
+    }
+    empty.hidden=!(filtering&&shown===0);
+  }
+  var tm;q.addEventListener('input',function(){clearTimeout(tm);tm=setTimeout(apply,120);});
+  function reset(){q.value='';apply();q.focus();}
+  clear.addEventListener('click',reset);clear2.addEventListener('click',reset);
+  document.querySelectorAll('.chip').forEach(function(c){c.addEventListener('click',function(){q.value=c.getAttribute('data-q');apply();document.getElementById('conteudo').scrollIntoView();});});
+  document.querySelectorAll('.fbtn').forEach(function(f){f.addEventListener('click',function(){cat=f.getAttribute('data-cat');document.querySelectorAll('.fbtn').forEach(function(x){x.setAttribute('aria-pressed',x===f?'true':'false');});apply();});});
+  document.addEventListener('keydown',function(e){if(e.key==='/'&&document.activeElement!==q&&!/INPUT|TEXTAREA/.test(document.activeElement.tagName)){e.preventDefault();q.focus();} if(e.key==='Escape'&&document.activeElement===q&&q.value){reset();}});
+  navLinks.forEach(function(a){a.addEventListener('click',function(){var t=document.getElementById(a.getAttribute('data-for'));if(t&&t.hidden){q.value='';cat='todos';document.querySelectorAll('.fbtn').forEach(function(x){x.setAttribute('aria-pressed',x.getAttribute('data-cat')==='todos'?'true':'false');});apply();}});});
+})();
+</script>
+</body>
+</html>
