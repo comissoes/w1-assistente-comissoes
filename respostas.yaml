@@ -36,7 +36,7 @@ atualizado_em: outubro de 2026
 # Versão mais recente da extensão (.zip no W1nner). Quando publicar um .zip
 # novo, aumente este número: quem estiver com a versão antiga vê um aviso no balão.
 extensao:
-  versao: 1.1.0
+  versao: 1.1.1
   aviso: Há uma versão nova do Assistente de Comissões. Baixe em W1nner › Arquivos › Comissões e reinstale seguindo o guia.
 
 # Códigos de parceira usados no campo "parceira" -> nome exibido
