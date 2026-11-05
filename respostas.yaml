@@ -59,7 +59,7 @@ respostas:
 - id: c-janela
   area: comissoes
   parceira: ''
-  pergunta: Até que dia posso pedir o pagamento (saque) das comissões?
+  pergunta: TESTE Até que dia posso pedir o pagamento (saque) das comissões?
   outras_formas:
   - quando posso sacar
   - prazo para solicitar pagamento
