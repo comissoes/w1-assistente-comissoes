@@ -1,8 +1,12 @@
-"""Valida respostas.yaml e gera site/kb.json para o Assistente de Comissões W1.
+"""Valida respostas.yaml, gera site/kb.json e publica as Centrais (pasta centrais/).
 
 Uso:  python scripts/gerar_kb.py respostas.yaml site
 Roda sozinho no GitHub (aba Actions) a cada alteração do respostas.yaml.
 Se encontrar erro, para com uma mensagem explicando o que corrigir e NADA é publicado.
+
+Centrais: todo arquivo .html dentro da pasta centrais/ é publicado no mesmo endereço,
+ex.: centrais/central-comissoes.html -> https://<usuario>.github.io/w1-assistente-comissoes/central-comissoes.html
+Arquivos sem <!DOCTYPE>/<head> (formato exportado do Claude) recebem o cabeçalho automaticamente.
 """
 import json
 import re
@@ -12,6 +16,9 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 import yaml
+
+NOINDEX = '<meta name="robots" content="noindex, nofollow">'
+PROIBIDOS_PUBLICO = ("admin",)   # arquivos com estes termos no nome nunca são publicados
 
 TAGS_OK = {"p", "ul", "ol", "li", "strong", "em", "b", "i", "br", "a", "table", "thead", "tbody",
            "tr", "th", "td", "span", "h4", "div"}
@@ -114,13 +121,43 @@ def main(origem, destino):
     }
     out = Path(destino)
     out.mkdir(parents=True, exist_ok=True)
+    centrais = publicar_centrais(Path(origem).parent / "centrais", out)
     (out / "kb.json").write_text(json.dumps(kb, ensure_ascii=False), encoding="utf-8")
     (out / "robots.txt").write_text("User-agent: *\nDisallow: /\n", encoding="utf-8")
+    links = "".join(f'<li><a href="{n}">{n}</a></li>' for n in centrais)
     (out / "index.html").write_text(
-        '<!doctype html><meta charset="utf-8"><meta name="robots" content="noindex">'
+        f'<!doctype html><meta charset="utf-8">{NOINDEX}'
         f"<title>Assistente de Comissões W1</title><p>Base do Assistente de Comissões W1 · {len(itens)} respostas · "
-        f"publicada em {kb['versao']}</p>", encoding="utf-8")
+        f"publicada em {kb['versao']}</p>" + (f"<p>Centrais publicadas:</p><ul>{links}</ul>" if links else ""), encoding="utf-8")
     print(f"✅ {len(itens)} respostas validadas e publicadas (versão {kb['versao']}).")
+    for n in centrais:
+        print(f"✅ Central publicada: {n}")
+
+
+def publicar_centrais(pasta, out):
+    """Copia as Centrais (HTML) para o site, completando o cabeçalho quando faltar."""
+    nomes = []
+    if not pasta.is_dir():
+        return nomes
+    for arq in sorted(pasta.glob("*.html")):
+        if any(p in arq.name.lower() for p in PROIBIDOS_PUBLICO):
+            print(f"⚠️  {arq.name} NÃO foi publicado (arquivo interno/admin).")
+            continue
+        html = arq.read_text(encoding="utf-8")
+        if not html.lstrip()[:15].lower().startswith("<!doctype"):
+            html = ('<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n<meta charset="utf-8">\n'
+                    '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
+                    f"{NOINDEX}\n</head>\n<body>\n{html}\n</body>\n</html>\n")
+        elif "noindex" not in html.lower():
+            html = re.sub(r"(<head[^>]*>)", r"\1\n" + NOINDEX, html, count=1, flags=re.I)
+        nome = arq.name.lower()
+        for a, b in (("á", "a"), ("à", "a"), ("ã", "a"), ("â", "a"), ("é", "e"), ("ê", "e"), ("í", "i"),
+                     ("ó", "o"), ("õ", "o"), ("ô", "o"), ("ú", "u"), ("ç", "c")):
+            nome = nome.replace(a, b)
+        nome = re.sub(r"[^a-z0-9._-]+", "-", nome)
+        (out / nome).write_text(html, encoding="utf-8")
+        nomes.append(nome)
+    return nomes
 
 
 if __name__ == "__main__":
