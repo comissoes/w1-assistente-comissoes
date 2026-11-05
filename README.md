@@ -35,6 +35,21 @@ Isso só é necessário quando o funcionamento do balão muda, não para mudar r
 
 Quem estiver com a versão antiga passa a ver um aviso amarelo no balão pedindo para baixar a nova.
 
+## Centrais de Comissões e de Estornos
+
+As Centrais (HTML) também ficam aqui, na pasta `centrais/`, e são publicadas automaticamente junto com as respostas:
+
+| Arquivo no repositório | Endereço publicado |
+|---|---|
+| `centrais/central-comissoes.html` | https://comissoes.github.io/w1-assistente-comissoes/central-comissoes.html |
+| `centrais/central-estornos.html` | https://comissoes.github.io/w1-assistente-comissoes/central-estornos.html |
+
+- **Para atualizar uma Central**, abra a pasta `centrais`, clique em **Add file › Upload files**, envie o arquivo novo **com o mesmo nome** e clique em **Commit changes**. O GitHub guarda o histórico de todas as versões (botão **History**).
+- **Use nomes sem espaço e sem acento.** Se o arquivo vier com outro nome, renomeie antes de enviar, senão o endereço muda.
+- O cabeçalho que falta nos arquivos exportados (`<!DOCTYPE>`, `<head>`) é completado na publicação. Não precisa mexer no arquivo.
+- Arquivos com **"admin"** no nome **nunca são publicados** (ex.: a Calculadora de PPs ADMIN). Mesmo assim, não suba arquivos internos aqui: o repositório é público.
+- Lembrete: o `respostas.yaml` (balão) e as Centrais são arquivos separados. Quando uma regra mudar, atualize os dois.
+
 ## Segurança
 
 - O repositório é público: qualquer pessoa com o endereço consegue ler as respostas. Coloque aqui **somente** conteúdo que já é para consultores. Nada de dados de clientes, valores individuais, assuntos do Jurídico, CaaS ou S1NC.
