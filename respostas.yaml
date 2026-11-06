@@ -374,6 +374,105 @@ respostas:
     <ul><li><span class="v ok">Correto</span> contrato de saúde a partir de 01/01/2026 com Especialista.</li>
     <li><span class="v ticket">Abra ticket · Comissões</span> desconto sem Especialista, contrato antes de 2026, fora de Saúde ou lançado duas vezes no mês.</li></ul>
 
+- id: c-ap
+  area: comissoes
+  parceira: ''
+  pergunta: Quais são as regras de comissão de AP (Análise Paga)?
+  outras_formas:
+  - regras de ap
+  - regra da ap
+  - regras da analise paga
+  - como funciona a comissao da ap
+  - como e calculada a comissao de ap
+  - percentual da ap
+  - quanto recebo de ap
+  - fator fq
+  - faixa da ap
+  - nova regra de ap agosto 2026
+  palavras_chave: ap analise paga regras regra comissao percentual base fator fq faturamento clientes unicos piso 20 teto 55 contato proprio outras fontes agosto 2026 calculo
+  secao: comissoes#regras-ap
+  resposta: |
+    <p><strong>APs pagas desde 01/08/2026</strong> (para FA I a FA IV). A comissão é calculada <strong>mês a mês</strong>:</p>
+    <p><strong>% de comissão = % Base × Fator FQ</strong>, com piso de <strong>20%</strong> e teto de <strong>55%</strong> (27,5% para outras fontes).</p>
+    <table class="t"><tr><th>Faturamento de AP no mês (contato próprio)</th><th>% Base</th></tr>
+    <tr><td>R$ 0 a 4.999,99</td><td>20%</td></tr>
+    <tr><td>R$ 5.000 a 7.499,99</td><td>35%</td></tr>
+    <tr><td>R$ 7.500 a 14.999,99</td><td>40%</td></tr>
+    <tr><td>R$ 15.000 a 29.999,99</td><td>45%</td></tr>
+    <tr><td>R$ 30.000 a 49.999,99</td><td>50%</td></tr>
+    <tr><td>R$ 50.000 ou mais</td><td>52,5%</td></tr></table>
+    <table class="t"><tr><th>APs de clientes únicos no mês</th><th>Fator FQ</th></tr>
+    <tr><td>0 a 1</td><td>×0,80</td></tr><tr><td>2</td><td>×0,90</td></tr><tr><td>3</td><td>×1,10</td></tr><tr><td>4 ou mais</td><td>×1,20</td></tr></table>
+    <ul><li><strong>Outras fontes (lead):</strong> % Base de 20% (até R$ 9.999,99), 25% (R$ 10.000 a 49.999,99) e 26,25% (R$ 50.000 ou mais), teto de 27,5%.</li>
+    <li><strong>Cliente único:</strong> o mesmo cliente só conta de novo no FQ 6 meses depois da AP anterior. A AP repetida é paga normalmente.</li>
+    <li><strong>AP parcelada:</strong> o percentual do mês do pagamento vale para todas as parcelas.</li>
+    <li><strong>FA IV:</strong> com faturamento de AP acima de R$ 10.000 no mês, a comissão nunca fica abaixo de 40% (contato próprio) ou 25% (outras fontes).</li>
+    <li><strong>PPs históricos</strong> não contam mais para a AP.</li>
+    <li><strong>Consultor Executivo:</strong> taxa fixa de 55% ou 65%, sem Fator FQ.</li>
+    <li><strong>Repasse:</strong> até o dia 10 do mês seguinte ao pagamento do cliente.</li></ul>
+    <p>Partners e acima, estorno e a regra anterior têm respostas próprias. Para simular, use a Calculadora (aba Análise Paga).</p>
+
+- id: c-appartner
+  area: comissoes
+  parceira: ''
+  pergunta: 'AP para Partners e acima: qual é o percentual e o spread de liderança?'
+  outras_formas:
+  - ap partner
+  - comissao de ap do lider
+  - spread de ap
+  - spread equipe direta ap
+  - ap senior partner
+  palavras_chave: ap analise paga partner senior associate principal managing mob lider spread equipe direta cargo fixo 40 50 treinador
+  secao: comissoes#regras-ap
+  resposta: |
+    <p>Partners e cargos acima recebem um <strong>percentual fixo</strong> sobre cada AP própria, sem Fator FQ, conforme o próprio faturamento de AP no mês:</p>
+    <table class="t"><tr><th>Faturamento de AP no mês</th><th>Contato próprio</th><th>Outras fontes</th></tr>
+    <tr><td>R$ 0 a 9.999,99</td><td>40%</td><td>20%</td></tr>
+    <tr><td>R$ 10.000 ou mais</td><td>50%</td><td>25%</td></tr></table>
+    <p><strong>Spread sobre a equipe direta</strong> (contato próprio · outras fontes), pela produção de AP da equipe direta no mês: até R$ 29.999,99 → 7% · 5%; R$ 30 mil → 8% · 5%; R$ 50 mil → 9% · 5%; R$ 75 mil → 10,5% · 5,25%; R$ 150 mil → 11,5% · 5,75%; R$ 250 mil ou mais → 12,5% · 6,25%.</p>
+    <p>Somam-se o spread por cargo e, quando houver, o de treinador. O líder não recebe spread de equipe direta sobre os próprios contratos. As tabelas completas estão na seção Análise Paga da Central de Comissões.</p>
+
+- id: c-apestorno
+  area: comissoes
+  parceira: ''
+  pergunta: 'AP: o cliente pediu estorno. Como fica a minha comissão?'
+  outras_formas:
+  - estorno da ap
+  - cliente pediu reembolso da ap
+  - cliente desistiu da analise paga
+  - arrependimento ap
+  palavras_chave: ap analise paga estorno reembolso devolucao cliente desistiu arrependeu 14 30 60 dias proporcional
+  secao: comissoes#regras-ap
+  resposta: |
+    <p>O cliente recebe de volta conforme o tempo desde a consultoria, e o seu estorno é <strong>proporcional</strong> ao valor devolvido a ele:</p>
+    <table class="t"><tr><th>Pedido feito</th><th>Devolvido ao cliente</th></tr>
+    <tr><td>0 a 14 dias após a consultoria</td><td>100%</td></tr>
+    <tr><td>15 a 30 dias</td><td>50%</td></tr>
+    <tr><td>31 a 60 dias</td><td>25%</td></tr>
+    <tr><td>Depois de 60 dias</td><td>Não é possível pedir estorno</td></tr></table>
+
+- id: c-apanterior
+  area: comissoes
+  parceira: ''
+  pergunta: 'AP paga antes de 01/08/2026: qual regra vale?'
+  outras_formas:
+  - regra antiga da ap
+  - ap com pps historicos
+  - ap de julho
+  - ap 2025
+  palavras_chave: ap analise paga regra anterior antiga pps historicos 2000 3000 julho 2026 2025 faixa 40 45
+  secao: comissoes#regras-ap
+  resposta: |
+    <p>APs pagas de <strong>01/01/2025 a 31/07/2026</strong> seguem a regra anterior: o percentual dependia do faturamento de AP no mês e dos <strong>PPs históricos válidos</strong>.</p>
+    <table class="t"><tr><th>Faturamento de AP no mês (contato próprio)</th><th>Até 1.999,99 PPs</th><th>2.000 a 2.999,99</th><th>3.000 ou mais</th></tr>
+    <tr><td>R$ 0 a 4.999,99</td><td>20%</td><td>40%</td><td>45%</td></tr>
+    <tr><td>R$ 5.000 a 7.499,99</td><td>35%</td><td>40%</td><td>45%</td></tr>
+    <tr><td>R$ 7.500 a 14.999,99</td><td>40%</td><td>40%</td><td>45%</td></tr>
+    <tr><td>R$ 15.000 a 29.999,99</td><td>45%</td><td>45%</td><td>45%</td></tr>
+    <tr><td>R$ 30.000 a 49.999,99</td><td>50%</td><td>50%</td><td>50%</td></tr>
+    <tr><td>R$ 50.000 ou mais</td><td>52,5%</td><td>52,5%</td><td>52,5%</td></tr></table>
+    <p><strong>Outras fontes:</strong> 20% (até R$ 4.999,99), 25% (R$ 5.000 a 49.999,99) e 26,25% (R$ 50.000 ou mais), sem aumento por PPs. AP parcelada mantém a regra do mês em que o cliente pagou.</p>
+
 - id: c-fup
   area: comissoes
   parceira: ''
@@ -874,7 +973,7 @@ respostas:
 - id: c-bonusquais
   area: comissoes
   parceira: ''
-  pergunta: Bati a meta de PPs. O percentual maior vale para quais contratos? E vale para AP?
+  pergunta: Bati a meta de PPs. O percentual maior vale para quais contratos?
   outras_formas:
   - bati 2000 pps e nao veio 40
   - atingi 3 mil pps
