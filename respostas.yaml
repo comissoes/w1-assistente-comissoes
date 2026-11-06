@@ -1176,6 +1176,29 @@ respostas:
     <li><strong>Correção de percentual:</strong> o repasse inicial foi maior que o devido (ex.: fonte do cliente ou cargo diferente do considerado).</li></ul>
     <p>O motivo aparece no campo <em>Observação</em> do extrato. Se não ficar claro, abra ticket no report do cliente com o assunto <strong>Comissões</strong>.</p>
 
+- id: c-appercent
+  area: comissoes
+  parceira: ''
+  pergunta: A comissão da AP veio com percentual menor do que eu esperava. Por quê?
+  outras_formas:
+  - recebi apenas 20% da ap
+  - ap veio na faixa errada
+  - percentual da ap menor
+  - deveria ser 50% na ap
+  - ap nao considerou os pps historicos
+  - comissao da ap diminuiu
+  palavras_chave: ap analise paga percentual menor faixa errada deveria 40 45 50 52,5 55 lead fator fq faturamento pps historicos partner
+  secao: comissoes#regras-ap
+  resposta: |
+    <p>Nas APs pagas desde <strong>01/08/2026</strong>, o percentual depende só do <strong>mês</strong> do pagamento. Confira estes pontos, que explicam quase todas as diferenças:</p>
+    <ol><li><strong>Fonte do cliente:</strong> cliente <strong>lead</strong> (Marketing, W1 Capital, outra unidade) usa outra tabela, com teto de <strong>27,5%</strong>. Contato próprio vai até 55%.</li>
+    <li><strong>Faturamento de AP do mês:</strong> o % Base sai da soma das APs pagas no mês (20% até R$ 4.999,99; 35%; 40%; 45%; 50%; 52,5% a partir de R$ 50.000).</li>
+    <li><strong>Quantidade de APs de clientes únicos:</strong> o Fator FQ multiplica o % Base (×0,80 com 0 ou 1 AP, ×0,90 com 2, ×1,10 com 3, ×1,20 com 4 ou mais). O mesmo cliente só conta de novo 6 meses depois.</li>
+    <li><strong>PPs históricos não contam mais</strong> para a AP desde 01/08/2026.</li>
+    <li><strong>Partners e acima</strong> têm percentual fixo: 40% (até R$ 9.999,99 no mês) ou 50% (contato próprio); 20% ou 25% (lead).</li>
+    <li><strong>AP parcelada:</strong> o percentual é o do mês em que o cliente pagou, para todas as parcelas.</li></ol>
+    <p>Para refazer a conta, pergunte aqui “quanto recebo de AP?” ou use a Calculadora de PPs › aba Análise Paga. Se a conta não bater com o repasse, abra ticket com o assunto <strong>Comissões</strong>.</p>
+
 - id: e-oque
   area: estornos
   parceira: ''
