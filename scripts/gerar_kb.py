@@ -25,7 +25,7 @@ TAGS_OK = {"p", "ul", "ol", "li", "strong", "em", "b", "i", "br", "a", "table", 
 ATTRS_OK = {"class", "href", "target", "rel"}
 SECOES = {
     "comissoes": {"calendario", "w1nner", "prazos", "fup", "bonus", "realocacao", "calculadora-pps",
-                  "outros", "ticket", "academy"},
+                  "outros", "ticket", "academy", "regras-ap", "regras-fup"},
     "estornos": {"conceitos", "resumo", "calculadora", "icatu", "mag", "sulamerica", "prudential", "amil",
                  "saudemais", "vilavelha", "itau", "cnp", "embracon", "magalu", "bb", "duvidas"},
 }
