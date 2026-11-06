@@ -127,7 +127,7 @@ def main(origem, destino):
     links = "".join(f'<li><a href="{n}">{n}</a></li>' for n in centrais)
     (out / "index.html").write_text(
         f'<!doctype html><meta charset="utf-8">{NOINDEX}'
-        f"<title>Assistente de Comissões W1</title><p>Base do Assistente de Comissões W1 · {len(itens)} respostas · "
+        f"<title>FAQ Comissões W1</title><p>Base do FAQ Comissões W1 · {len(itens)} respostas · "
         f"publicada em {kb['versao']}</p>" + (f"<p>Centrais publicadas:</p><ul>{links}</ul>" if links else ""), encoding="utf-8")
     print(f"✅ {len(itens)} respostas validadas e publicadas (versão {kb['versao']}).")
     for n in centrais:
