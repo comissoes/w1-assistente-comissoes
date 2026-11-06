@@ -36,7 +36,7 @@ atualizado_em: novembro de 2026
 # Versão mais recente da extensão (.zip no W1nner). Quando publicar um .zip
 # novo, aumente este número: quem estiver com a versão antiga vê um aviso no balão.
 extensao:
-  versao: 1.2.0
+  versao: 1.3.0
   aviso: Há uma versão nova do FAQ Comissões (antigo Assistente de Comissões). Baixe em W1nner › Arquivos › Comissões e reinstale seguindo o guia.
 
 # Códigos de parceira usados no campo "parceira" -> nome exibido
@@ -539,17 +539,30 @@ respostas:
 - id: c-bonus
   area: comissoes
   parceira: ''
-  pergunta: Como funciona o Bônus de PPs históricos? Quando e onde cai?
+  pergunta: Como funciona o Bônus por PPs? Quando e onde cai?
   outras_formas:
+  - regras do bonus de pps
+  - regra do bonus
   - quando recebo o bonus
   - bonus de pps
   - onde vejo o bonus
-  palavras_chave: bonus pps historicos 10 dia util w1 group corretora mes anterior comissao principal
+  - faixa a faixa b
+  - meta de pps
+  palavras_chave: bonus pps faixa a b meta trimestre 1000 750 30 35 40 45 teto manutencao reversao direito adquirido 10 dia util w1 group corretora
   secao: comissoes#bonus
   resposta: |
-    <ul><li><strong>Onde:</strong> só na BU <strong>W1 Group Corretora</strong> (troque o seletor de BU).</li>
-    <li><strong>Quando:</strong> até o <strong>10º dia útil</strong> de cada mês.</li>
-    <li><strong>Sobre o quê:</strong> a comissão principal que você recebeu no mês anterior. Comissão de janeiro gera bônus em fevereiro. Sem comissão principal no mês anterior, não há bônus.</li></ul>
+    <p>O bônus por PPs complementa a comissão de <strong>produtos financeiros (parceiras)</strong>. Desde <strong>01/07/2026</strong> ele depende de <strong>metas por trimestre</strong> (jan–mar, abr–jun, jul–set, out–dez), com a sua <strong>produção própria</strong>.</p>
+    <table class="t"><tr><th>Trilha</th><th>Meta/tri</th><th>Tri 1</th><th>Tri 2</th><th>Tri 3</th><th>Tri 4 (teto)</th></tr>
+    <tr><td>Faixa A</td><td>1.000 PPs</td><td>30%</td><td>35%</td><td>40%</td><td>45%</td></tr>
+    <tr><td>Faixa B</td><td>750 PPs</td><td>25%</td><td>30%</td><td>35%</td><td>40%</td></tr></table>
+    <ul><li><strong>Vale para os contratos do trimestre seguinte</strong> ao que você bateu a meta, e fica ligado a eles para sempre. Vale sempre o maior percentual entre as duas faixas.</li>
+    <li><strong>Bônus = repasse bruto da parceira × (% conquistado − % base do seu cargo).</strong> Ex.: FA IV (base 20%) com 45% → 25% do repasse.</li>
+    <li><strong>Quando cai:</strong> no mês seguinte a cada repasse da comissão base, até o <strong>10º dia útil</strong>, só na BU <strong>W1 Group Corretora</strong> (campo Observação).</li>
+    <li><strong>Só cliente de fonte própria</strong> gera bônus. Não vale para AP, FUP, Business ou Patrimonial.</li>
+    <li><strong>Manutenção:</strong> depois de 4 trimestres seguidos, mantém o teto com 500 PPs/tri (FA) ou 400 próprios/3.000 da equipe (Partner+).</li>
+    <li><strong>Reversão:</strong> trimestre sem bater a meta reduz 5 p.p. nos contratos novos; 3 seguidos voltam à base.</li>
+    <li><strong>Direito adquirido:</strong> quem tinha 2.000 ou 3.000 PPs históricos até 31/07/2026 mantém 40% ou 45%, sem meta.</li></ul>
+    <p>Para simular, use a Calculadora de PPs › aba <strong>Bônus por PPs</strong>.</p>
 
 - id: c-bonusnao
   area: comissoes
@@ -797,6 +810,11 @@ respostas:
   - recebi email de inadimplencia mas o cliente esta em dia
   - o que falta para ficar rodando
   - status nunca ativo errado
+  - alterar de validado para rodando
+  - status recebido parceira
+  - parcela debitada no cartao e ficou inadimplente
+  - cliente voltou a pagar alterar status
+  - prev esta ativa
   - apolice ativa mas status errado
   palavras_chave: status errado incorreto alterar corrigir mudar rodando inadimplente nunca ativo cancelado concluido validado email inadimplencia apolice ativa
   secao: comissoes#prazos
@@ -1022,7 +1040,9 @@ respostas:
     <ul><li><strong>Acesso:</strong> depois da assinatura do distrato, o ex-consultor recebe um e-mail com o link de acesso ao W1nner. Problemas de acesso: ticket <strong>Erro no sistema</strong>.</li>
     <li><strong>Saque, RPA e nota fiscal:</strong> são tratados pelo time <strong>Fiscal</strong>.</li>
     <li><strong>Clientes:</strong> são realocados e o novo responsável passa a receber depois da Reunião de Serviço, pela regra de realocação.</li>
-    <li><strong>Exceções:</strong> Business e Patrimonial continuam com o consultor de origem. Na AP (desde 10/2025), quem saiu continua recebendo as parcelas se concluiu as entregas C1 a C4.</li></ul>
+    <li><strong>Enquanto o cliente não é realocado</strong>, o consultor que saiu continua recebendo a comissão dos clientes ativos.</li>
+    <li><strong>Exceções:</strong> Business e Patrimonial continuam com o consultor de origem. Na AP (desde 10/2025), quem saiu continua recebendo as parcelas se concluiu as entregas C1 a C4.</li>
+    <li>O ex-consultor <strong>não vê valores futuros</strong> a receber (AP parcelada, FUP mensal, Business parcelado e produtos com repasse mensal).</li></ul>
 
 - id: c-acesso
   area: comissoes
@@ -1053,6 +1073,108 @@ respostas:
   resposta: |
     <p>Não. Abra <strong>um ticket para cada contrato</strong>, selecionando o report do cliente. Assim cada caso é conferido na parceira certa e nada fica para trás.</p>
     <p>Se a dúvida é “o total do mês veio menor”, baixe o extrato em Excel (<strong>Centro Econômico › Comissões › Gerar extrato</strong>) e compare com o mês anterior. Muitas vezes a diferença é um cliente de FUP que não pagou no mês.</p>
+
+- id: c-acelerador
+  area: comissoes
+  parceira: ''
+  pergunta: 'Acelerador de Início: como funciona o bônus de R$ 2.000 para novos consultores?'
+  outras_formas:
+  - bonus de 2000 do onboarding
+  - 4 aps em 28 dias
+  - acelerador de inicio
+  - bonus para bp novo
+  - campanha de ativacao
+  palavras_chave: acelerador inicio onboarding novo bp 4 aps 28 dias 2000 1000 primeiro lider trimestre
+  secao: comissoes#regras-ap
+  resposta: |
+    <p>Consultor em <strong>onboarding</strong> que fecha <strong>4 ou mais APs nos primeiros 28 dias</strong> recebe <strong>R$ 2.000</strong> no BP, e o <strong>1º líder</strong> recebe <strong>R$ 1.000</strong>.</p>
+    <ul><li>Vale para APs pagas a partir de 01/08/2026.</li>
+    <li>É pago no <strong>fim do trimestre</strong> em que a janela de 28 dias termina.</li>
+    <li>Vale <strong>uma única vez</strong> por consultor, só para novos onboardings, e soma com os demais bônus e comissões.</li>
+    <li>O bônus de líder vai para o <strong>1º líder</strong> do consultor; valor repassado a outro líder é estornado como indevido.</li></ul>
+
+- id: c-pfregra
+  area: comissoes
+  parceira: ''
+  pergunta: Quais são as regras de comissão de produtos financeiros (parceiras)?
+  outras_formas:
+  - regras de produtos financeiros
+  - percentual de produtos financeiros
+  - quanto recebo de seguro de vida
+  - quanto recebo de consorcio
+  - comissao base por cargo
+  - spread de lideranca produtos
+  palavras_chave: produtos financeiros parceiras seguro vida consorcio previdencia saude base cargo 7,5 15 17,5 20 24 27,5 30 spread lider repasse bruto
+  secao: comissoes#produtos-financeiros
+  resposta: |
+    <p>A comissão de produtos de parceiras é um percentual do <strong>repasse bruto que a parceira paga à W1</strong>, pela sua posição comercial na data de criação do report:</p>
+    <table class="t"><tr><th>Posição</th><th>% base</th></tr>
+    <tr><td>FA I</td><td>7,5%</td></tr><tr><td>FA II</td><td>15%</td></tr><tr><td>FA III</td><td>17,5%</td></tr><tr><td>FA IV</td><td>20%</td></tr>
+    <tr><td>Partner</td><td>24%</td></tr><tr><td>Senior Partner</td><td>27,5%</td></tr><tr><td>Associate Partner</td><td>30%</td></tr>
+    <tr><td>Principal</td><td>30,25%</td></tr><tr><td>Managing Partner</td><td>30,5%</td></tr><tr><td>Member of Board</td><td>30,5% + 0,5% da receita líquida de produtos dividido entre os MOBs</td></tr></table>
+    <ul><li>A base não depende da fonte do cliente. Cliente de fonte própria pode gerar <strong>bônus por PPs</strong>, pago no mês seguinte.</li>
+    <li>Os líderes recebem <strong>spread</strong> sobre a produção da estrutura (ex.: sobre um FA IV, Partner 4%, Senior Partner 7,5%, Associate Partner 10%).</li>
+    <li>Repasse parcelado pela parceira = comissão parcelada do mesmo jeito.</li></ul>
+    <p>Quanto a parceira paga em cada produto você vê na <strong>Calculadora de Comissões e PPs</strong> (W1nner › Arquivos › Comissões).</p>
+
+- id: c-dashboard
+  area: comissoes
+  parceira: ''
+  pergunta: O que é o Dashboard de Comissões e como peço acesso?
+  outras_formas:
+  - dashboard de comissoes
+  - power bi
+  - super ranking
+  - acompanhar pontuacao do trimestre
+  palavras_chave: dashboard power bi super ranking pontuacao trimestre 120 mes formulario acesso desconto account
+  secao: comissoes#outros
+  resposta: |
+    <p>O <strong>Dashboard de Comissões</strong> facilita a visualização e a conferência das comissões recebidas e mostra a pontuação no <strong>Super Ranking</strong> ao longo do trimestre, com o bônus esperado.</p>
+    <p>O acesso é pedido pelo formulário <a href="https://l9bx9shw.forms.app/demonstracao-de-interesse">demonstração de interesse</a>. O custo é de <strong>R$ 120,00 por mês</strong>, com desconto direto no account.</p>
+    <p>Para <strong>cancelar</strong> o acesso, inclusive ao sair da W1, abra ticket com o assunto <strong>Comissões</strong>. Se houve desconto depois da sua saída, informe no ticket para análise.</p>
+
+- id: c-bonussep
+  area: comissoes
+  parceira: ''
+  pergunta: Tenho 2.000/3.000 PPs (ou bati a meta), mas a comissão veio só com o percentual do meu cargo.
+  outras_formas:
+  - comissao veio so como fa iv mas tenho 2000 pps
+  - nao considerou os 2000 pps
+  - veio abaixo do esperado tenho mais de 2000 pps
+  - faltou a diferenca dos 40
+  - bonus de 3 mil pps nao veio junto
+  - comissao veio apenas com a base
+  palavras_chave: bonus pps 2000 3000 40 45 diferenca base cargo veio so apenas abaixo esperado separado mes seguinte observacao w1group
+  secao: comissoes#bonus
+  resposta: |
+    <p>Isso é esperado: a comissão de produtos de parceiras chega em <strong>duas partes</strong>.</p>
+    <ol><li><strong>Comissão base</strong> (o percentual do seu cargo) cai no repasse normal da parceira, no lançamento do cliente (campo <em>Contato</em>).</li>
+    <li><strong>Bônus por PPs</strong> (a diferença até 40% ou 45%) cai <strong>no mês seguinte</strong>, até o <strong>10º dia útil</strong>, na BU <strong>W1 Group Corretora</strong>, no campo <em>Observação</em>.</li></ol>
+    <p>Se mesmo assim a diferença não veio, confira:</p>
+    <ul><li><strong>O cliente é de fonte própria?</strong> Lead (Marketing, W1 Capital, outra unidade) não gera bônus.</li>
+    <li><strong>Houve comissão base no mês anterior?</strong> Sem base, não há bônus.</li>
+    <li><strong>Seu percentual valia na data do contrato?</strong> Quem tinha 2.000 ou 3.000 PPs históricos até 31/07/2026 tem 40% ou 45% (direito adquirido). Na regra trimestral, o percentual conquistado vale só para contratos fechados no trimestre seguinte.</li>
+    <li><strong>É produto de parceira?</strong> Bônus por PPs não vale para AP, FUP, Business ou Patrimonial.</li></ul>
+    <p>Tudo certo e sem bônus depois do 10º dia útil: <span class="v ticket">ticket · Comissões</span></p>
+
+- id: c-apdesconto
+  area: comissoes
+  parceira: ''
+  pergunta: Apareceu um desconto (valor negativo) numa AP. Por quê?
+  outras_formas:
+  - desconto na ap
+  - estorno na ap com contrato ativo
+  - ap com valor negativo
+  - correcao na ap
+  palavras_chave: ap analise paga desconto negativo estorno correcao realocacao duplicidade percentual
+  secao: comissoes#regras-ap
+  resposta: |
+    <p>Um valor negativo numa AP costuma ter um destes motivos:</p>
+    <ul><li><strong>O cliente pediu estorno:</strong> o seu estorno é proporcional ao que ele recebeu de volta (100% até 14 dias da consultoria, 50% de 15 a 30, 25% de 31 a 60).</li>
+    <li><strong>Correção de realocação:</strong> se o consultor anterior já tinha concluído a entrega (C1 a C4), as parcelas continuam com ele, e um repasse feito ao novo consultor é corrigido.</li>
+    <li><strong>Duplicidade:</strong> a mesma parcela foi creditada duas vezes, e só o valor a mais é estornado.</li>
+    <li><strong>Correção de percentual:</strong> o repasse inicial foi maior que o devido (ex.: fonte do cliente ou cargo diferente do considerado).</li></ul>
+    <p>O motivo aparece no campo <em>Observação</em> do extrato. Se não ficar claro, abra ticket no report do cliente com o assunto <strong>Comissões</strong>.</p>
 
 - id: e-oque
   area: estornos

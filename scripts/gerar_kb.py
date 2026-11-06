@@ -25,7 +25,7 @@ TAGS_OK = {"p", "ul", "ol", "li", "strong", "em", "b", "i", "br", "a", "table", 
 ATTRS_OK = {"class", "href", "target", "rel"}
 SECOES = {
     "comissoes": {"calendario", "w1nner", "prazos", "fup", "bonus", "realocacao", "calculadora-pps",
-                  "outros", "ticket", "academy", "regras-ap", "regras-fup"},
+                  "outros", "ticket", "academy", "regras-ap", "regras-fup", "produtos-financeiros"},
     "estornos": {"conceitos", "resumo", "calculadora", "icatu", "mag", "sulamerica", "prudential", "amil",
                  "saudemais", "vilavelha", "itau", "cnp", "embracon", "magalu", "bb", "duvidas"},
 }
@@ -111,6 +111,8 @@ def main(origem, destino):
     if erros:
         falhar(erros)
 
+    regras = carregar_regras(Path(origem).parent / "regras.yaml")
+
     ext = doc.get("extensao") or {}
     kb = {
         "versao": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -118,10 +120,12 @@ def main(origem, destino):
         "extensao": {"versao": str(ext.get("versao") or ""), "aviso": str(ext.get("aviso") or "")},
         "partners": {str(k): str(v) for k, v in parceiras.items()},
         "items": itens,
+        "regras": regras,
     }
     out = Path(destino)
     out.mkdir(parents=True, exist_ok=True)
     centrais = publicar_centrais(Path(origem).parent / "centrais", out)
+    pdfs = publicar_docs(Path(origem).parent / "centrais" / "docs", out / "docs")
     (out / "kb.json").write_text(json.dumps(kb, ensure_ascii=False), encoding="utf-8")
     (out / "robots.txt").write_text("User-agent: *\nDisallow: /\n", encoding="utf-8")
     links = "".join(f'<li><a href="{n}">{n}</a></li>' for n in centrais)
@@ -132,6 +136,46 @@ def main(origem, destino):
     print(f"✅ {len(itens)} respostas validadas e publicadas (versão {kb['versao']}).")
     for n in centrais:
         print(f"✅ Central publicada: {n}")
+    for n in pdfs:
+        print(f"✅ Documento publicado: docs/{n}")
+
+
+def carregar_regras(arq):
+    """Lê o regras.yaml (tabelas oficiais usadas nos cálculos do balão e da Central)."""
+    if not arq.exists():
+        return None
+    try:
+        r = yaml.safe_load(arq.read_text(encoding="utf-8"))
+    except yaml.YAMLError as e:
+        falhar([f"o regras.yaml não está no formato certo. Detalhe: {e}"])
+    erros = []
+    for chave in ("docs", "cargos", "bonus", "ap", "fup"):
+        if not r.get(chave):
+            erros.append(f"regras.yaml: falta a seção '{chave}'")
+    for k, d in (r.get("docs") or {}).items():
+        if not str(d.get("url", "")).startswith("https://"):
+            erros.append(f"regras.yaml: o link do documento '{k}' precisa começar com https://")
+    ids = {c.get("id") for c in r.get("cargos") or []}
+    for c in ("fa1", "fa2", "fa3", "fa4", "p", "sp", "ap", "pr", "mp", "mob"):
+        if c not in ids:
+            erros.append(f"regras.yaml: falta o cargo '{c}' na lista cargos")
+    if erros:
+        falhar(erros)
+    return r
+
+
+def publicar_docs(pasta, out):
+    """Publica os PDFs oficiais (pasta centrais/docs) em <site>/docs/."""
+    nomes = []
+    if not pasta.is_dir():
+        return nomes
+    out.mkdir(parents=True, exist_ok=True)
+    for arq in sorted(pasta.glob("*.pdf")):
+        if any(p in arq.name.lower() for p in PROIBIDOS_PUBLICO):
+            continue
+        (out / arq.name).write_bytes(arq.read_bytes())
+        nomes.append(arq.name)
+    return nomes
 
 
 def publicar_centrais(pasta, out):

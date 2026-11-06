@@ -1,0 +1,103 @@
+# =====================================================================
+#  REGRAS OFICIAIS USADAS PELOS ASSISTENTES DO FAQ COMISSÕES
+#  (cálculo de bônus de PPs, % de AP, estorno de AP, FUP, produtos
+#   financeiros, prazos). Copiado dos PDFs oficiais de Regras de
+#  comissionamento. Se uma regra mudar, altere AQUI e no PDF da pasta
+#  centrais/docs — o balão e a Central passam a calcular com o valor novo.
+#  Percentuais em número (35 = 35%). Valores em reais sem R$.
+# =====================================================================
+
+docs:
+  ap:
+    titulo: Regras de comissionamento — Análise Paga (v01/07/2026)
+    url: https://comissoes.github.io/w1-assistente-comissoes/docs/regras-analise-paga.pdf
+  fup:
+    titulo: Regras de comissionamento — Acompanhamento FUP (12/08/2024)
+    url: https://comissoes.github.io/w1-assistente-comissoes/docs/regras-acompanhamento-fup.pdf
+  bonus:
+    titulo: Regras de comissionamento — Bônus por PPs (desde 01/07/2026)
+    url: https://comissoes.github.io/w1-assistente-comissoes/docs/regras-bonus-pps.pdf
+  pf:
+    titulo: Regras de comissionamento — Produtos Financeiros
+    url: https://comissoes.github.io/w1-assistente-comissoes/docs/regras-produtos-financeiros.pdf
+  central:
+    titulo: Central de Comissões
+    url: https://comissoes.github.io/w1-assistente-comissoes/central-comissoes.html
+  estornos:
+    titulo: Central de Estornos
+    url: https://comissoes.github.io/w1-assistente-comissoes/central-estornos.html
+
+# Qual documento oficial acompanha cada seção (aparece no fim das respostas)
+secao_docs:
+  comissoes#regras-ap: [ap]
+  comissoes#regras-fup: [fup]
+  comissoes#fup: [fup]
+  comissoes#bonus: [bonus]
+  comissoes#calculadora-pps: [pf, bonus]
+  comissoes#prazos: [pf]
+  comissoes#realocacao: [ap]
+
+# Posições comerciais: código, nome, grupo (fa | partner) e % base em produtos financeiros
+cargos:
+  - {id: fa1, nome: Financial Advisor I (FA I), grupo: fa, base: 7.5}
+  - {id: fa2, nome: Financial Advisor II (FA II), grupo: fa, base: 15}
+  - {id: fa3, nome: Financial Advisor III (FA III), grupo: fa, base: 17.5}
+  - {id: fa4, nome: Financial Advisor IV (FA IV), grupo: fa, base: 20}
+  - {id: p, nome: Partner (P), grupo: partner, base: 24}
+  - {id: sp, nome: Senior Partner (SP), grupo: partner, base: 27.5}
+  - {id: ap, nome: Associate Partner (AP), grupo: partner, base: 30}
+  - {id: pr, nome: Principal (PR), grupo: partner, base: 30.25}
+  - {id: mp, nome: Managing Partner (MP), grupo: partner, base: 30.5}
+  - {id: mob, nome: Member of Board (MOB), grupo: partner, base: 30.5}
+
+# Spread de liderança em produtos financeiros: vendedor -> líder -> %
+spread_pf:
+  fa1: {p: 16.5, sp: 20, ap: 22.5, pr: 22.75, mp: 23}
+  fa2: {p: 9, sp: 12.5, ap: 15, pr: 15.25, mp: 15.5}
+  fa3: {p: 6.5, sp: 10, ap: 12.5, pr: 12.75, mp: 13}
+  fa4: {p: 4, sp: 7.5, ap: 10, pr: 10.25, mp: 10.5}
+  p: {p: 0, sp: 3.5, ap: 6, pr: 6.25, mp: 6.5}
+  sp: {p: 0, sp: 0, ap: 2.5, pr: 2.75, mp: 3}
+  ap: {p: 0, sp: 0, ap: 0, pr: 0.25, mp: 0.5}
+  pr: {p: 0, sp: 0, ap: 0, pr: 0, mp: 0.25}
+  mp: {p: 0, sp: 0, ap: 0, pr: 0, mp: 0.5}
+
+bonus:
+  inicio: '2026-07-01'
+  faixa_a: {meta: 1000, pct: [30, 35, 40, 45]}
+  faixa_b: {meta: 750, pct: [25, 30, 35, 40]}
+  manutencao:
+    fa: {a: 500, b: 375}
+    partner: {a: 400, b: 300, equipe_a: 3000, equipe_b: 2250}
+  direito_adquirido: {data: '2026-07-31', pps2000: 40, pps3000: 45}
+
+ap:
+  inicio_novo: '2026-08-01'
+  novo:
+    base_proprio: [[0, 20], [5000, 35], [7500, 40], [15000, 45], [30000, 50], [50000, 52.5]]
+    base_outras: [[0, 20], [10000, 25], [50000, 26.25]]
+    fq: [[0, 0.8], [2, 0.9], [3, 1.1], [4, 1.2]]
+    piso: 20
+    teto_proprio: 55
+    teto_outras: 27.5
+    fa4_piso: {a_partir: 10000, proprio: 40, outras: 25}
+    partner_proprio: [[0, 40], [10000, 50]]
+    partner_outras: [[0, 20], [10000, 25]]
+    equipe_proprio: [[0, 7], [30000, 8], [50000, 9], [75000, 10.5], [150000, 11.5], [250000, 12.5]]
+    equipe_outras: [[0, 5], [75000, 5.25], [150000, 5.75], [250000, 6.25]]
+  antigo:
+    inicio: '2025-01-01'
+    proprio: [[0, 20, 40, 45], [5000, 35, 40, 45], [7500, 40, 40, 45], [15000, 45, 45, 45], [30000, 50, 50, 50], [50000, 52.5, 52.5, 52.5]]
+    outras: [[0, 20], [5000, 25], [50000, 26.25]]
+  estorno: [[14, 100], [30, 50], [60, 25]]
+  acelerador: {aps: 4, dias: 28, consultor: 2000, lider: 1000}
+  consultor_executivo: [55, 65]
+
+fup:
+  novo_desde: '2024-09-01'
+  planos_novo: {standard: 149.90, premium: 199.90, infinity: 349.90, private: 649.90}
+  planos_antigo: {standard: 99.90, premium: 149.90, infinity: 299.90, private: 599.90}
+  proprio: {fa: [50, 50, 50, 50], p: [58, 58, 58, 58], sp: [62, 62, 62, 62], ap: [62.3, 62.3, 62.3, 62.3], pr: [62.55, 62.55, 62.55, 62.55], mp: [62.8, 62.8, 62.8, 62.8], mob: [62.8, 62.8, 62.8, 62.8]}
+  outras: {fa: [25, 35, 35, 35], p: [29, 39, 39, 39], sp: [31, 41, 41, 41], ap: [31.15, 41.15, 41.15, 41.15], pr: [31.275, 41.275, 41.275, 41.275], mp: [31.4, 41.4, 41.4, 41.4], mob: [31.4, 41.4, 41.4, 41.4]}
+  proprio_antigo: {fa: [40, 50, 50, 50], p: [48, 58, 58, 58], sp: [52, 62, 62, 62], ap: [52.3, 62.3, 62.3, 62.3]}
+  outras_antigo: {fa: [25, 35, 35, 35], p: [29, 39, 39, 39], sp: [31, 41, 41, 41], ap: [31.15, 41.15, 41.15, 41.15]}
