@@ -1,4 +1,4 @@
-# Respostas do Assistente de Comissões W1
+# Respostas do FAQ Comissões W1 (antigo Assistente de Comissões)
 
 Este repositório publica as respostas do balão de dúvidas (extensão do navegador) usado pelos consultores.
 **O único arquivo que você precisa editar é o `respostas.yaml`.**

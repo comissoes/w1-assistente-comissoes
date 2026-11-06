@@ -1,5 +1,5 @@
 # =====================================================================
-#  RESPOSTAS DO ASSISTENTE DE COMISSÕES W1 (balão do navegador)
+#  RESPOSTAS DO FAQ COMISSÕES W1 (balão do navegador)
 # =====================================================================
 #  Este é o ÚNICO arquivo que você precisa editar.
 #  Salvou aqui no GitHub (botão "Commit changes") -> em ~1 minuto a
@@ -36,8 +36,8 @@ atualizado_em: novembro de 2026
 # Versão mais recente da extensão (.zip no W1nner). Quando publicar um .zip
 # novo, aumente este número: quem estiver com a versão antiga vê um aviso no balão.
 extensao:
-  versao: 1.1.1
-  aviso: Há uma versão nova do Assistente de Comissões. Baixe em W1nner › Arquivos › Comissões e reinstale seguindo o guia.
+  versao: 1.2.0
+  aviso: Há uma versão nova do FAQ Comissões (antigo Assistente de Comissões). Baixe em W1nner › Arquivos › Comissões e reinstale seguindo o guia.
 
 # Códigos de parceira usados no campo "parceira" -> nome exibido
 parceiras:
@@ -385,6 +385,8 @@ respostas:
   - como funciona a comissao da ap
   - como e calculada a comissao de ap
   - percentual da ap
+  - percentual da analise paga
+  - qual o percentual da analise paga
   - quanto recebo de ap
   - fator fq
   - faixa da ap
@@ -415,7 +417,7 @@ respostas:
 - id: c-appartner
   area: comissoes
   parceira: ''
-  pergunta: 'AP para Partners e acima: qual é o percentual e o spread de liderança?'
+  pergunta: 'AP para Partners e acima: quanto recebo e qual é o spread de liderança?'
   outras_formas:
   - ap partner
   - comissao de ap do lider
@@ -454,10 +456,10 @@ respostas:
 - id: c-apanterior
   area: comissoes
   parceira: ''
-  pergunta: 'AP paga antes de 01/08/2026: qual regra vale?'
+  pergunta: 'AP paga antes de 01/08/2026: como era a regra anterior?'
   outras_formas:
   - regra antiga da ap
-  - ap com pps historicos
+  - ap paga com regra de pps historicos
   - ap de julho
   - ap 2025
   palavras_chave: ap analise paga regra anterior antiga pps historicos 2000 3000 julho 2026 2025 faixa 40 45
