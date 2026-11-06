@@ -31,7 +31,7 @@
 # =====================================================================
 
 # Texto exibido no rodapé do balão ("atualizada em ...")
-atualizado_em: outubro de 2026
+atualizado_em: novembro de 2026
 
 # Versão mais recente da extensão (.zip no W1nner). Quando publicar um .zip
 # novo, aumente este número: quem estiver com a versão antiga vê um aviso no balão.
@@ -243,6 +243,8 @@ respostas:
   - repasse do mes nao veio
   - parceira atrasou
   - ainda nao recebi a comissao do mes
+  - comissao da cnp atrasou
+  - ainda nao caiu este mes
   palavras_chave: parceira repasse mes nao veio nao caiu atrasou aguardar fim do mes
   secao: comissoes#prazos
   resposta: |
@@ -257,6 +259,10 @@ respostas:
   - report nao esta rodando
   - primeira comissao nao veio
   - status do report
+  - quando vai para rodando
+  - cliente ja pagou e nao esta rodando
+  - mudar para rodando
+  - status validado ainda
   palavras_chave: definicao status rodando report 60 dias primeiro repasse parceira
   secao: comissoes#prazos
   resposta: |
@@ -272,6 +278,8 @@ respostas:
   outras_formas:
   - mais de 60 dias sem comissao
   - nunca recebi a comissao desse cliente
+  - cliente pagou faz tempo e nao recebi
+  - ate agora nao recebi nada desse contrato
   palavras_chave: 60 dias passou sem repasse parceira nao veio ticket comissoes
   secao: comissoes#ticket
   resposta: |
@@ -300,6 +308,8 @@ respostas:
   outras_formas:
   - segunda parcela do consorcio
   - consorcio parou de pagar comissao
+  - so recebi a primeira parcela do consorcio
+  - segunda parcela do consorcio nao veio
   palavras_chave: consorcio segunda 2 parcela 90 dias encerramento grupo validacao credito
   secao: comissoes#prazos
   resposta: |
@@ -387,6 +397,8 @@ respostas:
   - fup pago sem comissao
   - assinatura paga sem repasse
   - como conferir fup
+  - comissao do acompanhamento nao entrou
+  - fup nao caiu
   palavras_chave: fup pago assinaturas detalhes situacao pago vencida conferir
   secao: comissoes#fup
   resposta: |
@@ -446,6 +458,9 @@ respostas:
   - bonus nao caiu
   - bonus nao veio
   - conferir bonus
+  - nao caiu o bonus de 3 mil pps
+  - faltou a diferenca dos 40
+  - bonus de 2k nao veio
   palavras_chave: bonus pps nao encontro nao caiu conferir extrato contato observacao
   secao: comissoes#bonus
   resposta: |
@@ -462,6 +477,9 @@ respostas:
   - recebi um cliente de outro consultor
   - herdei um cliente
   - realocacao de carteira
+  - assumi o cliente e nao recebi
+  - cliente transferido para mim
+  - comissao foi para o consultor antigo
   palavras_chave: realocacao realocado reuniao de servico primeiro evento pagamento consultor anterior novo
   secao: comissoes#realocacao
   resposta: |
@@ -547,6 +565,7 @@ respostas:
   outras_formas:
   - lead capital retroativo
   - reclassificado lead capital
+  - cliente virou lead capital
   palavras_chave: leadcapital lead capital retroativo reclassificado prospeccao propria w1 capital
   secao: comissoes#outros
   resposta: |
@@ -573,6 +592,10 @@ respostas:
   - imposto na nota
   - retencao de ir
   - iss da nota
+  - valor depositado diferente
+  - alterar conta bancaria
+  - pix para recebimento
+  - pagamento solicitado nao caiu
   palavras_chave: nota fiscal nf imposto impostos retencao tributo fiscal alcada
   secao: comissoes#outros
   resposta: |
@@ -660,6 +683,275 @@ respostas:
     <p>Sim. No <strong>W1 Academy</strong>, curso <strong>Central Econômica e Comissionamento</strong>:</p>
     <ol><li>Navegando na sua carteira de comissões</li><li>Como consultar o pagamento de FUP</li><li>Entendendo a comissão por realocação</li><li>Prazos de pagamento e status das comissões</li></ol>
     <p>Também há vídeo e FAQ no W1nner, em <strong>Arquivos › Comissões › Regras</strong>.</p>
+
+- id: c-status
+  area: comissoes
+  parceira: ''
+  pergunta: O status do contrato está errado (inadimplente, nunca ativo ou cancelado), mas o cliente está pagando.
+  outras_formas:
+  - alterar status para rodando
+  - corrigir status do contrato
+  - mudar status do report
+  - contrato aparece como inadimplente mas o cliente pagou
+  - recebi email de inadimplencia mas o cliente esta em dia
+  - o que falta para ficar rodando
+  - status nunca ativo errado
+  - apolice ativa mas status errado
+  palavras_chave: status errado incorreto alterar corrigir mudar rodando inadimplente nunca ativo cancelado concluido validado email inadimplencia apolice ativa
+  secao: comissoes#prazos
+  resposta: |
+    <p>Quem corrige o status de inadimplência, cancelamento ou <em>Nunca ativo</em> é o time de Comissões, depois de confirmar a situação na parceira.</p>
+    <ul><li><strong>Nunca ativo</strong> quer dizer que a W1 ainda não recebeu nenhuma comissão da parceira para aquele contrato. Se ainda não passaram 60 dias do 1º pagamento, aguarde: o status muda sozinho para Rodando quando a primeira comissão chega.</li>
+    <li><strong>Inadimplente ou cancelado</strong> com o cliente em dia: abra ticket no próprio report, com o assunto <strong>Comissões</strong>.</li></ul>
+    <p>No ticket, informe o <strong>nome completo do cliente como está na parceira</strong> e, se tiver, o comprovante de pagamento. Verificamos na parceira e ajustamos; quando não dá para consultar, perguntamos à parceira e respondemos no ticket.</p>
+    <p>Se o contrato ainda tem pendência de assinatura ou documento na parceira, quem resolve é <strong>Operações</strong>.</p>
+
+- id: c-pendencia
+  area: comissoes
+  parceira: ''
+  pergunta: O contrato tem pendência na parceira (assinatura, documento, nome divergente). Recebo a comissão?
+  outras_formas:
+  - comissao retida
+  - pendencia de assinatura
+  - contrato nao assinado
+  - nome do cliente diferente na seguradora
+  - cliente nao localizado na parceira
+  palavras_chave: pendencia retida assinatura gov.br documento nome divergente nao localizado operacoes ticket report
+  secao: comissoes#prazos
+  resposta: |
+    <p>Enquanto houver pendência na parceira, as comissões ficam <strong>retidas</strong>. Resolvida a pendência, a parceira volta a pagar e as comissões acumuladas são repassadas.</p>
+    <ul><li>Acompanhe o ticket de <strong>Operações</strong> aberto no mesmo report: é lá que a pendência é tratada.</li>
+    <li>Confira se o nome do cliente no W1nner está <strong>completo e igual ao da parceira</strong>. Com nome incompleto ou divergente, o contrato não é localizado e o repasse não acontece.</li>
+    <li>Pagamento feito em nome de outra pessoa também pode impedir a identificação: guarde o comprovante do 1º pagamento.</li></ul>
+
+- id: c-variacao
+  area: comissoes
+  parceira: ''
+  pergunta: No mês passado a comissão da parceira veio em um dia e neste mês não veio. Ou vieram duas parcelas juntas.
+  outras_formas:
+  - mes passado caiu dia 15 e este mes nao
+  - vieram duas comissoes no mesmo mes
+  - comissao dobrada
+  - pulou um mes
+  - recebo mes sim mes nao
+  - cliente pagou atrasado
+  palavras_chave: data fixa dia mes passado pulou dobrada duas parcelas juntas atraso atrasado adiantado regularizou ultimo dia porto
+  secao: comissoes#prazos
+  resposta: |
+    <p>A comissão acompanha o <strong>pagamento do cliente à parceira</strong> e o dia em que a parceira paga a W1, que muda de um mês para outro.</p>
+    <ul><li><strong>Sem dia fixo:</strong> a parceira tem até o último dia do mês para pagar a W1. Ter caído no dia 10 do mês passado não quer dizer que cairá no dia 10 deste mês.</li>
+    <li><strong>Cliente pagou atrasado:</strong> depois do pagamento, a parceira pode levar até 60 dias para processar. Duas parcelas podem vir juntas no mesmo mês.</li>
+    <li><strong>Cliente adiantou parcelas:</strong> as comissões vêm adiantadas, e no mês seguinte não há repasse daquele contrato.</li>
+    <li><strong>Porto Consórcio:</strong> repassa sempre no último dia do mês. O valor fica disponível para saque na janela do dia 1 ao 20 do mês seguinte.</li></ul>
+
+- id: c-prev90
+  area: comissoes
+  parceira: ''
+  pergunta: 'Previdência SulAmérica ou Zurich e aportes na W1 Capital: qual é o prazo?'
+  outras_formas:
+  - previdencia nao caiu
+  - zurich comissao nao veio
+  - sul america previdencia prazo
+  - aporte w1 capital comissao
+  - pps de aporte nao entraram
+  palavras_chave: previdencia sulamerica sul america zurich 90 dias primeiro repasse aporte capital pps
+  secao: comissoes#prazos
+  resposta: |
+    <p>Para essas parceiras o prazo é maior que o padrão de 60 dias:</p>
+    <ul><li><strong>Previdência SulAmérica e Zurich:</strong> o 1º repasse pode levar até <strong>90 dias</strong> após o 1º pagamento do cliente.</li>
+    <li><strong>Aportes na W1 Capital:</strong> o repasse pode levar até <strong>90 dias</strong> após o aporte.</li></ul>
+    <p><span class="v wait">Aguarde</span> dentro do prazo. Passou de 90 dias sem repasse: <span class="v ticket">ticket · Comissões</span></p>
+
+- id: c-campanha
+  area: comissoes
+  parceira: ''
+  pergunta: 'Consórcio: a 12ª parcela não caiu, ou o contrato pagou menos parcelas do que eu esperava.'
+  outras_formas:
+  - faltou a parcela 12
+  - parcela 11 nao caiu
+  - campanha porto
+  - consorcio de campanha
+  - comissao em 4 parcelas
+  - as comissoes acabaram
+  - repasses encerrados
+  palavras_chave: campanha parcela 12 11 10 ultima finalizado encerrado porto embracon modalidade 4 6 12 parcelas quantas parcelas
+  secao: comissoes#prazos
+  resposta: |
+    <p>Nem todo consórcio paga a comissão em 12 parcelas seguidas. O número e a ordem das parcelas dependem do <strong>mês em que o contrato foi fechado</strong> (campanhas da administradora) e da <strong>modalidade</strong> escolhida na contratação.</p>
+    <ul><li><strong>Campanhas:</strong> mudam o parcelamento. Exemplo: contratos da Porto da campanha de <strong>08/2025</strong> têm <strong>11 repasses</strong> no total, e não há 12º.</li>
+    <li><strong>Modalidade:</strong> na Porto, por exemplo, o contrato pode ter comissão em 4, 6 ou 12 parcelas, definido no fechamento.</li></ul>
+    <p>Confira o parcelamento do seu contrato na <strong>Calculadora de Comissões e PPs</strong> (versão mais recente, em W1nner › Arquivos › Comissões). Se a calculadora mostrar uma parcela que não veio, abra ticket com o assunto <strong>Comissões</strong>.</p>
+
+- id: c-cargo
+  area: comissoes
+  parceira: ''
+  pergunta: 'Mudei de cargo (ex.: FA I para FA II). Por que a comissão veio no cargo anterior?'
+  outras_formas:
+  - fui promovido e a comissao veio errada
+  - comissao como fa i mas sou fa ii
+  - subi de cargo
+  - percentual do cargo errado
+  - recebi como partner mas sou senior
+  palavras_chave: cargo posicao promocao mudanca fa i ii iii iv partner senior data hora report criado percentual anterior
+  secao: comissoes#outros
+  resposta: |
+    <p>A comissão segue o cargo que você tinha <strong>na data e hora em que o report foi criado</strong> no W1nner, e não o cargo na data do pagamento.</p>
+    <ul><li>Report criado antes da mudança de cargo: a comissão fica no cargo anterior, em todas as parcelas.</li>
+    <li>Report criado depois da mudança: vale o cargo novo.</li></ul>
+    <p>Vale até para o contrato que fez você subir de cargo: se o report foi criado antes do horário da mudança, ele fica no cargo anterior.</p>
+
+- id: c-calcdif
+  area: comissoes
+  parceira: ''
+  pergunta: O valor que recebi é diferente do que a Calculadora de PPs mostra.
+  outras_formas:
+  - comissao diferente da calculadora
+  - valor menor que o simulado
+  - minha comissao veio errada
+  - o valor nao bate com a calculadora
+  - deveria ser o dobro
+  palavras_chave: calculadora diferente divergente menor errado simulado nao bate versao linha anual mensal plano reduzido lead campanha cargo
+  secao: comissoes#calculadora-pps
+  resposta: |
+    <p>Antes de abrir ticket, confira estes pontos, que explicam a maioria das diferenças:</p>
+    <ol><li><strong>Versão:</strong> use a Calculadora mais recente (W1nner › Arquivos › Comissões). Versões antigas têm tabelas desatualizadas.</li>
+    <li><strong>Linha certa:</strong> parceira, produto, prazo e plano iguais aos do contrato (ex.: Plano Reduzido no consórcio XP/CNP, ou contrato feito direto na XP).</li>
+    <li><strong>Mensal ou anual:</strong> a calculadora mostra o total e a parcela. Compare a parcela com o repasse do mês.</li>
+    <li><strong>Mês de fechamento:</strong> contratos de campanha têm outro parcelamento.</li>
+    <li><strong>Cargo:</strong> vale o cargo na data de criação do report.</li>
+    <li><strong>Fonte do cliente:</strong> cliente lead (Marketing ou Capital) tem percentual menor e não gera bônus de PPs.</li>
+    <li><strong>Bônus de PPs:</strong> cai no mês seguinte, separado, no campo Observação.</li>
+    <li><strong>Saúde com Especialista:</strong> há desconto do Especialista desde 01/01/2026.</li></ol>
+    <p>Diferenças de centavos são arredondamento. Conferiu tudo e a diferença continua: ticket com o assunto <strong>Comissões</strong> e o print da sua simulação.</p>
+
+- id: c-cnpxp
+  area: comissoes
+  parceira: cnp
+  pergunta: 'Consórcio XP (CNP): o cliente tem conta na XP e a comissão veio menor.'
+  outras_formas:
+  - plano reduzido cnp
+  - cliente xp comissao menor
+  - condicao exclusiva xp
+  - consorcio cnp veio metade
+  palavras_chave: cnp consorcio xp conta ativa plano reduzido condicao exclusiva menor metade calculadora linha
+  secao: comissoes#calculadora-pps
+  resposta: |
+    <p>Quando o cliente tem <strong>conta ativa na XP</strong>, o consórcio pode ser fechado na condição exclusiva para clientes XP (<strong>Plano Reduzido</strong>), que paga comissão menor que o plano padrão.</p>
+    <p>Isso não tem relação com o cliente ser lead: o que vale é ele ter relação com a XP.</p>
+    <p>Na Calculadora de Comissões e PPs, simule na linha <strong>Plano Reduzido</strong> para ver o valor correto.</p>
+
+- id: c-portal
+  area: comissoes
+  parceira: ''
+  pergunta: O portal da parceira mostra uma comissão maior do que eu recebi.
+  outras_formas:
+  - na seguradora aparece valor maior
+  - portal da parceira mostra outro valor
+  - a parceira paga mais do que eu recebo
+  palavras_chave: portal parceira seguradora valor maior total comissao w1 diferente recebi menos
+  secao: comissoes#outros
+  resposta: |
+    <p>O portal da parceira mostra a <strong>comissão total paga à W1</strong>, e não a sua parte. Você recebe o percentual da sua posição comercial sobre esse valor, e o bônus de PPs, quando houver, cai no mês seguinte.</p>
+    <p>A comissão também é calculada sobre o que o <strong>cliente pagou à parceira</strong>, e não sobre o valor cadastrado no W1nner. Se o valor do contrato está errado no W1nner, fale com <strong>Operações</strong>.</p>
+    <p>Para saber quanto é a sua parte, use a <strong>Calculadora de Comissões e PPs</strong>.</p>
+
+- id: c-lead
+  area: comissoes
+  parceira: ''
+  pergunta: Por que a comissão do cliente veio menor e sem bônus de PPs? Ele é lead?
+  outras_formas:
+  - cliente lead marketing
+  - comissao menor que contato proprio
+  - lead da capital sem bonus
+  - nao caiu o bonus porque e lead
+  - cliente era meu contato proprio
+  palavras_chave: lead marketing capital outras fontes contato proprio percentual menor sem bonus prospeccao propria evidencias base
+  secao: comissoes#outros
+  resposta: |
+    <p>Clientes que chegaram por <strong>outras fontes</strong> (lead do Marketing, lead da W1 Capital ou de outra unidade) têm percentual de comissão menor que os de <strong>contato próprio</strong> e <strong>não geram bônus de PPs</strong>.</p>
+    <p>A classificação vem das bases de lead do Marketing e da Capital. Se você tem evidências de que a prospecção foi sua, envie-as em um ticket com o assunto <strong>Comissões</strong> para avaliação.</p>
+
+- id: c-bonusquais
+  area: comissoes
+  parceira: ''
+  pergunta: Bati a meta de PPs. O percentual maior vale para quais contratos? E vale para AP?
+  outras_formas:
+  - bati 2000 pps e nao veio 40
+  - atingi 3 mil pps
+  - bonus de pps vale para ap
+  - percentual de bonus nao aplicado
+  - faixa de bonus errada
+  palavras_chave: bati meta 2000 3000 pps 40 45 percentual contratos novos depois trimestre seguinte ap analise paga fup nao vale
+  secao: comissoes#bonus
+  resposta: |
+    <p>O percentual conquistado vale para os <strong>contratos fechados depois</strong> que você atingiu a meta. Na regra atual (desde 01/07/2026), vale para os contratos do <strong>trimestre seguinte</strong>. Contratos fechados antes recebem a base, ou o percentual que valia quando foram fechados.</p>
+    <p>O bônus de PPs é só para <strong>produtos financeiros de parceiras</strong>. Ele não vale para AP, FUP, Business ou Patrimonial.</p>
+    <p>Na AP, desde 01/08/2026, o percentual depende do faturamento de AP do mês e do Fator FQ, e não dos PPs históricos. Veja a seção <strong>Análise Paga</strong>.</p>
+
+- id: c-apparcela
+  area: comissoes
+  parceira: ''
+  pergunta: 'AP: faltou uma parcela ou não encontro a comissão da AP.'
+  outras_formas:
+  - nao recebi a parcela da ap
+  - ap parcelada faltando
+  - nao vejo a comissao da analise paga
+  - nona parcela da consultoria
+  palavras_chave: ap analise paga parcela faltando parcelada nao encontro observacao assinaturas quantas parcelas finalizada dia 10
+  secao: comissoes#prazos
+  resposta: |
+    <ul><li><strong>Onde procurar:</strong> a AP é lançada com o nome do cliente no campo <strong>Observação</strong> do extrato, e não em Contato.</li>
+    <li><strong>Quando:</strong> até o dia 10 do mês seguinte ao pagamento de cada parcela pelo cliente. Sem pagamento da parcela, não há comissão.</li>
+    <li><strong>Quantas parcelas:</strong> a AP tem o número de parcelas definido no fechamento (ex.: 4, 8 ou 10). Depois da última, não há mais repasse.</li></ul>
+    <p>Para conferir os pagamentos, acesse <strong>Centro Econômico › Assinaturas › Detalhes</strong>. Parcela paga e sem repasse depois do dia 10: <span class="v ticket">ticket · Comissões</span></p>
+
+- id: c-saida
+  area: comissoes
+  parceira: ''
+  pergunta: Saí da W1 (ou um consultor da minha equipe saiu). Como ficam as comissões e o saque?
+  outras_formas:
+  - nao trabalho mais na w1
+  - ex bp como recebo
+  - consultor desligado comissao
+  - distrato comissoes
+  - rpa ex consultor
+  palavras_chave: sai saiu desligado ex bp distrato acesso rpa saque comissoes clientes realocados ap c1 c4
+  secao: comissoes#realocacao
+  resposta: |
+    <ul><li><strong>Acesso:</strong> depois da assinatura do distrato, o ex-consultor recebe um e-mail com o link de acesso ao W1nner. Problemas de acesso: ticket <strong>Erro no sistema</strong>.</li>
+    <li><strong>Saque, RPA e nota fiscal:</strong> são tratados pelo time <strong>Fiscal</strong>.</li>
+    <li><strong>Clientes:</strong> são realocados e o novo responsável passa a receber depois da Reunião de Serviço, pela regra de realocação.</li>
+    <li><strong>Exceções:</strong> Business e Patrimonial continuam com o consultor de origem. Na AP (desde 10/2025), quem saiu continua recebendo as parcelas se concluiu as entregas C1 a C4.</li></ul>
+
+- id: c-acesso
+  area: comissoes
+  parceira: ''
+  pergunta: Não consigo abrir o Centro Econômico › Comissões (a tela redireciona ou dá erro).
+  outras_formas:
+  - aba comissoes nao abre
+  - erro no w1nner
+  - redireciona para o perfil
+  - nao consigo solicitar pagamento
+  palavras_chave: erro sistema acesso nao abre redireciona perfil tela comissoes centro economico bug ti
+  secao: comissoes#ticket
+  resposta: |
+    <p>Erros de tela e de acesso no W1nner são tratados pelo time de sistemas. Abra ticket com o assunto <strong>Erro no sistema</strong> e anexe o print do erro.</p>
+    <p>Se o problema é um valor errado no extrato, e não a tela, aí o assunto é <strong>Comissões</strong>.</p>
+
+- id: c-umticket
+  area: comissoes
+  parceira: ''
+  pergunta: Posso colocar vários clientes no mesmo ticket?
+  outras_formas:
+  - varios contratos em um ticket
+  - lista de clientes sem comissao
+  - divergencia nos valores do mes
+  - comissoes faltando no mes
+  palavras_chave: varios clientes contratos mesmo ticket lista individual um por contrato divergencia valores mes
+  secao: comissoes#ticket
+  resposta: |
+    <p>Não. Abra <strong>um ticket para cada contrato</strong>, selecionando o report do cliente. Assim cada caso é conferido na parceira certa e nada fica para trás.</p>
+    <p>Se a dúvida é “o total do mês veio menor”, baixe o extrato em Excel (<strong>Centro Econômico › Comissões › Gerar extrato</strong>) e compare com o mês anterior. Muitas vezes a diferença é um cliente de FUP que não pagou no mês.</p>
 
 - id: e-oque
   area: estornos
