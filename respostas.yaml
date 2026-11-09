@@ -43,7 +43,7 @@ extensao:
 # Cole em url o endereço do App da Web (termina em /exec). Vazio ou ativo: false = nada é registrado.
 registro:
   ativo: true
-  url: ''
+  url: 'https://script.google.com/macros/s/AKfycbw-yinFi8ZQThumJZsgv3fx4Z3__XwD0W_eVPv1SFuQn0aQWCbuib1v8axj7ME_k1Zm/exec'
 
 # Códigos de parceira usados no campo "parceira" -> nome exibido
 parceiras:
