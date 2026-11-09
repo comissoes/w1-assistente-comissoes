@@ -36,8 +36,14 @@ atualizado_em: novembro de 2026
 # Versão mais recente da extensão (.zip no W1nner). Quando publicar um .zip
 # novo, aumente este número: quem estiver com a versão antiga vê um aviso no balão.
 extensao:
-  versao: 1.3.1
-  aviso: Há uma versão nova do FAQ Comissões, agora com cálculo de comissão de consórcio. Baixe em W1nner › Arquivos › Comissões e reinstale seguindo o guia.
+  versao: 1.4.0
+  aviso: Há uma versão nova do FAQ Comissões, agora com cálculo de consórcio e o botão “Esta resposta ajudou?”. Baixe em W1nner › Arquivos › Comissões e reinstale seguindo o guia.
+
+# Registro anônimo das perguntas (planilha Google via Apps Script).
+# Cole em url o endereço do App da Web (termina em /exec). Vazio ou ativo: false = nada é registrado.
+registro:
+  ativo: true
+  url: ''
 
 # Códigos de parceira usados no campo "parceira" -> nome exibido
 parceiras:
