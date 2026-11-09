@@ -111,6 +111,13 @@ def main(origem, destino):
     if erros:
         falhar(erros)
 
+    def registro(r):
+        """Endereço do Apps Script que guarda as perguntas (só aceita script.google.com)."""
+        url = str(r.get("url") or "").strip()
+        if url and not re.match(r"^https://script\.google\.com/macros/s/[\w-]+/exec$", url):
+            falhar([f"registro.url inválido: {url} (use o endereço do App da Web, terminando em /exec)"])
+        return {"url": url if r.get("ativo", True) else ""}
+
     regras = carregar_regras(Path(origem).parent / "regras.yaml")
 
     ext = doc.get("extensao") or {}
@@ -118,6 +125,7 @@ def main(origem, destino):
         "versao": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "updated": str(doc.get("atualizado_em") or ""),
         "extensao": {"versao": str(ext.get("versao") or ""), "aviso": str(ext.get("aviso") or "")},
+        "registro": registro(doc.get("registro") or {}),
         "partners": {str(k): str(v) for k, v in parceiras.items()},
         "items": itens,
         "regras": regras,
