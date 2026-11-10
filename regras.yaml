@@ -2,24 +2,21 @@
 #  REGRAS OFICIAIS USADAS PELOS ASSISTENTES DO FAQ COMISSÕES
 #  (cálculo de bônus de PPs, % de AP, estorno de AP, FUP, produtos
 #   financeiros, prazos). Copiado dos PDFs oficiais de Regras de
-#  comissionamento. Se uma regra mudar, altere AQUI e no PDF da pasta
-#  centrais/docs — o balão e a Central passam a calcular com o valor novo.
+#  comissionamento. Se uma regra mudar, altere AQUI (o documento oficial fica
+#  no W1nner › Arquivos › Comissões) — o balão e a Central passam a calcular com o valor novo.
 #  Percentuais em número (35 = 35%). Valores em reais sem R$.
 # =====================================================================
 
+# Documentos oficiais: só o título (as respostas orientam W1nner › Arquivos › Comissões; nenhum PDF é publicado)
 docs:
   ap:
     titulo: Regras de comissionamento — Análise Paga (v01/07/2026)
-    url: https://comissoes.github.io/w1-assistente-comissoes/docs/regras-analise-paga.pdf
   fup:
     titulo: Regras de comissionamento — Acompanhamento FUP (12/08/2024)
-    url: https://comissoes.github.io/w1-assistente-comissoes/docs/regras-acompanhamento-fup.pdf
   bonus:
     titulo: Regras de comissionamento — Bônus por PPs (desde 01/07/2026)
-    url: https://comissoes.github.io/w1-assistente-comissoes/docs/regras-bonus-pps.pdf
   pf:
     titulo: Regras de comissionamento — Produtos Financeiros
-    url: https://comissoes.github.io/w1-assistente-comissoes/docs/regras-produtos-financeiros.pdf
   central:
     titulo: Central de Comissões
     url: https://comissoes.github.io/w1-assistente-comissoes/central-comissoes.html
