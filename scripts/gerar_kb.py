@@ -161,8 +161,8 @@ def carregar_regras(arq):
         if not r.get(chave):
             erros.append(f"regras.yaml: falta a seção '{chave}'")
     for k, d in (r.get("docs") or {}).items():
-        if not str(d.get("url", "")).startswith("https://"):
-            erros.append(f"regras.yaml: o link do documento '{k}' precisa começar com https://")
+        if not str(d.get("titulo", "")).strip():
+            erros.append(f"regras.yaml: o documento '{k}' precisa de um titulo")
     ids = {c.get("id") for c in r.get("cargos") or []}
     for c in ("fa1", "fa2", "fa3", "fa4", "p", "sp", "ap", "pr", "mp", "mob"):
         if c not in ids:
@@ -173,9 +173,10 @@ def carregar_regras(arq):
 
 
 def publicar_docs(pasta, out):
-    """Publica os PDFs oficiais (pasta centrais/docs) em <site>/docs/."""
+    """Desativado: os documentos oficiais ficam só no W1nner (Arquivos › Comissões).
+    Mesmo que alguém suba PDFs na pasta centrais/docs, eles NÃO são publicados."""
     nomes = []
-    if not pasta.is_dir():
+    if True:
         return nomes
     out.mkdir(parents=True, exist_ok=True)
     for arq in sorted(pasta.glob("*.pdf")):
