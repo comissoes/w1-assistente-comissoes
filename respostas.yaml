@@ -36,8 +36,8 @@ atualizado_em: novembro de 2026
 # Versão mais recente da extensão (.zip no W1nner). Quando publicar um .zip
 # novo, aumente este número: quem estiver com a versão antiga vê um aviso no balão.
 extensao:
-  versao: 1.5.0
-  aviso: Há uma versão nova do FAQ Comissões, agora com cálculo de consórcio e o botão “Esta resposta ajudou?”. Baixe em W1nner › Arquivos › Comissões e reinstale seguindo o guia.
+  versao: 1.5.1
+  aviso: Há uma versão nova do FAQ Comissões, com a regra atualizada do Acelerador de Início. Baixe em W1nner › Arquivos › Comissões e reinstale seguindo o guia.
 
 # Registro anônimo das perguntas (planilha Google via Apps Script).
 # Cole em url o endereço do App da Web (termina em /exec). Vazio ou ativo: false = nada é registrado.
@@ -1090,14 +1090,17 @@ respostas:
   - acelerador de inicio
   - bonus para bp novo
   - campanha de ativacao
-  palavras_chave: acelerador inicio onboarding novo bp 4 aps 28 dias 2000 1000 primeiro lider trimestre
+  - quando recebo o acelerador
+  - bonus de onboarding cai quando
+  palavras_chave: acelerador inicio onboarding novo bp 4 aps 28 dias 2000 1000 primeiro lider quando recebo mes seguinte janela cpf clientes unicos
   secao: comissoes#regras-ap
   resposta: |
     <p>Consultor em <strong>onboarding</strong> que fecha <strong>4 ou mais APs nos primeiros 28 dias</strong> recebe <strong>R$ 2.000</strong> no BP, e o <strong>1º líder</strong> recebe <strong>R$ 1.000</strong>.</p>
     <ul><li>Vale para APs pagas a partir de 01/08/2026.</li>
-    <li>É pago no <strong>fim do trimestre</strong> em que a janela de 28 dias termina.</li>
-    <li>Vale <strong>uma única vez</strong> por consultor, só para novos onboardings, e soma com os demais bônus e comissões.</li>
-    <li>O bônus de líder vai para o <strong>1º líder</strong> do consultor; valor repassado a outro líder é estornado como indevido.</li></ul>
+    <li>Contam só <strong>clientes únicos</strong>: uma AP por CPF de cliente.</li>
+    <li>É pago <strong>no mês seguinte ao encerramento da janela de 28 dias</strong>. Ex.: começou em 03/11, a janela vai até 30/11 e o bônus cai em dezembro.</li>
+    <li>Vale <strong>uma única vez</strong> por consultor, só para novos onboardings (não para quem já estava ativo), e soma com os demais bônus e comissões, sem mudar o % de comissão do mês.</li>
+    <li>O bônus de líder vai para o <strong>1º líder</strong>, o consultor diretamente acima de quem está no onboarding; valor repassado a outro líder é estornado como indevido.</li></ul>
 
 - id: c-pfregra
   area: comissoes
