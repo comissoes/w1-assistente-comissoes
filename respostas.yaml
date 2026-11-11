@@ -804,6 +804,66 @@ respostas:
     <ol><li>Navegando na sua carteira de comissões</li><li>Como consultar o pagamento de FUP</li><li>Entendendo a comissão por realocação</li><li>Prazos de pagamento e status das comissões</li></ol>
     <p>Também há vídeo e FAQ no W1nner, em <strong>Arquivos › Comissões › Regras</strong>.</p>
 
+- id: c-vilavelha
+  area: comissoes
+  parceira: vilavelha
+  pergunta: 'Vila Velha: não recebo comissão há meses. A comissão é mensal?'
+  outras_formas:
+  - nao recebo comissao da vila velha
+  - vila velha parou de pagar comissao
+  - faz meses que nao recebo da vila velha
+  - nunca recebi comissao da vila velha
+  - comissao da vila velha e parcela unica
+  - seguro auto vila velha comissao mensal
+  - renovacao vila velha nao recebi comissao
+  palavras_chave: vilavelha vila velha seguro auto ramos parcela unica mensal meses parou nunca recebi comissao
+  secao: comissoes#prazos
+  resposta: |
+    <p>Na Vila Velha (seguro auto e demais ramos) a comissão é paga em <strong>parcela única</strong>, sobre o prêmio total da apólice, <strong>mesmo que o cliente parcele</strong> o seguro. Não existem parcelas mensais de comissão.</p>
+    <ul><li><strong>Já recebeu uma comissão desse contrato?</strong> Então ela foi paga por inteiro e não há mais o que receber nos meses seguintes. Não é preciso abrir ticket.</li>
+    <li><strong>Nunca recebeu nenhuma comissão?</strong> Abra <strong>um ticket</strong> no report do cliente, com o assunto <strong>Comissões</strong>, informando o nome completo do cliente como está na Vila Velha. Vamos verificar com a parceira.</li></ul>
+    <p><strong>Renovação:</strong> cada renovação da apólice gera uma <strong>nova comissão</strong>, também em parcela única (em geral, uma a cada 12 meses). O repasse da renovação segue o prazo de produtos de parceiras: <strong>até 60 dias</strong> após o pagamento do cliente. Passou disso sem repasse, abra ticket informando o número da proposta de renovação.</p>
+    <p>Abra só um ticket por cliente: tickets repetidos do mesmo caso não aceleram a análise.</p>
+
+- id: c-naoia
+  area: comissoes
+  parceira: ''
+  pergunta: O FAQ Comissões é uma inteligência artificial?
+  outras_formas:
+  - voce e uma ia
+  - isso e chatgpt
+  - e um robo
+  - usa inteligencia artificial
+  - quem responde as perguntas
+  palavras_chave: ia inteligencia artificial robo chatgpt gpt bot chatbot automatico quem responde
+  secao: comissoes#prazos
+  resposta: |
+    <p><strong>Não.</strong> O FAQ Comissões não é uma inteligência artificial. É uma <strong>busca automática</strong> nas regras documentadas pelo Departamento de Comissões: ele encontra a resposta escrita pelo time e, em alguns assuntos, faz contas com as tabelas oficiais (AP, bônus de PPs, consórcio, prazos).</p>
+    <ul><li>Ele <strong>não consulta</strong> os seus contratos, o seu extrato nem o W1nner.</li>
+    <li>Ele <strong>não analisa</strong> casos específicos nem cria respostas novas.</li>
+    <li>A versão válida das regras está sempre no <strong>W1nner › Arquivos › Comissões</strong>.</li></ul>
+    <p>Se a sua dúvida depende dos dados do seu contrato, abra ticket no report do cliente, com o assunto <strong>Comissões</strong>.</p>
+
+- id: c-comprovante
+  area: comissoes
+  parceira: ''
+  pergunta: O cliente pagou. Envio o comprovante para o contrato ficar Rodando?
+  outras_formas:
+  - cliente efetivou o pagamento solicitar que o contrato suba como rodando
+  - segue comprovante de pagamento
+  - envio comprovante de pagamento do cliente
+  - cliente pagou quero que fique rodando
+  - anexo comprovante para alterar status
+  - cliente ja pagou e nao esta rodando
+  - subir contrato para rodando
+  palavras_chave: comprovante pagamento pagou efetivou rodando subir alterar status anexo boleto pix
+  secao: comissoes#prazos
+  resposta: |
+    <p><strong>Não é preciso enviar o comprovante.</strong> O status não muda pelo pagamento do cliente: ele muda <strong>sozinho para Rodando quando a W1 recebe a comissão da parceira</strong>.</p>
+    <ul><li>Cada parceira tem um prazo interno para processar o pagamento do cliente e repassar a comissão. Por isso pode levar alguns dias entre o pagamento e a mudança de status.</li>
+    <li>O comprovante não acelera esse processo: o que vale é o repasse da parceira.</li>
+    <li>Se passarem <strong>60 dias desde o pagamento</strong> e o contrato ainda não estiver Rodando, abra ticket no próprio report, com o assunto <strong>Comissões</strong>, informando o nome completo do cliente como está na parceira.</li></ul>
+
 - id: c-status
   area: comissoes
   parceira: ''
@@ -828,7 +888,7 @@ respostas:
     <p>Quem corrige o status de inadimplência, cancelamento ou <em>Nunca ativo</em> é o time de Comissões, depois de confirmar a situação na parceira.</p>
     <ul><li><strong>Nunca ativo</strong> quer dizer que a W1 ainda não recebeu nenhuma comissão da parceira para aquele contrato. Se ainda não passaram 60 dias do 1º pagamento, aguarde: o status muda sozinho para Rodando quando a primeira comissão chega.</li>
     <li><strong>Inadimplente ou cancelado</strong> com o cliente em dia: abra ticket no próprio report, com o assunto <strong>Comissões</strong>.</li></ul>
-    <p>No ticket, informe o <strong>nome completo do cliente como está na parceira</strong> e, se tiver, o comprovante de pagamento. Verificamos na parceira e ajustamos; quando não dá para consultar, perguntamos à parceira e respondemos no ticket.</p>
+    <p>No ticket, informe o <strong>nome completo do cliente como está na parceira</strong>. Verificamos na parceira e ajustamos; quando não dá para consultar, perguntamos à parceira e respondemos no ticket. Comprovante de pagamento do cliente não altera o status: o que vale é o repasse da parceira.</p>
     <p>Se o contrato ainda tem pendência de assinatura ou documento na parceira, quem resolve é <strong>Operações</strong>.</p>
 
 - id: c-pendencia
@@ -1040,6 +1100,8 @@ respostas:
   - consultor desligado comissao
   - distrato comissoes
   - rpa ex consultor
+  - sai da w1 e o seguro renovou de quem e a comissao
+  - ja sai da w1 ainda vou receber a comissao
   palavras_chave: sai saiu desligado ex bp distrato acesso rpa saque comissoes clientes realocados ap c1 c4
   secao: comissoes#realocacao
   resposta: |
@@ -1047,6 +1109,7 @@ respostas:
     <li><strong>Saque, RPA e nota fiscal:</strong> são tratados pelo time <strong>Fiscal</strong>.</li>
     <li><strong>Clientes:</strong> são realocados e o novo responsável passa a receber depois da Reunião de Serviço, pela regra de realocação.</li>
     <li><strong>Enquanto o cliente não é realocado</strong>, o consultor que saiu continua recebendo a comissão dos clientes ativos.</li>
+    <li><strong>Renovação de seguro</strong> (ex.: Vila Velha) feita depois da saída: segue a mesma regra. Se o cliente foi realocado e o novo responsável fez a Reunião de Serviço, a comissão da renovação vai para ele; se ainda não houve realocação, vai para a carteira de quem saiu.</li>
     <li><strong>Exceções:</strong> Business e Patrimonial continuam com o consultor de origem. Na AP (desde 10/2025), quem saiu continua recebendo as parcelas se concluiu as entregas C1 a C4.</li>
     <li>O ex-consultor <strong>não vê valores futuros</strong> a receber (AP parcelada, FUP mensal, Business parcelado e produtos com repasse mensal).</li></ul>
 
