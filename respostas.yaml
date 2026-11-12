@@ -1433,7 +1433,7 @@ respostas:
   palavras_chave: estorno nao bate tabela errado contestar divergencia diferente
   secao: estornos#duvidas
   resposta: |
-    <p>Confira primeiro a <strong>versão do produto</strong> e a <strong>data de venda</strong> (na Icatu, guia antigo ou guia out/2025) e a última parcela paga.</p>
+    <p>Confira primeiro a <strong>versão do produto</strong> e a <strong>data de venda</strong> (na Icatu, guia antigo ou guia out/2025) e a última parcela paga. Na Icatu, veja também se o cliente <strong>reduziu o prêmio</strong> em vez de cancelar: nesse caso o estorno incide só sobre a diferença de comissão e os percentuais parecem pequenos.</p>
     <p>Se continuar diferente, envie ao time de <strong>Comissões</strong> o nome do cliente, o certificado ou a proposta e o mês do extrato.</p>
 
 - id: e-semregra
@@ -1526,6 +1526,7 @@ respostas:
     <table class="t"><tr><th>Permanência</th><th>Estorno</th></tr>
     <tr><td>&lt; 1 mês</td><td>100%</td></tr><tr><td>1 a 2</td><td>90%</td></tr><tr><td>2 a 3</td><td>80%</td></tr><tr><td>3 a 4</td><td>70%</td></tr><tr><td>4 a 5</td><td>60%</td></tr><tr><td>5 a 6</td><td>50%</td></tr><tr><td>6 ou mais</td><td>0%</td></tr></table>
     <p>12ª parcela + 6 meses = contrato livre no <strong>mês 18</strong>.</p>
+    <p>A Icatu conta em <strong>dias</strong>, a partir do mês de competência de cada parcela: até 30 dias, 100%; de 31 a 60, 90%; e assim por diante.</p>
 
 - id: e-icatuess
   area: estornos
@@ -1582,7 +1583,7 @@ respostas:
     <li>Para cada parcela que pagou agenciamento: permanência = <strong>última parcela mantida − nº da parcela + 1</strong>.</li>
     <li>Busque o percentual na tabela da versão do produto e multiplique pelo <strong>agenciamento daquela parcela</strong>.</li>
     <li>Some as parcelas. Permanência fora da tabela = 0%.</li></ol>
-    <p>Ou use a calculadora da Central de Estornos.</p>
+    <p>Ou use a calculadora da Central de Estornos. Se o cliente <strong>reduziu o prêmio</strong> em vez de cancelar, a conta é outra: o percentual incide só sobre a diferença de comissão.</p>
 
 - id: e-icatuvarios
   area: estornos
@@ -1630,6 +1631,22 @@ respostas:
   secao: estornos#icatu
   resposta: |
     <p>As duas se completam. A tabela vale para <strong>cada parcela</strong> (12 meses a partir dela). Como o agenciamento vai até a 12ª parcela, o contrato só fica totalmente livre no mês 24. No guia out/2025 a lógica é a mesma com 6 meses por parcela: livre no mês 18.</p>
+
+- id: e-icatureduz
+  area: estornos
+  parceira: icatu
+  pergunta: O cliente da Icatu não cancelou, só reduziu o prêmio. Por que veio estorno?
+  outras_formas:
+  - reduziu o premio icatu
+  - cliente diminuiu o seguro icatu
+  - tirou cobertura icatu estorno
+  - estorno pequeno icatu cliente ativo
+  palavras_chave: icatu reducao premio reduziu diminuiu cobertura capital estorno parcial diferenca comissao ativo horizonte
+  secao: estornos#icatu
+  resposta: |
+    <p>Na Icatu, a <strong>redução de prêmio no 1º ano</strong> também gera estorno, mesmo com o contrato ativo. A conta é feita sobre a <strong>diferença</strong> entre a comissão antiga e a nova, e não sobre o agenciamento inteiro.</p>
+    <p>Cada parcela do 1º ano usa o percentual da tabela pelo tempo que ficou ativa até a redução. As que já tinham completado 12 meses (guia antigo e Essencial) ou 6 meses (guia out/2025) não têm estorno.</p>
+    <p><em>Exemplo:</em> a comissão mensal caiu de R$ 445 para R$ 260, uma diferença de R$ 185. A parcela com 11 meses estorna 8,33% de R$ 185 (R$ 15,45), e a com 1 mês estorna 91,67% (R$ 170,05). Por isso aparecem estornos pequenos e crescentes.</p>
 
 - id: e-icatupme
   area: estornos
