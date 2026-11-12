@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Central do Especialista de Vida</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap">
+<style>
+
+/* Layout: barra de busca fixa; índice lateral por assunto (faixa rolável no celular); conteúdo em blocos pesquisáveis.
+   Começa pelo diagnóstico "preciso abrir ticket?" e pelo calendário do mês. Brandbook W1: Petróleo, subtons, Turquesa como acento, Public Sans. */
+:root{
+  --bg:#ebf0f0; --surface:#ffffff; --surface-2:#f4f7f7; --ink:#022028; --ink-2:#3e6a6d; --muted:#5f8a8b;
+  --line:#d3e0df; --line-strong:#afcecd; --accent:#5fded4; --accent-ink:#1d6d67; --accent-soft:#dff7f4;
+  --band:#022028; --band-2:#0a181c; --band-ink:#ffffff; --band-muted:#afcecd; --band-line:#1f4148; --band-cell:#04222a;
+  --bar:#bfeee9; --hi:#fff1b8; --hi-ink:#022028;
+  --risk:#b23c3c; --risk-soft:#fbe4e4; --warn:#a96a08; --warn-soft:#fff1d9; --ok:#3f7a2f; --ok-soft:#e5f3df; --info:#2d5f8a; --info-soft:#e3eef8;
+  --font:"Public Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0a181c; --surface:#0f2329; --surface-2:#132a31; --ink:#ebf0f0; --ink-2:#afcecd; --muted:#84afaf;
+  --line:#1f4148; --line-strong:#3e6a6d; --accent:#5fded4; --accent-ink:#5fded4; --accent-soft:#12383a;
+  --band:#022028; --band-2:#061215; --band-ink:#ffffff; --band-muted:#afcecd; --band-line:#1f4148; --band-cell:#04222a;
+  --bar:#1d4a4c; --hi:#5fded4; --hi-ink:#022028;
+  --risk:#f08a8a; --risk-soft:#3a1c1f; --warn:#f0b65a; --warn-soft:#3a2c12; --ok:#8fcf7c; --ok-soft:#1c3319; --info:#8cbbe6; --info-soft:#16283a;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0a181c; --surface:#0f2329; --surface-2:#132a31; --ink:#ebf0f0; --ink-2:#afcecd; --muted:#84afaf;
+  --line:#1f4148; --line-strong:#3e6a6d; --accent:#5fded4; --accent-ink:#5fded4; --accent-soft:#12383a;
+  --band:#022028; --band-2:#061215; --band-ink:#ffffff; --band-muted:#afcecd; --band-line:#1f4148; --band-cell:#04222a;
+  --bar:#1d4a4c; --hi:#5fded4; --hi-ink:#022028;
+  --risk:#f08a8a; --risk-soft:#3a1c1f; --warn:#f0b65a; --warn-soft:#3a2c12; --ok:#8fcf7c; --ok-soft:#1c3319; --info:#8cbbe6; --info-soft:#16283a;
+  color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15.5px;line-height:1.6;-webkit-font-smoothing:antialiased;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--band)}
+h1,h2,h3,h4{line-height:1.2;text-wrap:balance;margin:0}
+p{margin:0}
+a{color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.wrap{max-width:1240px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+td,th,.num{font-variant-numeric:tabular-nums}
+.path{display:inline-block;font-weight:600;color:var(--ink);background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:1px 8px;font-size:.92em;white-space:normal}
+.subj{font-weight:700;color:var(--ink)}
+.th3{font-size:15px;font-weight:700;margin:6px 0 8px}
+.q{scroll-margin-top:110px}
+@keyframes flash{0%,40%{box-shadow:0 0 0 3px var(--accent)}100%{box-shadow:0 0 0 3px transparent}}
+.flash{animation:flash 2.2s ease-out;border-radius:var(--r)}
+.vlinks{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:auto}
+.watch{display:inline-flex;align-items:center;gap:6px;background:var(--ink);color:var(--bg);text-decoration:none;font-weight:600;font-size:14px;padding:7px 14px;border-radius:999px}
+.watch:hover{opacity:.9}
+small.mut{color:var(--muted);font-size:12px}
+.sec>.q>.th3:first-child{margin-top:0}
+
+/* ---------- topo ---------- */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--band);color:var(--band-ink);border-bottom:3px solid var(--accent)}
+.top .wrap{display:flex;align-items:center;gap:20px;padding-block:12px}
+.brand{display:flex;align-items:center;gap:12px;color:var(--band-ink);text-decoration:none;flex-shrink:0}
+.brand svg{width:44px;height:22px;display:block}
+.brand span{font-weight:600;font-size:15px;letter-spacing:.01em;border-left:1px solid #3e6a6d;padding-left:12px;white-space:nowrap}
+.search{flex:1;display:flex;align-items:center;gap:10px;background:#ffffff;border-radius:8px;padding:0 12px;min-width:0;border:2px solid transparent}
+.search:focus-within{border-color:var(--accent)}
+.search svg{width:18px;height:18px;flex-shrink:0;color:#3e6a6d}
+.search input{flex:1;min-width:0;border:0;outline:0;background:transparent;font:500 15px var(--font);color:#022028;padding-block:11px}
+.search input::-webkit-search-cancel-button{display:none}
+.search input::placeholder{color:#6d9899;font-weight:400}
+.kbd{font:600 11px var(--font);color:#3e6a6d;border:1px solid #afcecd;border-radius:4px;padding:1px 6px}
+.clear{border:0;background:#ebf0f0;color:#1f4148;font:600 12px var(--font);border-radius:5px;padding:5px 10px;cursor:pointer}
+@media (max-width:720px){.brand span{display:none}.kbd{display:none}.top .wrap{gap:12px}}
+
+/* ---------- abertura ---------- */
+.intro{background:linear-gradient(180deg,var(--band) 0%,var(--band-2) 100%);color:var(--band-ink)}
+.intro .wrap{padding-block:36px 30px;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:40px;align-items:end}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.intro h1{font-size:clamp(30px,4.4vw,46px);font-weight:700;letter-spacing:-.02em;margin-top:10px}
+.intro p.lead{color:var(--band-muted);font-size:16.5px;max-width:60ch;margin-top:14px;font-weight:300}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.chip{border:1px solid #3e6a6d;background:transparent;color:var(--band-ink);font:500 13px var(--font);padding:6px 12px;border-radius:999px;cursor:pointer}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--band-line);border:1px solid var(--band-line);border-radius:var(--r);overflow:hidden}
+.fact{background:var(--band-cell);padding:14px 16px}
+.fact b{display:block;font-size:22px;font-weight:700;color:var(--band-ink);letter-spacing:-.01em}
+.fact small{display:block;color:var(--band-muted);font-size:12.5px;line-height:1.4;margin-top:2px}
+@media (max-width:860px){.intro .wrap{grid-template-columns:1fr;gap:24px}}
+
+/* ---------- corpo ---------- */
+.layout{display:grid;grid-template-columns:240px minmax(0,1fr);gap:36px;padding-block:28px 64px}
+@media (max-width:980px){.layout{grid-template-columns:minmax(0,1fr);gap:20px}}
+.side{position:sticky;top:calc(env(safe-area-inset-top,0px) + 82px);align-self:start;max-height:calc(100vh - 100px);overflow:auto}
+.side h4{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:14px 0 6px}
+.side h4:first-child{margin-top:0}
+.side nav{display:flex;flex-direction:column;gap:2px}
+.side nav a{display:flex;justify-content:space-between;gap:8px;align-items:baseline;text-decoration:none;color:var(--ink);font-size:14px;padding:5px 10px;border-radius:6px}
+.side nav a:hover{background:var(--surface)}
+.side nav a small{color:var(--muted);font-size:11.5px;white-space:nowrap}
+.side nav a.dim{opacity:.35}
+.side nav a.star{font-weight:700}
+@media (max-width:980px){
+  .side{position:static;max-height:none;overflow:visible}
+  .side nav{flex-direction:row;overflow-x:auto;gap:6px;padding-bottom:6px}
+  .side nav a{white-space:nowrap;background:var(--surface);border:1px solid var(--line)}
+  .side nav a small{display:none}
+  .side h4{display:none}
+  .side{display:flex;flex-direction:column}
+  .side nav.all{display:flex}
+}
+
+.status{display:none;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:8px;padding:10px 14px;font-size:14px}
+.status.on{display:flex}
+.empty{background:var(--surface);border:1px dashed var(--line-strong);border-radius:var(--r);padding:32px 24px;text-align:center;color:var(--ink-2)}
+.empty h3{color:var(--ink);font-size:18px;margin-bottom:6px}
+
+main{min-width:0;display:flex;flex-direction:column;gap:44px}
+.part{display:flex;align-items:baseline;gap:14px;margin-bottom:-24px;color:var(--muted)}
+.part b{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-ink);font-weight:700;white-space:nowrap}
+.part span{flex:1;height:1px;background:var(--line-strong)}
+.sec{scroll-margin-top:96px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:10px}
+.sec-head h2{font-size:clamp(22px,2.6vw,28px);font-weight:700;letter-spacing:-.015em}
+.sec-head .tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:4px;background:var(--surface-2);color:var(--ink-2);border:1px solid var(--line)}
+.tag.acc{background:var(--accent-soft);color:var(--accent-ink);border-color:transparent}
+.sec-sub{color:var(--ink-2);max-width:75ch}
+.sec.featured .sec-head{border-bottom-color:var(--accent)}
+
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:860px){.grid2,.grid3{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;min-width:0;display:flex;flex-direction:column;gap:10px}
+.card h3{font-size:16.5px;font-weight:700}
+.k{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.card p,.card li{color:var(--ink-2)}
+.card ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.card strong{color:var(--ink)}
+.big{font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1;color:var(--ink)}
+.big small{font-size:14px;font-weight:500;color:var(--ink-2);letter-spacing:0}
+
+.note{border-radius:8px;padding:12px 14px;font-size:14.5px;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-2)}
+.note strong{color:var(--ink)}
+.note.warn{background:var(--warn-soft);border-color:transparent}
+.note.risk{background:var(--risk-soft);border-color:transparent}
+.note.ok{background:var(--ok-soft);border-color:transparent}
+.note.acc{background:var(--accent-soft);border-color:transparent}
+
+/* tabelas */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th{background:var(--surface-2);color:var(--ink-2);font-weight:600;text-align:left;padding:9px 12px;font-size:12.5px;letter-spacing:.02em;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:8px 12px;border-top:1px solid var(--line);vertical-align:top}
+tbody tr:first-child td{border-top:0}
+td.p{position:relative;font-weight:600;white-space:nowrap;background:linear-gradient(90deg,var(--bar) calc(var(--p,0)*1%),transparent 0);background-clip:padding-box}
+td.p.z{color:var(--ok)}
+td.p.full{color:var(--risk)}
+.tcap{font-size:12.5px;color:var(--muted);margin-top:6px}
+table.sum td:first-child{font-weight:600;white-space:nowrap}
+table.sum td a{text-decoration:none;color:var(--ink)}
+table.sum td a:hover{color:var(--accent-ink)}
+
+/* régua de parcelas (exemplo Icatu) */
+.strip{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:4px}
+.cell{border-radius:6px;padding:6px 2px 7px;text-align:center;background:var(--surface-2);border:1px solid var(--line);font-size:12px;line-height:1.25;min-width:0}
+.cell b{display:block;font-size:13px;color:var(--ink)}
+.cell.h{background:var(--accent-soft);border-color:var(--accent)}
+.cell.n{opacity:.45}
+.cell span{display:block;color:var(--ink-2)}
+.stripl{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--ink-2);margin-bottom:6px;flex-wrap:wrap}
+@media (max-width:620px){.strip{grid-template-columns:repeat(6,minmax(0,1fr))}}
+
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;counter-reset:s}
+.steps li{position:relative;padding-left:34px;color:var(--ink-2)}
+.steps li::before{counter-increment:s;content:counter(s);position:absolute;left:0;top:1px;width:22px;height:22px;border-radius:50%;background:var(--ink);color:var(--bg);font-size:12px;font-weight:700;display:grid;place-items:center}
+
+/* FAQ / acordeões */
+details.qa{background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+details.qa>summary{cursor:pointer;list-style:none;padding:13px 44px 13px 16px;font-weight:600;position:relative}
+details.qa>summary::-webkit-details-marker{display:none}
+details.qa>summary::after{content:"+";position:absolute;right:16px;top:50%;transform:translateY(-50%);font-weight:400;font-size:20px;color:var(--muted)}
+details.qa[open]>summary::after{content:"–"}
+details.qa[open]{border-color:var(--line-strong)}
+details.qa>div{padding:0 16px 16px;color:var(--ink-2);display:flex;flex-direction:column;gap:10px}
+details.qa>div ul,details.qa>div ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
+details.qa strong{color:var(--ink)}
+.faq{display:flex;flex-direction:column;gap:8px}
+
+details.more{border-top:1px dashed var(--line-strong);padding-top:10px}
+details.more>summary{cursor:pointer;font-weight:600;color:var(--accent-ink);font-size:14px}
+details.more>div{margin-top:12px;display:flex;flex-direction:column;gap:12px}
+
+.partner{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:flex;flex-direction:column;gap:14px;scroll-margin-top:96px;min-width:0}
+.partner>header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.partner h3{font-size:20px;font-weight:700}
+.partner .when{text-align:right}
+.partner .when b{display:block;font-size:20px;font-weight:700;line-height:1.1}
+.partner .when small{color:var(--muted);font-size:12px}
+@media (max-width:620px){.partner .when{text-align:left}}
+
+/* selos de decisão (ticket) */
+.verdict{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:999px;white-space:nowrap}
+.verdict::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.verdict.ok{background:var(--ok-soft);color:var(--ok)}
+.verdict.wait{background:var(--warn-soft);color:var(--warn)}
+.verdict.ticket{background:var(--risk-soft);color:var(--risk)}
+.verdict.other{background:var(--info-soft);color:var(--info)}
+.decide{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (max-width:620px){.decide{grid-template-columns:minmax(0,1fr)}}
+.decide>div{border:1px solid var(--line);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;background:var(--surface)}
+
+/* diagnóstico */
+.diag{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:18px;align-items:start}
+@media (max-width:860px){.diag{grid-template-columns:minmax(0,1fr)}}
+.diag-list{display:flex;flex-direction:column;gap:14px}
+.dgroup h4{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:6px}
+.dopts{display:flex;flex-direction:column;gap:4px}
+.dopt{text-align:left;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:500 14px/1.35 var(--font);padding:8px 12px;border-radius:8px;cursor:pointer}
+.dopt:hover{border-color:var(--line-strong)}
+.dopt[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:var(--bg)}
+.dres{position:sticky;top:calc(env(safe-area-inset-top,0px) + 96px);background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+@media (max-width:860px){.dres{position:static}}
+.dres-top{background:var(--band);color:var(--band-ink);padding:16px 20px;display:flex;flex-direction:column;gap:8px}
+.dres-top .lb{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--band-muted);font-weight:600}
+.dres-top h3{font-size:19px;font-weight:700}
+.dres-body{padding:16px 20px 18px;display:flex;flex-direction:column;gap:10px;color:var(--ink-2)}
+.dres-body strong{color:var(--ink)}
+.dres-body ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.dres-body a.go{font-weight:600;text-decoration:none}
+.dres-body a.go:hover{text-decoration:underline}
+
+/* calendário do mês */
+.cal{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px 18px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.cal-scale,.cal-row .bar{display:grid;grid-template-columns:repeat(31,minmax(0,1fr));gap:2px}
+.cal-scale span{font-size:10.5px;color:var(--muted);text-align:center}
+.cal-scale span.mk{color:var(--ink);font-weight:700}
+.cal-row{display:flex;flex-direction:column;gap:5px}
+.cal-row .lbl{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:14px}
+.cal-row .lbl b{color:var(--ink)}
+.cal-row .lbl small{color:var(--muted);font-size:12.5px}
+.cal-row .bar i{display:block;height:14px;border-radius:3px;background:var(--surface-2);border:1px solid var(--line)}
+.cal-row .bar i.on{background:var(--accent);border-color:var(--accent)}
+.cal-row .bar i.soft{background:var(--accent-soft);border-color:var(--accent);border-style:dashed}
+.cal-legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
+.cal-legend i{display:inline-block;width:14px;height:10px;border-radius:2px;vertical-align:-1px;margin-right:6px;background:var(--accent)}
+.cal-legend i.soft{background:var(--accent-soft);border:1px dashed var(--accent)}
+
+/* calculadora */
+.calc{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:18px}
+@media (max-width:860px){.calc{grid-template-columns:minmax(0,1fr)}}
+.tabs2{display:flex;gap:6px;flex-wrap:wrap}
+.tab2{border:1px solid var(--line-strong);background:var(--surface);color:var(--ink-2);font:600 13.5px var(--font);padding:7px 14px;border-radius:999px;cursor:pointer}
+.tab2[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.fld{display:flex;flex-direction:column;gap:5px}
+.fld label{font-size:13px;font-weight:600;color:var(--ink)}
+.fld small{color:var(--muted);font-size:12px;line-height:1.4}
+.fld input,.fld select{font:15px var(--font);color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:8px;padding:9px 11px;width:100%}
+.seg{display:flex;border:1px solid var(--line-strong);border-radius:8px;overflow:hidden}
+.seg button{flex:1;border:0;background:var(--surface);color:var(--ink-2);font:600 13px var(--font);padding:8px 6px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent-ink)}
+.res{background:var(--band);color:var(--band-ink);border-radius:var(--r);padding:18px 20px;display:flex;flex-direction:column;gap:6px}
+.res .lb{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--band-muted);font-weight:600}
+.res .v{font-size:34px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.res .s{color:var(--band-muted);font-size:14px}
+.verd{border-radius:8px;padding:10px 12px;font-size:14px}
+.verd.ok{background:var(--ok-soft);color:var(--ok)} .verd.up{background:var(--risk-soft);color:var(--risk)} .verd.dn{background:var(--warn-soft);color:var(--warn)}
+mark{background:var(--hi);color:var(--hi-ink);border-radius:2px;padding:0 1px}
+footer{border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+footer .wrap{padding-block:24px 40px;display:flex;flex-direction:column;gap:8px}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+
+/* ---------- específicos: Especialista de Vida ---------- */
+.formula{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--band);color:var(--band-ink);border-radius:var(--r);padding:16px 18px;font-weight:600}
+.formula span{background:var(--band-cell);border:1px solid var(--band-line);border-radius:6px;padding:6px 12px}
+.formula b{color:var(--accent);font-size:20px}
+.calc-out{display:flex;flex-direction:column;gap:14px;min-width:0}
+.kp .card{gap:6px}
+.kp .big{font-size:24px}
+.pctrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.pctrow .seg{flex:1;min-width:180px}
+.pctin{display:flex;align-items:center;gap:6px}
+.pctin input{width:90px}
+.fld .err{color:var(--risk)}
+#strip{grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+#strip .cell{padding:8px 4px 9px}
+#strip .cell span{font-size:11.5px;color:var(--muted)}
+#strip .cell b{font-size:14px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:420px){#strip{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.fld textarea{font:15px var(--font);color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:8px;padding:9px 11px;width:100%;resize:vertical}
+.dv-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.dv-row .watch{border:0;cursor:pointer;font-family:var(--font)}
+.dv-ok{color:var(--ok);font-weight:600;font-size:14px}
+</style>
+<style>[hidden]{display:none!important}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#inicio" aria-label="W1 Central do Especialista de Vida">
+      <svg viewBox="0 0 72 36" aria-hidden="true"><path fill="currentColor" d="M45.2869 8.52863H56.5388L34.9322 35.9999L26.6178 35.9932C24.1433 35.9932 22.1383 33.965 22.1383 31.4672V22.7596L11.7349 35.9999H4.48394C2.00714 35.9999 0 33.9739 0 31.4739V8.52863H8.99446V25.2596L22.1406 8.52863H31.1062V26.5767L45.2869 8.52863ZM72 4.52366C72 2.02363 69.9929 -0.00233459 67.5161 -0.00233459H51.9862L47.9963 5.07599H59.2327V35.9977H71.9978V4.5259L72 4.52366Z"/></svg>
+      <span>Especialista de Vida</span>
+    </a>
+    <label class="search" for="q">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" autocomplete="off" placeholder="Busque: dia 20, janela, estorno, extrato, módulo, nota fiscal…" aria-label="Buscar nesta página">
+      <span class="kbd" aria-hidden="true">/</span>
+      <button class="clear" id="clear" type="button" hidden>Limpar</button>
+    </label>
+  </div>
+</header>
+
+<section class="intro" id="inicio">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">Departamento de Comissões · Consulta para Especialistas de Seguro de Vida</div>
+      <h1>Sua comissão de Seguro de Vida, do contrato até a sua conta</h1>
+      <p class="lead">Você recebe um percentual sobre a comissão que a W1 recebe da seguradora em cada contrato em que atua. Simule quanto vai receber, entenda a janela de apuração e veja como conferir tudo no W1nner.</p>
+      <div class="chips" aria-label="Atalhos">
+        <button class="chip" data-go="calculadora">Simular comissão</button>
+        <button class="chip" data-q="janela">Janela de apuração</button>
+        <button class="chip" data-q="estorno">Estorno</button>
+        <button class="chip" data-q="extrato">Extrato</button>
+        <button class="chip" data-q="adiantamento">Adiantamento</button>
+        <button class="chip" data-go="ticket">Preciso abrir ticket?</button>
+      </div>
+    </div>
+    <div class="facts">
+      <div class="fact"><b>Dia 16 ou 17</b><small>Fechamento da janela: entra o que a W1 recebeu das seguradoras desde o fechamento anterior</small></div>
+      <div class="fact"><b>Dia 20</b><small>Lançamento no seu W1nner (dia útil anterior, se o 20 não for útil)</small></div>
+      <div class="fact"><b>Dia 1 a 20</b><small>Solicitar pagamento no W1nner e anexar a nota fiscal (uma por BU)</small></div>
+      <div class="fact"><b>Mesmo %</b><small>Estorno descontado com o mesmo percentual que você recebeu no contrato</small></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap layout">
+  <aside class="side" aria-label="Índice">
+    <h4>Comece aqui</h4>
+    <nav>
+      <a href="#calculadora" data-for="calculadora" class="star">Simule sua comissão <small>calculadora</small></a>
+      <a href="#regra" data-for="regra">Como é calculada <small>a regra</small></a>
+    </nav>
+    <h4>Recebimento</h4>
+    <nav>
+      <a href="#prazos" data-for="prazos">Quando o valor cai <small>janela · dia 20</small></a>
+      <a href="#condicoes" data-for="condicoes">Condições para receber <small>requisitos</small></a>
+      <a href="#w1nner" data-for="w1nner">Conferir no W1nner <small>extrato · saque</small></a>
+    </nav>
+    <h4>Cancelamento</h4>
+    <nav>
+      <a href="#estorno" data-for="estorno">Estorno <small>mesmo %</small></a>
+    </nav>
+    <h4>Suporte</h4>
+    <nav>
+      <a href="#duvidas" data-for="duvidas">Dúvidas frequentes <small>FAQ</small></a>
+      <a href="#pergunte" data-for="pergunte">Enviar dúvida <small>anônimo</small></a>
+      <a href="#ticket" data-for="ticket">Quando abrir ticket <small>assunto</small></a>
+    </nav>
+  </aside>
+
+  <main>
+    <div class="status" id="status"><span id="status-t"></span><button class="clear" type="button" id="clear2">Limpar busca</button></div>
+    <div class="empty" id="empty" hidden><h3>Nada encontrado</h3><p>Tente outra palavra, como "estorno", "dia 20" ou "extrato".</p></div>
+
+    <section class="sec featured" id="calculadora">
+      <div class="sec-head"><h2>Simule sua comissão</h2><div class="tags"><span class="tag acc">Calculadora</span></div></div>
+      <p class="sec-sub">Escolha a seguradora e o produto, informe quanto o cliente paga e o seu percentual no contrato. O resultado já é o valor que você recebe.</p>
+      <div class="calc q" data-k="calculadora simular simulação quanto vou receber">
+        <form class="card" id="form" autocomplete="off">
+          <div class="fld"><label for="parceira">Seguradora</label><select id="parceira"></select></div>
+          <div class="fld"><label for="produto">Produto</label><select id="produto"></select></div>
+          <div class="fld"><label for="premio" id="premio-lbl">Quanto o cliente paga por mês (R$)</label><input type="text" id="premio" inputmode="decimal" value="350,00"></div>
+          <div class="fld">
+            <label for="pct">Seu percentual no contrato</label>
+            <div class="pctrow">
+              <div class="seg" role="group" aria-label="Atalhos de percentual">
+                <button type="button" data-p="20" aria-pressed="false">20%</button>
+                <button type="button" data-p="25" aria-pressed="false">25%</button>
+                <button type="button" data-p="30" aria-pressed="true">30%</button>
+              </div>
+              <div class="pctin"><input type="text" id="pct" inputmode="decimal" value="30" aria-describedby="pct-hint"><span>%</span></div>
+            </div>
+            <small id="pct-hint">Outro valor: digite de 2,5% a 35%.</small>
+            <small class="err" id="pct-err" hidden></small>
+          </div>
+          <div class="note warn" id="nota" hidden></div>
+          <div class="note">Se a venda foi feita em outro módulo ou alternativa de comissionamento da seguradora, a comissão pode ser diferente da simulada. Na Icatu e na MAG, a 1ª parcela pode vir como adiantamento, com valor e prazo diferentes.</div>
+        </form>
+
+        <div class="calc-out" aria-live="polite">
+          <div class="res">
+            <div class="lb" id="r-head">Você recebe no 1º ano</div>
+            <div class="v num" id="r-big">–</div>
+            <div class="s" id="r-sub"></div>
+          </div>
+          <div class="grid2 kp">
+            <div class="card"><div class="k">Total no 1º ano</div><div class="big num" id="r-ano1">–</div></div>
+            <div class="card"><div class="k">A partir do 2º ano</div><div class="big num" id="r-ano2">–</div></div>
+          </div>
+          <div id="chart">
+            <div class="stripl"><span>Sua comissão mês a mês no 1º ano</span><span id="strip-r"></span></div>
+            <div class="strip" id="strip"></div>
+          </div>
+          <div class="tw" id="rec-wrap" hidden><table><thead><tr><th>Período</th><th>Você recebe por mês</th></tr></thead><tbody id="rec"></tbody></table></div>
+          <p class="tcap">Estimativa para orientação. O valor oficial é o lançado no W1nner, calculado sobre cada parcela que a W1 recebeu de fato da seguradora.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="regra">
+      <div class="sec-head"><h2>Como a sua comissão é calculada</h2><div class="tags"><span class="tag">A regra</span></div></div>
+      <div class="formula q" data-k="fórmula regra percentual base">
+        <span>Sua comissão</span><b>=</b><span>comissão que a W1 recebeu da seguradora na parcela</span><b>×</b><span>seu percentual no contrato</span>
+      </div>
+      <div class="grid2">
+        <div class="card q" data-k="mensalidade prêmio cliente paga">
+          <h3>Sobre o que a W1 recebe, não sobre a mensalidade</h3>
+          <p>Quando o cliente paga a parcela, a seguradora paga uma comissão à W1. O seu percentual incide sobre essa comissão. Com 30% de participação, você não recebe 30% da mensalidade do cliente: a calculadora já faz essa conta por você.</p>
+        </div>
+        <div class="card q" data-k="seguradora produto diferente módulo alternativa capital prazo">
+          <h3>Por que o mesmo prêmio rende valores diferentes</h3>
+          <p>Cada seguradora paga a W1 de um jeito. Dentro da mesma seguradora, o valor muda conforme o produto, o prazo de pagamento, o capital segurado e o <strong>módulo ou alternativa de comissionamento</strong> escolhido na venda.</p>
+        </div>
+        <div class="card q" data-k="1º ano segundo ano recorrente cai diminui">
+          <h3>1º ano e anos seguintes</h3>
+          <p>Na maioria dos produtos a seguradora paga mais no 1º ano e uma comissão menor e recorrente depois. Alguns concentram a maior parte no 1º mês. O seu percentual continua o mesmo; o que muda é a base.</p>
+        </div>
+        <div class="card q" data-k="parcela linha separada duas parcelas atraso">
+          <h3>Cada parcela é calculada separadamente</h3>
+          <p>Cada parcela que a W1 recebe gera uma linha própria de comissão para você. Se a W1 receber duas parcelas do mesmo cliente na mesma janela (uma atrasada e a do mês, por exemplo), você recebe duas linhas.</p>
+        </div>
+        <div class="card q" data-k="dois especialistas mais de um divisão">
+          <h3>Mais de um especialista no mesmo contrato</h3>
+          <p>Cada especialista recebe o próprio percentual sobre o valor <strong>inteiro</strong> da comissão recebida pela W1. A participação de outro especialista não reduz a sua.</p>
+        </div>
+        <div class="card q" data-k="arredondamento centavos">
+          <h3>Arredondamento</h3>
+          <p>O cálculo é feito sobre o valor exato de cada parcela. Diferenças de centavos entre a simulação e o extrato são normais.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="prazos">
+      <div class="sec-head"><h2>Quando o valor cai</h2><div class="tags"><span class="tag acc">Janela de apuração</span></div></div>
+      <p class="sec-sub">A comissão só existe depois que o cliente paga e a seguradora repassa a comissão à W1. A partir daí, o valor entra na próxima janela de apuração e é lançado no dia 20.</p>
+      <div class="card q" data-k="etapas fluxo cliente paga seguradora apuração lançamento dia 20">
+        <ol class="steps">
+          <li><strong>O cliente paga</strong> a parcela do seguro.</li>
+          <li><strong>A seguradora paga a W1</strong>, no prazo de cada seguradora, que pode levar de alguns dias a algumas semanas.</li>
+          <li><strong>Fechamento da janela</strong>, por volta do dia 16 ou 17: o time de Comissões levanta tudo o que a W1 recebeu desde o fechamento anterior.</li>
+          <li><strong>Lançamento no dia 20</strong> no seu W1nner. Quando o dia 20 não é dia útil, o lançamento é feito no dia útil anterior.</li>
+        </ol>
+      </div>
+      <div class="q" data-k="janela exemplo outubro novembro feriado 19">
+        <div class="tw">
+          <table>
+            <thead><tr><th>A W1 recebeu da seguradora entre</th><th>Fechamento</th><th>Lançamento no W1nner</th></tr></thead>
+            <tbody>
+              <tr><td>18/09 e 16/10</td><td>16/10</td><td><strong>20/10</strong></td></tr>
+              <tr><td>17/10 e o fechamento de novembro</td><td>16 ou 17/11</td><td><strong>19/11</strong> <small class="mut">(dia 20 é feriado)</small></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="tcap">Exemplo de duas janelas seguidas. As datas de fechamento podem variar um ou dois dias de um mês para outro.</p>
+      </div>
+      <div class="card q" data-k="adiantamento adiantada antecipação parcela 1 parcela 0 parcela 2 demora icatu mag proporcional">
+        <div class="k">Icatu e MAG</div>
+        <h3>Parcela de adiantamento</h3>
+        <p>A seguradora pode pagar a 1ª parcela (na MAG, a parcela 0) como uma <strong>comissão de adiantamento</strong>. Quando isso acontece:</p>
+        <ul>
+          <li>a parcela seguinte pode levar <strong>um ou dois meses a mais</strong> para chegar, porque a seguradora já antecipou parte daquela comissão;</li>
+          <li>o adiantamento pode ser <strong>proporcional</strong>, então o valor da 1ª parcela (e às vezes das seguintes) pode não bater com a simulação. Às vezes bate, às vezes não.</li>
+        </ul>
+        <p>Você recebe o seu percentual sobre exatamente o que a seguradora pagou à W1 em cada parcela, adiantada ou não. No total do contrato, o adiantamento muda o momento em que o valor chega.</p>
+      </div>
+      <div class="note acc q" data-k="depois do fechamento mês seguinte não caiu"><strong>Na prática:</strong> se a seguradora pagou a W1 depois do fechamento, a comissão daquela parcela fica para o lançamento do mês seguinte. Uma parcela paga pelo cliente no fim do mês pode aparecer só no dia 20 do mês seguinte, ou no outro.</div>
+    </section>
+
+    <section class="sec" id="condicoes">
+      <div class="sec-head"><h2>Condições para receber</h2><div class="tags"><span class="tag">Requisitos</span></div></div>
+      <p class="sec-sub">Uma parcela gera comissão para você quando todas estas condições são atendidas.</p>
+      <div class="grid2">
+        <div class="card q" data-k="pagamento inadimplente recebeu"><div class="k">1</div><h3>O cliente pagou e a W1 recebeu</h3><p>Sem pagamento da seguradora à W1 não há comissão, mesmo com a apólice ativa.</p></div>
+        <div class="card q" data-k="janela fechamento"><div class="k">2</div><h3>A W1 recebeu dentro da janela</h3><p>Valores recebidos depois do fechamento entram no lançamento do mês seguinte.</p></div>
+        <div class="card q" data-k="registrado contrato especialista percentual"><div class="k">3</div><h3>Você está registrado no contrato</h3><p>O contrato precisa ter você como especialista, com o seu percentual. Contrato sem você registrado, ou com percentual zerado, não gera comissão.</p></div>
+        <div class="card q" data-k="cadastro ativo retido"><div class="k">4</div><h3>Seu cadastro de especialista está ativo</h3><p>Sem o cadastro ativo, o valor fica retido até a correção e é liberado depois.</p></div>
+      </div>
+    </section>
+
+    <section class="sec" id="w1nner">
+      <div class="sec-head"><h2>Como conferir no W1nner</h2><div class="tags"><span class="tag">Extrato · saque</span></div></div>
+      <p class="sec-sub">Você tem o mesmo acesso dos consultores. Tudo o que você recebe aparece em <span class="path">Menu lateral › Centro Econômico › Comissões</span>.</p>
+      <div class="grid2">
+        <div class="card q" data-k="lançamento produtos parceiros spread descrição">
+          <h3>Como o lançamento aparece</h3>
+          <ul>
+            <li>Classificação <strong>Produtos Parceiros</strong>, tipo <strong>Spread</strong>.</li>
+            <li>Descrição: <em>Comissionamento de Especialista – nome do cliente – Seguro de Vida – seguradora</em>.</li>
+            <li>Uma linha por parcela. Estornos aparecem como valores negativos.</li>
+          </ul>
+        </div>
+        <div class="card q" data-k="encontrar cliente contato filtro bu">
+          <h3>Encontrar um cliente</h3>
+          <p>Role até <strong>Extrato de comissões</strong> e digite o nome do cliente no filtro <strong>Contato</strong>. Se não encontrar, confira a BU selecionada no topo da tela: cada empresa do grupo tem o seu próprio extrato.</p>
+        </div>
+        <div class="card q" data-k="baixar extrato excel gerar extrato e-mail">
+          <h3>Baixar o extrato em Excel</h3>
+          <p>Em <span class="path">Centro Econômico › Comissões</span>, clique em <strong>Gerar extrato</strong>. A planilha detalhada é enviada para o seu e-mail.</p>
+        </div>
+        <div class="card q" data-k="solicitar pagamento nota fiscal saque dia 1 a 20 bu">
+          <h3>Receber o valor</h3>
+          <p>O pagamento não é automático. Com o valor em <strong>Disponível para receber</strong>, clique em <strong>Solicitar pagamento</strong>, escolha a BU, informe o valor e anexe a nota fiscal daquela BU. O pedido vale entre os dias <strong>1 e 20</strong> do mês, com uma nota fiscal por BU.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="estorno">
+      <div class="sec-head"><h2>Estorno</h2><div class="tags"><span class="tag">Cancelamento</span></div></div>
+      <p class="sec-sub">Quando o cliente cancela antes do prazo mínimo da seguradora, a seguradora cobra de volta da W1 parte da comissão já paga. O estorno chega a você na mesma proporção em que você recebeu.</p>
+      <div class="formula q" data-k="estorno fórmula mesmo percentual">
+        <span>Seu estorno</span><b>=</b><span>estorno cobrado da W1 pela seguradora</span><b>×</b><span>seu percentual no contrato</span>
+      </div>
+      <div class="grid2">
+        <div class="card q" data-k="exemplo estorno 30%"><h3>Exemplo</h3><p>Se você recebeu 30% da comissão de um contrato, você devolve 30% do que a seguradora estornar da W1 nesse contrato.</p></div>
+        <div class="card q" data-k="negativo extrato janela desconto saldo"><h3>Como aparece</h3><p>O estorno segue a mesma janela de apuração e aparece no extrato como um lançamento <strong>negativo</strong>, descontado do seu saldo.</p></div>
+      </div>
+      <div class="note q" data-k="central de estornos prazos percentuais seguradora">Os prazos e percentuais de estorno de cada seguradora estão na <strong>Central de Estornos</strong>, no W1nner em <span class="path">Arquivos › Comissões</span>.</div>
+    </section>
+
+    <section class="sec" id="duvidas">
+      <div class="sec-head"><h2>Dúvidas frequentes</h2><div class="tags"><span class="tag">FAQ</span></div></div>
+      <div class="faq">
+        <details class="qa q"><summary>Por que não recebo o meu percentual sobre a mensalidade do cliente?</summary><div><p>Porque o seu percentual incide sobre a comissão que a seguradora paga à W1, que é uma parte da mensalidade. A calculadora já converte isso e mostra quanto você recebe para cada valor pago pelo cliente.</p></div></details>
+        <details class="qa q"><summary>O valor da calculadora não bateu com o meu extrato. Por quê?</summary><div><p>As causas mais comuns:</p><ul><li>a venda foi feita em outro módulo ou alternativa de comissionamento;</li><li>o capital segurado ou o prazo de pagamento muda a faixa de comissão;</li><li>o cliente mudou o valor do prêmio (reajuste, inclusão ou exclusão de cobertura);</li><li>a seguradora pagou a 1ª parcela como adiantamento proporcional (Icatu e MAG);</li><li>duas parcelas caíram juntas ou uma ficou para a janela seguinte;</li><li>houve estorno no mesmo período;</li><li>arredondamento de centavos.</li></ul><p>Se nenhuma delas explica a diferença, abra um ticket.</p></div></details>
+        <details class="qa q"><summary>O cliente pagou, mas nada apareceu no dia 20.</summary><div><p>Na maioria dos casos, a seguradora ainda não tinha pago a W1 até o fechamento da janela. A comissão entra no lançamento do mês seguinte. Se passarem dois lançamentos sem o valor, abra um ticket.</p></div></details>
+        <details class="qa q"><summary>Recebi a 1ª parcela, mas a 2ª está demorando.</summary><div><p>Na Icatu e na MAG é comum a 1ª parcela (ou a parcela 0, na MAG) vir como comissão de adiantamento. Nesse caso a seguradora segura a parcela seguinte por um ou dois meses, porque já antecipou parte dela. Aguarde dois lançamentos antes de abrir ticket. Veja <a href="#prazos">Parcela de adiantamento</a>.</p></div></details>
+        <details class="qa q"><summary>O valor da 1ª parcela veio diferente da simulação.</summary><div><p>Se a seguradora pagou a 1ª parcela como adiantamento proporcional, o valor pode ser maior ou menor que o simulado, e a diferença se ajusta nas parcelas seguintes. Você sempre recebe o seu percentual sobre o que a W1 recebeu de fato.</p></div></details>
+        <details class="qa q"><summary>Recebi duas comissões do mesmo cliente no mesmo mês.</summary><div><p>Cada parcela recebida pela W1 gera uma linha. Isso acontece quando o cliente paga uma parcela atrasada junto com a do mês, ou quando a seguradora repassa duas parcelas na mesma janela.</p></div></details>
+        <details class="qa q"><summary>Apareceu um valor negativo no meu extrato.</summary><div><p>É um estorno: a seguradora cobrou de volta parte da comissão de um contrato cancelado, e você devolve o seu percentual sobre esse valor. Veja <a href="#estorno">Estorno</a>.</p></div></details>
+        <details class="qa q"><summary>Outro especialista também atua no meu contrato. Isso reduz a minha comissão?</summary><div><p>Não. Cada especialista recebe o próprio percentual sobre o valor inteiro da comissão recebida pela W1.</p></div></details>
+        <details class="qa q"><summary>Por que a comissão caiu depois de um ano?</summary><div><p>A partir do 2º ano a maioria das seguradoras paga à W1 uma comissão recorrente menor. Seu percentual continua o mesmo, mas a base diminui. A calculadora mostra o valor esperado depois do 1º ano.</p></div></details>
+        <details class="qa q"><summary>O cliente está inadimplente. Recebo mesmo assim?</summary><div><p>Não. Sem pagamento do cliente a seguradora não paga a W1, e não há comissão. Quando o cliente regulariza, as parcelas pagas geram comissão na janela em que a W1 receber.</p></div></details>
+        <details class="qa q"><summary>Minha seguradora ou produto não está na calculadora.</summary><div><p>A calculadora cobre as seguradoras e os produtos com vendas novas. A regra é a mesma para todos: seu percentual sobre o que a W1 recebeu. Para um produto fora da lista, confira os valores lançados no extrato.</p></div></details>
+      </div>
+    </section>
+
+    <section class="sec" id="pergunte">
+      <div class="sec-head"><h2>Não encontrou sua dúvida?</h2><div class="tags"><span class="tag acc">Envie</span></div></div>
+      <p class="sec-sub">Escreva sua dúvida abaixo. Ela chega ao time de Comissões de forma anônima e ajuda a melhorar esta página. Não é um ticket: para um caso específico de cliente, abra ticket no W1nner.</p>
+      <form class="card q" id="duvida-form" data-k="enviar dúvida pergunta sugestão">
+        <div class="fld"><label for="duvida">Sua dúvida</label><textarea id="duvida" rows="3" maxlength="400" placeholder="Ex.: a 2ª parcela de um cliente da MAG não veio, quanto tempo devo esperar?"></textarea><small>Não coloque nome de cliente, CPF ou número de proposta.</small></div>
+        <div class="dv-row"><button type="submit" class="watch" id="duvida-btn">Enviar dúvida</button><span class="dv-ok" id="duvida-ok" hidden>Recebido. Obrigado!</span></div>
+      </form>
+    </section>
+
+    <section class="sec" id="ticket">
+      <div class="sec-head"><h2>Quando abrir ticket</h2><div class="tags"><span class="tag">Suporte</span></div></div>
+      <p class="sec-sub">Antes de abrir, confira: o lançamento do dia 20 já saiu? Você olhou a BU certa e procurou o cliente pelo filtro Contato? Se sim, use o assunto <span class="subj">Comissões</span> e informe o nome do cliente, a seguradora e o mês do lançamento.</p>
+      <div class="decide">
+        <div class="q"><span class="verdict wait">Aguarde</span><p>O cliente pagou neste mês e o valor não apareceu no dia 20: a seguradora pode ter pago a W1 depois do fechamento.</p></div>
+        <div class="q"><span class="verdict wait">Aguarde</span><p>Recebeu a 1ª parcela e a 2ª ainda não veio: na Icatu e na MAG a seguradora pode ter adiantado a comissão. Espere dois lançamentos.</p></div>
+        <div class="q"><span class="verdict ticket">Abra ticket</span><p>Um contrato em que você atua não gerou comissão por dois lançamentos seguidos, com o cliente em dia.</p></div>
+        <div class="q"><span class="verdict ticket">Abra ticket</span><p>O percentual aplicado é diferente do que vale para você no contrato, ou apareceu um estorno de cliente que não cancelou.</p></div>
+        <div class="q"><span class="verdict ok">Resolva aqui</span><p>Valor diferente da simulação: confira primeiro as causas em <a href="#duvidas">Dúvidas frequentes</a>.</p></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<footer><div class="wrap"><span>Departamento de Comissões W1 · Central do Especialista de Vida</span><span>Simulações baseadas nas regras de comissionamento vigentes das seguradoras. Em caso de divergência, vale o lançamento oficial no W1nner.</span></div></footer>
+
+<script>
+const PLANOS = (function(s,k){const b=atob(s),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i)^k.charCodeAt(i%k.length);return JSON.parse(new TextDecoder().decode(u));})('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','w1vida');
+const $ = id => document.getElementById(id);
+const brl = v => v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const parse = s => { s=String(s).trim().replace(/[^\d,.-]/g,''); if(s.includes(',')) s=s.replace(/\./g,'').replace(',','.'); const n=parseFloat(s); return isNaN(n)?NaN:n; };
+const selP=$('parceira'), selPr=$('produto');
+Object.keys(PLANOS).forEach(p=>{const o=document.createElement('option');o.value=p;o.textContent=p==='Akad'?'Akad (antiga Argo)':p;selP.appendChild(o);});
+function fillProdutos(){selPr.innerHTML='';PLANOS[selP.value].forEach((x,i)=>{const o=document.createElement('option');o.value=i;o.textContent=x.d?`${x.n} · ${x.d}`:x.n;selPr.appendChild(o);});}
+function recList(p){ if(p.r2==null) return null; if(Array.isArray(p.r2)) return p.r2; return [{l:'A partir do 2º ano',r:p.r2}]; }
+function calc(){
+  const plano=PLANOS[selP.value][selPr.value];
+  const premio=parse($('premio').value), pctRaw=parse($('pct').value);
+  document.querySelectorAll('.seg button').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.p)===pctRaw)));
+  let ok=true;
+  if(isNaN(pctRaw)||pctRaw<2.5||pctRaw>35){$('pct-err').textContent='Informe um percentual entre 2,5% e 35%.';$('pct-err').hidden=false;ok=false;} else $('pct-err').hidden=true;
+  if(isNaN(premio)||premio<=0) ok=false;
+  $('premio-lbl').textContent=plano.unico?'Valor do pagamento único (R$)':'Quanto o cliente paga por mês (R$)';
+  $('nota').hidden=!plano.nota; $('nota').textContent=plano.nota||'';
+  if(!ok){['r-big','r-ano1','r-ano2'].forEach(i=>$(i).textContent='–');$('r-sub').textContent='Preencha o valor e o percentual.';$('strip').innerHTML='';$('rec-wrap').hidden=true;return;}
+  const pct=pctRaw/100, meses=plano.r1.map(r=>premio*r*pct), ano1=meses.reduce((a,b)=>a+b,0), rec=recList(plano);
+  if(plano.unico){
+    $('r-head').textContent='Você recebe uma vez';$('r-big').textContent=brl(meses[0]);$('r-sub').textContent=`sobre um pagamento único de ${brl(premio)}`;
+    $('r-ano1').textContent=brl(meses[0]);$('r-ano2').textContent='Não há';$('chart').hidden=true;$('rec-wrap').hidden=true;return;
+  }
+  $('chart').hidden=false;
+  const uni=meses.every(m=>Math.abs(m-meses[0])<0.005);
+  $('r-head').textContent='Você recebe no 1º ano';
+  if(uni){$('r-big').textContent=`${brl(meses[0])} por mês`;$('r-sub').textContent=`do 1º ao 12º mês, com o cliente pagando ${brl(premio)} por mês`;}
+  else{
+    const k=meses.findIndex(m=>Math.abs(m-meses[11])<0.005);
+    $('r-big').textContent=k>1?`${brl(meses[0])} nos 2 primeiros meses`:`${brl(meses[0])} no 1º mês`;
+    $('r-sub').textContent=`e ${brl(meses[11])} por mês até o 12º mês, com o cliente pagando ${brl(premio)} por mês`;
+  }
+  $('r-ano1').textContent=brl(ano1);
+  $('r-ano2').innerHTML=rec==null?'<small>depende da renovação</small>':(rec[0].r>0?`${brl(premio*rec[0].r*pct)} <small>por mês</small>`:'Não há');
+  const max=Math.max(...meses)||1;
+  $('strip').innerHTML=meses.map((m,i)=>`<div class="cell${m===max?' h':''}"><span>M${i+1}</span><b class="num">${brl(m).replace('R$','').trim()}</b></div>`).join('');
+  $('strip-r').textContent='valores em R$';
+  if(rec&&rec.length>1){$('rec').innerHTML=rec.map(x=>`<tr><td>${x.l}</td><td class="num">${brl(premio*x.r*pct)}</td></tr>`).join('');$('rec-wrap').hidden=false;}
+  else $('rec-wrap').hidden=true;
+}
+selP.addEventListener('change',()=>{fillProdutos();calc();});
+selPr.addEventListener('change',calc); $('premio').addEventListener('input',calc); $('pct').addEventListener('input',calc);
+document.querySelectorAll('.seg button').forEach(b=>b.addEventListener('click',()=>{$('pct').value=b.dataset.p;calc();}));
+$('form').addEventListener('submit',e=>e.preventDefault());
+$('premio').addEventListener('blur',()=>{const v=parse($('premio').value);if(!isNaN(v))$('premio').value=v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});});
+selP.value='Icatu';fillProdutos();selPr.value=0;calc();
+
+/* registro anônimo (mesma planilha do FAQ Comissões, Origem = especialista-vida) */
+const W1Reg=(function(){
+  let url='https://script.google.com/macros/s/AKfycbw-yinFi8ZQThumJZsgv3fx4Z3__XwD0W_eVPv1SFuQn0aQWCbuib1v8axj7ME_k1Zm/exec';
+  const sessao=Math.random().toString(36).slice(2,10), versao='vida-1.0';
+  try{fetch('kb.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(kb=>{if(kb&&kb.registro){url=kb.registro.ativo===false?'':(kb.registro.url||url);}}).catch(()=>{});}catch(e){}
+  const mascarar=t=>String(t||'').replace(/[\w.+-]+@[\w-]+\.[\w.]+/g,'[e-mail]').replace(/\b\d{2}\.?\d{3}\.?\d{3}\/?\d{4}-?\d{2}\b/g,'[cnpj]').replace(/\b\d{3}\.?\d{3}\.?\d{3}-?\d{2}\b/g,'[cpf]').replace(/(\+?55\s?)?\(?\b\d{2}\)?\s?9?\d{4}-?\d{4}\b/g,'[telefone]').replace(/\b\d{6,}\b/g,'[número]').replace(/\s+/g,' ').trim().slice(0,400);
+  function enviar(ev){ if(!url||!/^https?:/.test(location.protocol))return; ev.k='w1faq';ev.origem='especialista-vida';ev.sessao=sessao;ev.versao=versao;
+    try{fetch(url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(ev),keepalive:true}).catch(()=>{});}catch(e){} }
+  return {busca:(t,n)=>enviar({evento:'pergunta',pergunta:mascarar(t),resultado:n>0?'busca':'sem resposta',titulo:n+' resultado(s) na página',tema:'busca'}),
+          duvida:t=>enviar({evento:'pergunta',pergunta:mascarar(t),resultado:'duvida enviada',tema:'duvida'})};
+})();
+document.getElementById('duvida-form').addEventListener('submit',e=>{e.preventDefault();const t=document.getElementById('duvida').value.trim();if(t.length<5)return;W1Reg.duvida(t);document.getElementById('duvida').value='';document.getElementById('duvida-ok').hidden=false;setTimeout(()=>{document.getElementById('duvida-ok').hidden=true;},5000);});
+
+/* busca */
+(function(){
+  const q=$('q'), clear=$('clear');
+  const norm=s=>(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+  const secs=[...document.querySelectorAll('main .sec')];
+  const units=[...document.querySelectorAll('main .q')];
+  units.forEach(u=>{u._t=norm(u.textContent+' '+(u.dataset.k||''));});
+  secs.forEach(s=>{s._t=norm(s.querySelector('h2').textContent+' '+(s.querySelector('.sec-sub')||{textContent:''}).textContent);});
+  const links=[...document.querySelectorAll('.side nav a')];
+  function apply(){
+    const terms=norm(q.value.trim()).split(/\s+/).filter(Boolean);
+    clear.hidden=!terms.length;
+    let total=0;
+    secs.forEach(s=>{
+      const secHit=terms.length&&terms.every(t=>s._t.includes(t));
+      let n=0;
+      s.querySelectorAll('.q').forEach(u=>{const hit=!terms.length||secHit||terms.every(t=>u._t.includes(t));u.hidden=!hit;if(hit)n++;if(u.tagName==='DETAILS')u.open=!!terms.length&&hit;});
+      s.hidden=!!terms.length&&n===0&&!secHit; if(!s.hidden&&terms.length) total+=n;
+    });
+    links.forEach(a=>{const t=$(a.dataset.for);a.classList.toggle('dim',!!t&&t.hidden);});
+    $('status').classList.toggle('on',!!terms.length&&total>0);
+    $('status-t').textContent=`${total} resultado${total===1?'':'s'} para "${q.value.trim()}"`;
+    $('empty').hidden=!(terms.length&&total===0);
+    clearTimeout(lt); const txt=q.value.trim(); if(txt.length>=3) lt=setTimeout(()=>{if(txt!==ultimo){ultimo=txt;W1Reg.busca(txt,total);}},2500);
+  }
+  let lt, ultimo='';
+  let tm;q.addEventListener('input',()=>{clearTimeout(tm);tm=setTimeout(apply,120);});
+  function reset(){q.value='';apply();q.focus();}
+  clear.addEventListener('click',reset);$('clear2').addEventListener('click',reset);
+  document.addEventListener('keydown',e=>{if(e.key==='/'&&document.activeElement.tagName!=='INPUT'&&document.activeElement.tagName!=='SELECT'){e.preventDefault();q.focus();}});
+  document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{
+    if(c.dataset.go){q.value='';apply();$(c.dataset.go).scrollIntoView();}
+    else{q.value=c.dataset.q;apply();document.querySelector('.layout').scrollIntoView();}
+  }));
+})();
+</script>
+
+</body>
+</html>
