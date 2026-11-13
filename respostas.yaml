@@ -950,7 +950,7 @@ respostas:
 - id: c-campanha
   area: comissoes
   parceira: ''
-  pergunta: 'Consórcio: a 12ª parcela não caiu, ou o contrato pagou menos parcelas do que eu esperava.'
+  pergunta: 'Consórcio: a parcela veio diferente da calculadora, a 12ª não caiu ou o contrato pagou menos parcelas do que eu esperava.'
   outras_formas:
   - faltou a parcela 12
   - parcela 11 nao caiu
@@ -959,12 +959,18 @@ respostas:
   - comissao em 4 parcelas
   - as comissoes acabaram
   - repasses encerrados
-  palavras_chave: campanha parcela 12 11 10 ultima finalizado encerrado porto embracon modalidade 4 6 12 parcelas quantas parcelas
+  - aparecem 11 parcelas mas a calculadora mostra 12
+  - comissao do consorcio porto veio menor que a calculadora
+  - parcela do consorcio menor que o esperado
+  - valor da parcela do consorcio diferente da calculadora
+  palavras_chave: campanha parcela 12 11 10 ultima finalizado encerrado porto embracon modalidade 4 6 12 parcelas quantas parcelas menor diferente calculadora crescente valor
   secao: comissoes#prazos
   resposta: |
     <p>Nem todo consórcio paga a comissão em 12 parcelas seguidas. O número e a ordem das parcelas dependem do <strong>mês em que o contrato foi fechado</strong> (campanhas da administradora) e da <strong>modalidade</strong> escolhida na contratação.</p>
     <ul><li><strong>Campanhas:</strong> mudam o parcelamento. Exemplo: contratos da Porto da campanha de <strong>08/2025</strong> têm <strong>11 repasses</strong> no total, e não há 12º.</li>
+    <li><strong>Valor de cada parcela:</strong> algumas campanhas mudam também o valor de cada repasse, sem mudar o total. Exemplo: contratos de imóvel da Porto fechados em <strong>03 e 04/2026</strong> pagam parcelas <strong>crescentes</strong> (as primeiras menores e as últimas maiores), somando o mesmo total da tabela padrão.</li>
     <li><strong>Modalidade:</strong> na Porto, por exemplo, o contrato pode ter comissão em 4, 6 ou 12 parcelas, definido no fechamento.</li></ul>
+    <p>Na calculadora, escolha a linha da <strong>campanha do mês do fechamento</strong> (ex.: “Consórcio imóvel Campanha · Contrato fechado em 03 e 04/2026”), e não a linha padrão.</p>
     <p>Confira o parcelamento do seu contrato na <strong>Calculadora de Comissões e PPs</strong> (versão mais recente, em W1nner › Arquivos › Comissões). Se a calculadora mostrar uma parcela que não veio, abra ticket com o assunto <strong>Comissões</strong>.</p>
 
 - id: c-cargo
@@ -1259,13 +1265,20 @@ respostas:
   - deveria ser 50% na ap
   - ap nao considerou os pps historicos
   - comissao da ap diminuiu
-  palavras_chave: ap analise paga percentual menor faixa errada deveria 40 45 50 52,5 55 lead fator fq faturamento pps historicos partner
+  - fechei 4 aps e a comissao veio 40%
+  - pelo simulador seria 48% e recebi menos
+  - simulador de receita deu percentual maior
+  - recebi percentual menor que a calculadora na ap
+  - ap veio com fator fq menor
+  palavras_chave: ap analise paga percentual menor faixa errada deveria 40 45 50 52,5 55 lead fator fq faturamento pps historicos partner simulador carencia 6 meses cliente unico repetido
   secao: comissoes#regras-ap
   resposta: |
     <p>Nas APs pagas desde <strong>01/08/2026</strong>, o percentual depende só do <strong>mês</strong> do pagamento. Confira estes pontos, que explicam quase todas as diferenças:</p>
-    <ol><li><strong>Fonte do cliente:</strong> cliente <strong>lead</strong> (Marketing, W1 Capital, outra unidade) usa outra tabela, com teto de <strong>27,5%</strong>. Contato próprio vai até 55%.</li>
+    <ol><li><strong>Cliente que já teve AP com você nos últimos 6 meses:</strong> a AP é paga normalmente e soma no faturamento, mas <strong>não conta</strong> na quantidade de APs do Fator FQ. É o motivo mais comum quando o simulador mostra um percentual maior: por exemplo, 4 APs no mês, sendo 2 de clientes na carência, contam como 2 APs (×0,90) e não 4 (×1,20).</li>
+    <li><strong>Fonte do cliente:</strong> cliente <strong>lead</strong> (Marketing, W1 Capital, outra unidade) usa outra tabela, com teto de <strong>27,5%</strong>. Contato próprio vai até 55%.</li>
     <li><strong>Faturamento de AP do mês:</strong> o % Base sai da soma das APs pagas no mês (20% até R$ 4.999,99; 35%; 40%; 45%; 50%; 52,5% a partir de R$ 50.000).</li>
-    <li><strong>Quantidade de APs de clientes únicos:</strong> o Fator FQ multiplica o % Base (×0,80 com 0 ou 1 AP, ×0,90 com 2, ×1,10 com 3, ×1,20 com 4 ou mais). O mesmo cliente só conta de novo 6 meses depois.</li>
+    <li><strong>Quantidade de APs de clientes únicos:</strong> o Fator FQ multiplica o % Base (×0,80 com 0 ou 1 AP, ×0,90 com 2, ×1,10 com 3, ×1,20 com 4 ou mais).</li>
+    <li><strong>FA IV:</strong> com faturamento de AP acima de R$ 10.000 no mês, o percentual nunca fica abaixo de 40% (25% para lead).</li>
     <li><strong>PPs históricos não contam mais</strong> para a AP desde 01/08/2026.</li>
     <li><strong>Partners e acima</strong> têm percentual fixo: 40% (até R$ 9.999,99 no mês) ou 50% (contato próprio); 20% ou 25% (lead).</li>
     <li><strong>AP parcelada:</strong> o percentual é o do mês em que o cliente pagou, para todas as parcelas.</li></ol>
