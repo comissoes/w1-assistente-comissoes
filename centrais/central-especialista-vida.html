@@ -382,7 +382,7 @@ footer .wrap{padding-block:24px 40px;display:flex;flex-direction:column;gap:8px}
               </div>
               <div class="pctin"><input type="text" id="pct" inputmode="decimal" value="30" aria-describedby="pct-hint"><span>%</span></div>
             </div>
-            <small id="pct-hint">Outro valor: digite de 2,5% a 35%.</small>
+            <small id="pct-hint">Outro valor: digite de 2,5% a 40%.</small>
             <small class="err" id="pct-err" hidden></small>
           </div>
           <div class="note warn" id="nota" hidden></div>
@@ -585,7 +585,7 @@ function calc(){
   const premio=parse($('premio').value), pctRaw=parse($('pct').value);
   document.querySelectorAll('.seg button').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.p)===pctRaw)));
   let ok=true;
-  if(isNaN(pctRaw)||pctRaw<2.5||pctRaw>35){$('pct-err').textContent='Informe um percentual entre 2,5% e 35%.';$('pct-err').hidden=false;ok=false;} else $('pct-err').hidden=true;
+  if(isNaN(pctRaw)||pctRaw<2.5||pctRaw>40){$('pct-err').textContent='Informe um percentual entre 2,5% e 40%.';$('pct-err').hidden=false;ok=false;} else $('pct-err').hidden=true;
   if(isNaN(premio)||premio<=0) ok=false;
   $('premio-lbl').textContent=plano.unico?'Valor do pagamento único (R$)':'Quanto o cliente paga por mês (R$)';
   $('nota').hidden=!plano.nota; $('nota').textContent=plano.nota||'';
