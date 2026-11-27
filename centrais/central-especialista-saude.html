@@ -12,7 +12,7 @@
 <style>
 
 /* Layout: barra de busca fixa; índice lateral por assunto (faixa rolável no celular); conteúdo em blocos pesquisáveis.
-   Central do Especialista de Plano de Saúde: calculadora, regra, adesão (boleto pago), janela, W1nner, estorno, FAQ e ticket. Brandbook W1: Petróleo, subtons, Turquesa como acento, Public Sans. */
+   Central do Especialista de Plano de Saúde: calculadora, regra, adesão (boleto pago), janela, W1nner, estorno, FAQ e quando questionar. Brandbook W1: Petróleo, subtons, Turquesa como acento, Public Sans. */
 :root{
   --bg:#ebf0f0; --surface:#ffffff; --surface-2:#f4f7f7; --ink:#022028; --ink-2:#3e6a6d; --muted:#5f8a8b;
   --line:#d3e0df; --line-strong:#afcecd; --accent:#5fded4; --accent-ink:#1d6d67; --accent-soft:#dff7f4;
@@ -292,9 +292,7 @@ footer .wrap{padding-block:24px 40px;display:flex;flex-direction:column;gap:8px}
 .dv-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .dv-row .watch{border:0;cursor:pointer;font-family:var(--font)}
 .dv-ok{color:var(--ok);font-weight:600;font-size:14px}
-#seg-nivel{margin-top:6px}
-.fld .pctrow{margin-top:8px}
-.pctrow small{flex:1;min-width:180px}
+.pctin{margin-top:2px}
 </style>
 <style>[hidden]{display:none!important}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
 </head>
@@ -326,7 +324,7 @@ footer .wrap{padding-block:24px 40px;display:flex;flex-direction:column;gap:8px}
         <button class="chip" data-q="janela">Janela de apuração</button>
         <button class="chip" data-q="estorno">Estorno</button>
         <button class="chip" data-q="extrato">Extrato</button>
-        <button class="chip" data-go="ticket">Preciso abrir ticket?</button>
+        <button class="chip" data-go="questionar">Quando questionar?</button>
       </div>
     </div>
     <div class="facts">
@@ -359,9 +357,8 @@ footer .wrap{padding-block:24px 40px;display:flex;flex-direction:column;gap:8px}
     <h4>Suporte</h4>
     <nav>
       <a href="#duvidas" data-for="duvidas">Dúvidas frequentes <small>FAQ</small></a>
-      <a href="#ticket" data-for="ticket">Quando abrir ticket <small>assunto</small></a>
-      <a href="#pergunte" data-for="pergunte">Enviar dúvida <small>anônimo</small></a>
-    </nav>
+      <a href="#questionar" data-for="questionar">Quando questionar <small>comissões</small></a>
+          </nav>
   </aside>
 
   <main>
@@ -370,24 +367,16 @@ footer .wrap{padding-block:24px 40px;display:flex;flex-direction:column;gap:8px}
 
     <section class="sec featured" id="calculadora">
       <div class="sec-head"><h2>Simule sua comissão</h2><div class="tags"><span class="tag acc">Calculadora</span></div></div>
-      <p class="sec-sub">Escolha a modalidade e a operadora, informe a mensalidade do contrato e o seu percentual. O resultado já é o valor que você recebe.</p>
+      <p class="sec-sub">Escolha a modalidade e a operadora, informe a mensalidade do contrato e o seu percentual no contrato. O resultado já é o valor que você recebe.</p>
       <div class="calc q" data-k="calculadora simular simulação quanto vou receber operadora pme adesão individual">
         <form class="card" id="form" autocomplete="off">
           <div class="fld"><label for="parceira">Modalidade</label><select id="parceira"></select></div>
           <div class="fld"><label for="produto">Operadora</label><select id="produto"></select></div>
           <div class="fld"><label for="premio">Mensalidade do contrato (R$)</label><input type="text" id="premio" inputmode="decimal" value="2.000,00"><small>Valor total da fatura mensal, somando todas as vidas.</small></div>
           <div class="fld">
-            <label>Seu percentual no contrato</label>
-            <div class="seg" role="group" aria-label="Origem do negócio" id="seg-origem">
-              <button type="button" data-o="lead" aria-pressed="true">Lead</button>
-              <button type="button" data-o="proprio" aria-pressed="false">Próprio</button>
-            </div>
-            <div class="seg" role="group" aria-label="Nível do especialista" id="seg-nivel">
-              <button type="button" data-n="1" aria-pressed="true">Especialista I</button>
-              <button type="button" data-n="2" aria-pressed="false">Especialista II</button>
-              <button type="button" data-n="3" aria-pressed="false">Especialista III</button>
-            </div>
-            <div class="pctrow"><div class="pctin"><input type="text" id="pct" inputmode="decimal" value="5" aria-describedby="pct-hint"><span>%</span></div><small id="pct-hint">Escolha origem e nível, ou digite outro valor (2,5% a 45%). Líder em venda lead: 20%.</small></div>
+            <label for="pct">Seu percentual no contrato</label>
+            <div class="pctin"><input type="text" id="pct" inputmode="decimal" value="10" aria-describedby="pct-hint"><span>%</span></div>
+            <small id="pct-hint">Digite o seu percentual no contrato (de 2,5% a 45%).</small>
             <small class="err" id="pct-err" hidden></small>
           </div>
           <div class="note warn" id="nota" hidden></div>
@@ -437,10 +426,6 @@ footer .wrap{padding-block:24px 40px;display:flex;flex-direction:column;gap:8px}
           <h3>Lead ou próprio</h3>
           <p><strong>Lead</strong> é o cliente encaminhado a você, pelo consultor ou pela W1. <strong>Próprio</strong> é o cliente que você mesmo captou, mesmo que o contrato tenha sido fechado no código de outro consultor no W1nner.</p>
         </div>
-        <div class="card q" data-k="líder liderança spread 5% 20% venda lead">
-          <h3>Líder do time</h3>
-          <p>O líder recebe <strong>5%</strong> sobre cada venda da equipe, além da comissão do especialista (não sai da sua). Na venda lead do próprio líder o percentual é <strong>20%</strong>; a venda própria do líder segue a tabela de nível.</p>
-        </div>
         <div class="card q" data-k="mensalidade prêmio fatura cliente paga">
           <h3>Sobre o que a W1 recebe, não sobre a mensalidade</h3>
           <p>Quando o cliente paga a mensalidade, a operadora paga uma comissão à W1. O seu percentual incide sobre essa comissão. A calculadora já faz essa conta por você.</p>
@@ -470,7 +455,7 @@ footer .wrap{padding-block:24px 40px;display:flex;flex-direction:column;gap:8px}
 
     <section class="sec featured" id="adesao">
       <div class="sec-head"><h2>Adesão: comissão só com o boleto pago</h2><div class="tags"><span class="tag acc">Coletivo por adesão</span></div></div>
-      <p class="sec-sub">Nos planos coletivos por adesão, a comissão só existe depois que o cliente paga o <strong>boleto de adesão</strong> emitido pela administradora ou operadora. Proposta assinada, sem boleto pago, não gera comissão para ninguém.</p>
+      <p class="sec-sub">Nos planos coletivos por adesão, a comissão só existe depois que o cliente paga o <strong>boleto de adesão</strong> emitido pela administradora ou operadora. Sem o boleto de adesão pago, não há comissão para ninguém.</p>
       <div class="card q" data-k="adesão boleto fluxo etapas assinatura pagamento administradora qualicorp">
         <ol class="steps">
           <li><strong>O cliente assina a proposta</strong> de adesão.</li>
@@ -481,7 +466,7 @@ footer .wrap{padding-block:24px 40px;display:flex;flex-direction:column;gap:8px}
         </ol>
       </div>
       <div class="decide">
-        <div class="q" data-k="boleto não pago proposta cancelada sem comissão"><span class="verdict ticket">Sem comissão</span><p>O cliente não pagou o boleto de adesão: a proposta não é implantada e não há comissão, nem para você nem para o consultor. Não é caso de ticket.</p></div>
+        <div class="q" data-k="boleto não pago sem comissão"><span class="verdict ticket">Sem comissão</span><p>O cliente não pagou o boleto de adesão: não há comissão sobre esse contrato, nem para você nem para o consultor.</p></div>
         <div class="q" data-k="boleto pago não apareceu aguardar"><span class="verdict wait">Aguarde</span><p>O boleto foi pago, mas o valor não apareceu no dia 20: a administradora pode ter pago a W1 depois do fechamento. Espere o lançamento seguinte.</p></div>
       </div>
       <div class="note warn q" data-k="adesão 90 dias permanência estorno individual familiar">Na adesão e nos planos individuais e familiares, o cliente precisa ficar <strong>pelo menos 90 dias</strong> no plano. Se cancelar antes, a operadora cobra de volta a comissão e o estorno chega a você (veja <a href="#estorno">Estorno</a>).</div>
@@ -576,10 +561,10 @@ footer .wrap{padding-block:24px 40px;display:flex;flex-direction:column;gap:8px}
       <div class="faq">
         <details class="qa q"><summary>O cliente assinou a adesão, mas não veio comissão.</summary><div><p>Na adesão, a comissão só existe depois que o cliente paga o boleto de adesão. Confira se o boleto foi pago. Se foi pago e o valor não apareceu, aguarde o lançamento seguinte: a administradora pode ter pago a W1 depois do fechamento. Veja <a href="#adesao">Adesão</a>.</p></div></details>
         <details class="qa q"><summary>Por que não recebo o meu percentual sobre a mensalidade do cliente?</summary><div><p>Porque o seu percentual incide sobre a comissão que a operadora paga à W1, que é calculada a partir da mensalidade. A calculadora já converte isso e mostra quanto você recebe para cada mensalidade.</p></div></details>
-        <details class="qa q"><summary>Como sei se o contrato é lead ou próprio?</summary><div><p>Lead é o cliente encaminhado a você pelo consultor ou pela W1. Próprio é o cliente que você captou, mesmo que o contrato esteja no código de outro consultor no W1nner. Se o percentual aplicado não bater com a origem do negócio, abra um ticket.</p></div></details>
-        <details class="qa q"><summary>O valor da calculadora não bateu com o meu extrato. Por quê?</summary><div><p>As causas mais comuns:</p><ul><li>o contrato está em outra faixa de vidas, com outra grade de comissão;</li><li>a mensalidade mudou (reajuste, inclusão ou exclusão de vidas);</li><li>a proposta tinha taxa cadastral, descontada na 2ª parcela de comissão;</li><li>duas parcelas caíram juntas ou uma ficou para a janela seguinte;</li><li>houve estorno no mesmo período;</li><li>arredondamento de centavos.</li></ul><p>Se nenhuma delas explica a diferença, abra um ticket.</p></div></details>
+        <details class="qa q"><summary>Como sei se o contrato é lead ou próprio?</summary><div><p>Lead é o cliente encaminhado a você pelo consultor ou pela W1. Próprio é o cliente que você captou, mesmo que o contrato esteja no código de outro consultor no W1nner. Se o percentual aplicado não bater com a origem do negócio, questione o time de Comissões.</p></div></details>
+        <details class="qa q"><summary>O valor da calculadora não bateu com o meu extrato. Por quê?</summary><div><p>As causas mais comuns:</p><ul><li>o contrato está em outra faixa de vidas, com outra grade de comissão;</li><li>a mensalidade mudou (reajuste, inclusão ou exclusão de vidas);</li><li>a proposta tinha taxa cadastral, descontada na 2ª parcela de comissão;</li><li>duas parcelas caíram juntas ou uma ficou para a janela seguinte;</li><li>houve estorno no mesmo período;</li><li>arredondamento de centavos.</li></ul><p>Se nenhuma delas explica a diferença, questione o time de Comissões.</p></div></details>
         <details class="qa q"><summary>A 2ª parcela veio menor que a simulação.</summary><div><p>Quando a proposta tem taxa cadastral, a operadora desconta esse valor na 2ª parcela de comissão. Você recebe o seu percentual sobre o que a W1 recebeu de fato.</p></div></details>
-        <details class="qa q"><summary>O cliente pagou, mas nada apareceu no dia 20.</summary><div><p>Na maioria dos casos, a operadora ainda não tinha pago a W1 até o fechamento da janela. A comissão entra no lançamento do mês seguinte. Se passarem dois lançamentos sem o valor, abra um ticket.</p></div></details>
+        <details class="qa q"><summary>O cliente pagou, mas nada apareceu no dia 20.</summary><div><p>Na maioria dos casos, a operadora ainda não tinha pago a W1 até o fechamento da janela. A comissão entra no lançamento do mês seguinte. Se passarem dois lançamentos sem o valor, questione o time de Comissões.</p></div></details>
         <details class="qa q"><summary>Recebi duas comissões do mesmo cliente no mesmo mês.</summary><div><p>Cada parcela recebida pela W1 gera uma linha. Isso acontece quando o cliente paga uma mensalidade atrasada junto com a do mês, ou quando a operadora repassa duas parcelas na mesma janela.</p></div></details>
         <details class="qa q"><summary>Apareceu um valor negativo no meu extrato.</summary><div><p>É um estorno: a operadora cobrou de volta parte da comissão de um contrato cancelado, e você devolve o seu percentual sobre esse valor. Veja <a href="#estorno">Estorno</a>.</p></div></details>
         <details class="qa q"><summary>Por que a comissão parou depois de alguns meses?</summary><div><p>A maioria das operadoras paga a comissão só nas primeiras parcelas (o agenciamento). Algumas, como a Amil, pagam depois um valor pequeno e vitalício. A calculadora mostra o que esperar mês a mês.</p></div></details>
@@ -589,25 +574,16 @@ footer .wrap{padding-block:24px 40px;display:flex;flex-direction:column;gap:8px}
       </div>
     </section>
 
-    <section class="sec" id="ticket">
-      <div class="sec-head"><h2>Quando abrir ticket</h2><div class="tags"><span class="tag">Suporte</span></div></div>
-      <p class="sec-sub">Antes de abrir, confira: o lançamento do dia 20 já saiu? Você olhou a BU certa e procurou o cliente pelo filtro Contato? Se sim, use o assunto <span class="subj">Comissões</span> e informe o nome do cliente (ou da empresa), a operadora e o mês do lançamento.</p>
+    <section class="sec" id="questionar">
+      <div class="sec-head"><h2>Quando questionar comissões</h2><div class="tags"><span class="tag">Suporte</span></div></div>
+      <p class="sec-sub">Antes de questionar, confira: o lançamento do dia 20 já saiu? Você olhou a BU certa e procurou o cliente pelo filtro Contato? Se sim, fale com o time de <span class="subj">Comissões</span> e informe o nome do cliente (ou da empresa), a operadora e o mês do lançamento.</p>
       <div class="decide">
         <div class="q"><span class="verdict wait">Aguarde</span><p>O cliente pagou neste mês e o valor não apareceu no dia 20: a operadora pode ter pago a W1 depois do fechamento.</p></div>
-        <div class="q"><span class="verdict other">Não é ticket</span><p>Adesão sem boleto pago: não há comissão. Confirme o pagamento do boleto com a administradora.</p></div>
-        <div class="q"><span class="verdict ticket">Abra ticket</span><p>Um contrato em que você atua não gerou comissão por dois lançamentos seguidos, com o cliente em dia.</p></div>
-        <div class="q"><span class="verdict ticket">Abra ticket</span><p>O percentual aplicado é diferente do que vale para você (nível ou origem lead/próprio), ou apareceu um estorno de cliente que não cancelou.</p></div>
+        <div class="q"><span class="verdict other">Sem comissão</span><p>Adesão sem boleto pago: não há comissão. Confirme o pagamento do boleto com a administradora.</p></div>
+        <div class="q"><span class="verdict ticket">Questione</span><p>Um contrato em que você atua não gerou comissão por dois lançamentos seguidos, com o cliente em dia.</p></div>
+        <div class="q"><span class="verdict ticket">Questione</span><p>O percentual aplicado é diferente do que vale para você no contrato, ou apareceu um estorno de cliente que não cancelou.</p></div>
         <div class="q"><span class="verdict ok">Resolva aqui</span><p>Valor diferente da simulação: confira primeiro as causas em <a href="#duvidas">Dúvidas frequentes</a>.</p></div>
       </div>
-    </section>
-
-    <section class="sec" id="pergunte">
-      <div class="sec-head"><h2>Não encontrou sua dúvida?</h2><div class="tags"><span class="tag acc">Envie</span></div></div>
-      <p class="sec-sub">Escreva sua dúvida abaixo. Ela chega ao time de Comissões de forma anônima e ajuda a melhorar esta página. Não é um ticket: para um caso específico de cliente, abra ticket no W1nner.</p>
-      <form class="card q" id="duvida-form" data-k="enviar dúvida pergunta sugestão">
-        <div class="fld"><label for="duvida">Sua dúvida</label><textarea id="duvida" rows="3" maxlength="400" placeholder="Ex.: o boleto de adesão foi pago há 20 dias, quando a comissão aparece?"></textarea><small>Não coloque nome de cliente, CPF, CNPJ ou número de proposta.</small></div>
-        <div class="dv-row"><button type="submit" class="watch" id="duvida-btn">Enviar dúvida</button><span class="dv-ok" id="duvida-ok" hidden>Recebido. Obrigado!</span></div>
-      </form>
     </section>
   </main>
 </div>
@@ -615,28 +591,17 @@ footer .wrap{padding-block:24px 40px;display:flex;flex-direction:column;gap:8px}
 <footer><div class="wrap"><span>Departamento de Comissões W1 · Central do Especialista de Plano de Saúde</span><span>Regra: "Regras de comissionamento - Especialistas de Plano de Saúde" (nov/2026). Simulações baseadas nas grades de comissão vigentes das operadoras. Em caso de divergência, vale o lançamento oficial no W1nner.</span></div></footer>
 
 <script>
-const PLANOS = (function(s,k){const b=atob(s),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i)^k.charCodeAt(i%k.length);return JSON.parse(new TextDecoder().decode(u));})('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','w1saude');
-const TAB={lead:{1:5,2:7.5,3:10},proprio:{1:35,2:40,3:45}};
+const PLANOS = (function(s,k){const b=atob(s),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i)^k.charCodeAt(i%k.length);return JSON.parse(new TextDecoder().decode(u));})('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','w1saude');
 const $ = id => document.getElementById(id);
 const brl = v => v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
-const fmtPct = v => v.toLocaleString('pt-BR',{maximumFractionDigits:2});
 const parse = s => { s=String(s).trim().replace(/[^\d,.-]/g,''); if(s.includes(',')) s=s.replace(/\./g,'').replace(',','.'); const n=parseFloat(s); return isNaN(n)?NaN:n; };
 const selP=$('parceira'), selPr=$('produto');
-let origem='lead', nivel=1;
 Object.keys(PLANOS).forEach(p=>{const o=document.createElement('option');o.value=p;o.textContent=p;selP.appendChild(o);});
 function fillProdutos(){selPr.innerHTML='';PLANOS[selP.value].forEach((x,i)=>{const o=document.createElement('option');o.value=i;o.textContent=x.d?`${x.n} · ${x.d}`:x.n;selPr.appendChild(o);});}
 function recList(p){ if(p.r2==null) return []; if(Array.isArray(p.r2)) return p.r2; return p.r2>0?[{l:'A partir do 2º ano',r:p.r2}]:[]; }
-function syncSeg(pctRaw){
-  let o=null,n=null;
-  for(const oo in TAB) for(const nn in TAB[oo]) if(Math.abs(TAB[oo][nn]-pctRaw)<1e-9){o=oo;n=Number(nn);}
-  document.querySelectorAll('#seg-origem button').forEach(b=>b.setAttribute('aria-pressed',String(o!==null&&b.dataset.o===o)));
-  document.querySelectorAll('#seg-nivel button').forEach(b=>b.setAttribute('aria-pressed',String(n!==null&&Number(b.dataset.n)===n)));
-  if(o!==null){origem=o;nivel=n;}
-}
 function calc(){
   const plano=PLANOS[selP.value][selPr.value];
   const premio=parse($('premio').value), pctRaw=parse($('pct').value);
-  syncSeg(pctRaw);
   let ok=true;
   if(isNaN(pctRaw)||pctRaw<2.5||pctRaw>45){$('pct-err').textContent='Informe um percentual entre 2,5% e 45%.';$('pct-err').hidden=false;ok=false;} else $('pct-err').hidden=true;
   if(isNaN(premio)||premio<=0) ok=false;
@@ -658,11 +623,8 @@ function calc(){
   if(unicos.length||(mensal&&rec.length>1)){$('rec').innerHTML=rec.filter(x=>x.r>0).map(x=>`<tr><td>${x.l}</td><td class="num">${brl(premio*x.r*pct)}${x.u?'':' <small class="mut">por mês</small>'}</td></tr>`).join('');$('rec-wrap').hidden=false;}
   else $('rec-wrap').hidden=true;
 }
-function setPct(){ $('pct').value=fmtPct(TAB[origem][nivel]); calc(); }
 selP.addEventListener('change',()=>{fillProdutos();calc();});
 selPr.addEventListener('change',calc); $('premio').addEventListener('input',calc); $('pct').addEventListener('input',calc);
-document.querySelectorAll('#seg-origem button').forEach(b=>b.addEventListener('click',()=>{origem=b.dataset.o;setPct();}));
-document.querySelectorAll('#seg-nivel button').forEach(b=>b.addEventListener('click',()=>{nivel=Number(b.dataset.n);setPct();}));
 $('form').addEventListener('submit',e=>e.preventDefault());
 $('premio').addEventListener('blur',()=>{const v=parse($('premio').value);if(!isNaN(v))$('premio').value=v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});});
 selP.value=Object.keys(PLANOS)[0];fillProdutos();selPr.value=0;calc();
@@ -678,7 +640,6 @@ const W1Reg=(function(){
   return {busca:(t,n)=>enviar({evento:'pergunta',pergunta:mascarar(t),resultado:n>0?'busca':'sem resposta',titulo:n+' resultado(s) na página',tema:'busca'}),
           duvida:t=>enviar({evento:'pergunta',pergunta:mascarar(t),resultado:'duvida enviada',tema:'duvida'})};
 })();
-document.getElementById('duvida-form').addEventListener('submit',e=>{e.preventDefault();const t=document.getElementById('duvida').value.trim();if(t.length<5)return;W1Reg.duvida(t);document.getElementById('duvida').value='';document.getElementById('duvida-ok').hidden=false;setTimeout(()=>{document.getElementById('duvida-ok').hidden=true;},5000);});
 
 /* busca */
 (function(){
